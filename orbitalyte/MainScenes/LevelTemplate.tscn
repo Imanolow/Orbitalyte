@@ -1,8 +1,9 @@
-[gd_scene load_steps=14 format=3 uid="uid://dqvmy7l7k5r8p"]
+[gd_scene load_steps=14 format=3 uid="uid://diratp3310lje"]
 
 [ext_resource type="PackedScene" uid="uid://ej6t4kuyttvk" path="res://Planets/BlockerPlanet.tscn" id="1_blocker"]
 [ext_resource type="Texture2D" uid="uid://isv51osr3tow" path="res://Planets/Background/Orbitalyte_Level_Back.png" id="1_f0v6q"]
 [ext_resource type="Texture2D" uid="uid://ds2pccf1afixf" path="res://Planets/Background/Orbitalyte_Stars_02.png" id="2_10i07"]
+[ext_resource type="PackedScene" uid="uid://b5t82k3j8yaqm" path="res://Planets/GoalPlanet.tscn" id="2_qqn4s"]
 [ext_resource type="PackedScene" uid="uid://cgpq84j1x5kh2" path="res://Planets/StartPlanet.tscn" id="3_4lhco"]
 [ext_resource type="Texture2D" uid="uid://cy58pgq27yej1" path="res://Planets/PlanetSprites/Planet_test_02.png" id="3_qyc2t"]
 [ext_resource type="Texture2D" uid="uid://csa17ej11qpr1" path="res://Planets/Background/Orbitalyte_Stars_01.png" id="3_ut1xd"]
@@ -12,9 +13,8 @@
 [ext_resource type="Script" uid="uid://l1xqu3oenae6" path="res://GameManager/Ship.gd" id="8_ship_script"]
 [ext_resource type="Script" uid="uid://ck38s26tbc357" path="res://GameManager/trail_renderer.gd" id="9_trail_script"]
 [ext_resource type="Texture2D" uid="uid://btfmj6j3n7ynb" path="res://Ship/Orbitalyte_Ship_01.png" id="12_ut1xd"]
-[ext_resource type="PackedScene" uid="uid://b5t82k3j8yaqm" path="res://Planets/GoalPlanet.tscn" id="2_qqn4s"]
 
-[node name="Main" type="Node2D"]
+[node name="Main2" type="Node2D"]
 
 [node name="Parallax2D" type="Parallax2D" parent="."]
 repeat_size = Vector2(1920, 1080)
