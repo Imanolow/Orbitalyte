@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://c3m7v8r5q2w4x"]
+
+[ext_resource type="Script" path="res://GameManager/Ship.gd" id="1_ship_script"]
+
+[node name="Ship" type="Node2D"]
+script = ExtResource("1_ship_script")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+centered = true
+
+

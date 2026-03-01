@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://ej6t4kuyttvk"]
+
+[ext_resource type="Script" uid="uid://b5g7wyouwxyq5" path="res://GameManager/blocker_planet.gd" id="1_blocker_script"]
+[ext_resource type="Script" uid="uid://de2ss5vymev2q" path="res://GameManager/orbital_ring.gd" id="2_ring_script"]
+
+[node name="BlockerPlanet" type="Node2D"]
+script = ExtResource("1_blocker_script")
+
+[node name="OrbitalRing" type="Node2D" parent="."]
+script = ExtResource("2_ring_script")
+
+[node name="Marker2D" type="Marker2D" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]

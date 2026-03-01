@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Orbitalyte</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Space+Mono&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;height:100%;background:#000008;overflow:hidden}
+#bg{position:fixed;inset:0;z-index:0;pointer-events:none}
+#app{position:absolute;left:50%;top:0;transform:translateX(-50%);width:clamp(300px,55vw,600px);height:100vh;display:flex;flex-direction:column;z-index:1}
+#cv{flex:1;width:100%;display:block}
+#bar{height:86px;background:#02020f;border-top:1px solid #ffffff12;display:flex;align-items:center;padding:0 12px;gap:8px;flex-shrink:0}
+.btn{width:54px;height:54px;border-radius:50%;border:1.5px solid #ffffff30;background:#ffffff08;color:#fff;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;user-select:none;-webkit-tap-highlight-color:transparent}
+.btn:active{background:#ffffff25;border-color:#ffffff80}
+#sp{flex:1}
+#lbtn{flex-shrink:0;width:130px;height:54px;border-radius:27px;border:1.5px solid #ffd93260;background:#ffd93210;color:#ffd932;font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent;position:relative;overflow:hidden}
+#lbtn.c{border-color:#ffd932cc}
+#pb{position:absolute;left:0;top:0;height:100%;width:0;border-radius:27px;pointer-events:none}
+#lt{position:relative;z-index:1;pointer-events:none}
+.ov{position:absolute;left:0;top:0;right:0;bottom:86px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#00000adb;z-index:20;gap:12px}
+.ov h1{font-family:'Orbitron',sans-serif;font-size:clamp(14px,3.5vw,26px);font-weight:900;color:#fff;letter-spacing:5px;text-align:center}
+.ov p{font-size:9px;color:#ffffff60;letter-spacing:2px;text-align:center;line-height:2;max-width:200px}
+.xb{padding:12px 30px;border-radius:30px;border:1.5px solid #ffd93270;background:#ffd93215;color:#ffd932;font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;cursor:pointer;margin-top:8px}
+</style>
+</head>
+<body>
+<canvas id="bg"></canvas>
+<div id="app">
+  <canvas id="cv"></canvas>
+  <div class="ov" id="oStart">
+    <h1>ORBITALYTE</h1>
+    <p>USE GRAVITY TO CURVE YOUR PATH<br>REACH THE GOLDEN STAR ✦<br><br>◀ ▶ to slide · LAUNCH × 2</p>
+    <button class="xb" id="bStart">BEGIN</button>
+  </div>
+  <div class="ov" id="oWin" style="display:none">
+    <h1>✦ CLEAR</h1>
+    <button class="xb" id="bNext">NEXT</button>
+  </div>
+  <div id="bar">
+    <button class="btn" id="bL">◀</button>
+    <button class="btn" id="bR">▶</button>
+    <div id="sp"></div>
+    <button id="lbtn"><div id="pb"></div><span id="lt">LAUNCH</span></button>
+  </div>
+</div>
+<script>
+// ── stars ────────────────────────────────────────────
+const bg=document.getElementById('bg'),bx=bg.getContext('2d');
+function stars(){
+  bg.width=innerWidth;bg.height=innerHeight;
+  for(let i=0;i<250;i++){
+    bx.beginPath();bx.arc(Math.random()*bg.width,Math.random()*bg.height,Math.random()*1.3+.2,0,Math.PI*2);
+    bx.fillStyle='rgba(255,255,255,'+(Math.random()*.7+.2)+')';bx.fill();
+  }
+}
+stars();
+window.addEventListener('resize',()=>{stars();init();});
+
+// ── canvas ───────────────────────────────────────────
+const cv=document.getElementById('cv'),cx=cv.getContext('2d');
+let W,H;
+function sz(){W=cv.width=cv.clientWidth;H=cv.height=cv.clientHeight;}
+sz();
+
+// ═══════════════════════════════════════════════════════════════════
+//  LEVEL EDITOR — todo lo que necesitas para crear tus propios niveles
+// ═══════════════════════════════════════════════════════════════════
+//
+//  ESTRUCTURA DE UN NIVEL
+//  ─────────────────────
+//  Cada nivel es un objeto { p: [ ...planetas ] } dentro del array LV.
+//  Para añadir un nivel nuevo, copia uno existente, pégalo al final del
+//  array (antes del ']') separado por una coma, y modifica sus valores.
+//
+//  PARA PASAR DE NIVEL
+//  ───────────────────
+//  El juego avanza solo al aterrizar en el planeta con goal:1.
+//  El botón "NEXT" de la pantalla de victoria llama a lvl++ y carga
+//  el siguiente índice del array LV. Si llegas al último nivel, vuelve
+//  a empezar desde el primero (lvl % LV.length).
+//  → Para añadir niveles: simplemente añade más objetos al array LV.
+//  → Para cambiar el orden: reordena los objetos dentro del array.
+//
+//  PROPIEDADES DE CADA PLANETA
+//  ────────────────────────────
+//  x  → posición horizontal  (0 = borde izquierdo · 1 = borde derecho · 0.5 = centro)
+//  y  → posición vertical    (0 = parte superior  · 1 = parte inferior)
+//         ⚠️  El eje Y va de arriba a abajo: y:0.1 es casi arriba, y:0.9 casi abajo.
+//         La nave empieza abajo (start en y≈0.85-0.90) y el destino está arriba (goal en y≈0.10-0.14).
+//
+//  r  → radio del planeta en píxeles
+//         · Start/goal: usa r entre 18 y 26  (pequeños, sin órbita)
+//         · Bloqueadores: usa r entre 44 y 65 (grandes, con órbita y gravedad)
+//         · Cuanto mayor r, más espacio físico ocupa y más difícil de rodear
+//         · ⚠️  Si r es muy grande puede solaparse con otros planetas — revisa las posiciones
+//
+//  g  → fuerza de gravedad del planeta (G×M, unidad arbitraria)
+//         · 0       → sin gravedad (obligatorio en start y goal — si no, la nave no puede salir)
+//         · 800     → atracción muy suave, apenas curva
+//         · 1200    → suave — buena para planetas grandes o cuando quieres curvas amplias
+//         · 1500    → media — el punto dulce para la mayoría de bloqueadores
+//         · 2000    → fuerte — la nave necesita mucha velocidad o salir muy lejos
+//         · >2500   → muy fuerte, la nave casi no puede escapar — usar con cuidado
+//         ⚠️  La gravedad se calcula como f = g / distancia², así que aumenta
+//             exponencialmente cuanto más cerca pasa la nave del planeta.
+//
+//  orb  → NO lo pongas en el objeto: se calcula automáticamente como r×1.1
+//         Es solo visual (el círculo discontinuo). Representa la zona donde
+//         la gravedad ya es perceptible. No lo modifiques directamente.
+//
+//  start:1  → marca el planeta de inicio (solo uno por nivel)
+//  goal:1   → marca el planeta destino con la estrella dorada ✦ (solo uno por nivel)
+//
+//  REGLAS DE DISEÑO
+//  ────────────────
+//  ✔  Siempre incluye exactamente un planeta con start:1 y uno con goal:1
+//  ✔  Start y goal siempre con g:0 (sin gravedad)
+//  ✔  Los planetas bloqueadores deben interponerse entre start y goal
+//     para que no haya línea recta libre — coloca al menos uno con x≈0.5
+//     entre los dos en el eje Y
+//  ✔  Deja espacio suficiente entre planetas para que la nave pueda pasar
+//     por los laterales: la nave mide ~13px de radio efectivo
+//  ✔  Una buena separación mínima entre centros de dos planetas es r1+r2+30px
+//
+//  REFERENCIA RÁPIDA DE DIFICULTAD
+//  ────────────────────────────────
+//  Fácil   → 1 bloqueador central, g≈1200-1400, r≈55-65
+//  Medio   → 2 bloqueadores escalonados izq/der, g≈1400-1600
+//  Difícil → 3-4 bloqueadores, algunos en el centro, g≈1500-1800
+//
+const LV=[
+  // ── NIVEL 1 · Tutorial · Un planeta bloqueador central ──────────
+  {p:[
+    {x:.5,  y:.86, r:24, g:0,    start:1},   // planeta inicio — siempre g:0
+    {x:.5,  y:.55, r:60, g:1600},            // bloqueador — centro exacto, radio grande
+    {x:.5,  y:.14, r:24, g:0,    goal:1},    // planeta meta — siempre g:0
+  ]},
+
+  // ── NIVEL 2 · Dos planetas escalonados izquierda/derecha ────────
+  {p:[
+    {x:.5,  y:.88, r:22, g:0,    start:1},
+    {x:.33, y:.66, r:54, g:1500},            // bloqueador izquierdo-bajo
+    {x:.67, y:.42, r:54, g:1500},            // bloqueador derecho-alto
+    {x:.5,  y:.13, r:22, g:0,    goal:1},
+  ]},
+
+  // ── NIVEL 3 · Tres planetas, zigzag ─────────────────────────────
+  {p:[
+    {x:.5,  y:.90, r:20, g:0,    start:1},
+    {x:.5,  y:.71, r:50, g:1400},            // bloqueador central-bajo
+    {x:.23, y:.52, r:46, g:1300},            // bloqueador izquierdo-medio
+    {x:.74, y:.34, r:46, g:1300},            // bloqueador derecho-alto
+    {x:.5,  y:.11, r:20, g:0,    goal:1},
+  ]},
+
+  // ── NIVEL 4 · Cuatro planetas, laberinto ────────────────────────
+  {p:[
+    {x:.5,  y:.91, r:18, g:0,    start:1},
+    {x:.5,  y:.73, r:48, g:1400},            // bloqueo central alto
+    {x:.24, y:.55, r:44, g:1200},            // izquierda media
+    {x:.75, y:.40, r:44, g:1200},            // derecha alta
+    {x:.48, y:.25, r:46, g:1300},            // casi-centro superior
+    {x:.5,  y:.09, r:18, g:0,    goal:1},
+  ]},
+];
+
+let lvl=0,P=[];
+function build(){
+  P=LV[lvl%LV.length].p.map(p=>({
+    x:p.x*W,y:p.y*H,r:p.r,gk:p.g,
+    goal:!!p.goal,start:!!p.start,
+    orb:p.g>0?Math.round(p.r*1.1):0  // orbit ring only on blocker planets
+  }));
+}
+
+// ── ship ─────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════════
+//  CONSTANTES DE FÍSICA — tócalas para ajustar la dificultad global
+// ═══════════════════════════════════════════════════════════════════
+//
+//  GAP   → distancia en px entre la superficie del planeta y el centro de la nave.
+//          Si la ves "dentro" del planeta, súbelo. Si flota demasiado, bájalo.
+//          Valor recomendado: 10–16
+//
+//  SAFE  → velocidad máxima (px/frame) a la que la nave puede aterrizar sin explotar.
+//          Más alto = más permisivo, más fácil llegar al destino.
+//          Más bajo = solo aterrizajes muy suaves, más difícil.
+//          Valor recomendado: 6–10
+//
+//  TMAX  → longitud de la estela de la nave (en frames guardados).
+//          Solo visual, no afecta la jugabilidad.
+//
+const GAP=13;
+const SAFE=8;
+const TMAX=55;
+
+// ── CONSTANTES DE LANZAMIENTO (en doFire y la preview) ──
+//  La velocidad de lanzamiento se calcula como:  velocidad = (potencia/100) × 6.5 + 0.8
+//  · El 6.5 es el rango máximo — súbelo para lanzamientos más potentes
+//  · El 0.8 es la velocidad mínima — la nave siempre sale con algo de impulso
+//  Si quieres más potencia máxima: cambia el 6.5 por un número mayor (ej. 8)
+//  Si quieres menos: cámbialo a 5 o menos
+
+let S={},trail=[],flash=0,phase='S';
+// phase: S=surface, C=charging, F=flying, W=won
+
+function spawn(){
+  const p=P.find(p=>p.start);
+  const a=-Math.PI/2; // top of planet
+  S={x:p.x,y:p.y-p.r-GAP,vx:0,vy:0,pi:P.indexOf(p),a,od:1,ob:false};
+  trail=[];phase='S';
+}
+
+// ── launch ───────────────────────────────────────────
+let pw=0,pd=1,ct=null;
+
+function startCharge(){
+  if(phase!=='S')return;
+  phase='C';pw=0;pd=1;
+  document.getElementById('lbtn').classList.add('c');
+  document.getElementById('lt').textContent='RELEASE';
+  ct=setInterval(()=>{
+    pw+=pd*2;
+    if(pw>=100){pw=100;pd=-1;}
+    if(pw<=0)  {pw=0;  pd= 1;}
+    const pb=document.getElementById('pb');
+    pb.style.width=pw+'%';
+    pb.style.background=pw>66?'linear-gradient(90deg,rgba(255,130,0,.5),rgba(255,20,20,.7))':
+                        pw>33?'linear-gradient(90deg,rgba(80,255,120,.35),rgba(255,195,0,.6))':
+                               'linear-gradient(90deg,rgba(60,200,255,.35),rgba(70,255,160,.5))';
+  },16);
+}
+
+function doFire(){
+  if(phase!=='C')return;
+  clearInterval(ct);ct=null;
+  document.getElementById('lbtn').classList.remove('c');
+  document.getElementById('lt').textContent='LAUNCH';
+  document.getElementById('pb').style.width='0';
+  const p=P[S.pi];
+  const ang=S.ob ? S.a+(Math.PI/2)*S.od : S.a;
+  const spd=pw/100*6.5+0.8;
+  S.vx=Math.cos(ang)*spd;S.vy=Math.sin(ang)*spd;
+  S.pi=-1;S.ob=false;phase='F';
+}
+
+function crash(){
+  clearInterval(ct);ct=null;
+  document.getElementById('lbtn').classList.remove('c');
+  document.getElementById('lt').textContent='LAUNCH';
+  document.getElementById('pb').style.width='0';
+  flash=22;trail=[];spawn();
+}
+
+// ── input ────────────────────────────────────────────
+let lh=false,rh=false;
+function setL(v){lh=v;document.getElementById('bL').classList.toggle('on',v);}
+function setR(v){rh=v;document.getElementById('bR').classList.toggle('on',v);}
+
+document.getElementById('bL').addEventListener('mousedown', e=>{e.preventDefault();setL(true);});
+document.getElementById('bL').addEventListener('touchstart',e=>{e.preventDefault();setL(true);},{passive:false});
+document.getElementById('bL').addEventListener('mouseup',  ()=>setL(false));
+document.getElementById('bL').addEventListener('touchend', ()=>setL(false));
+document.getElementById('bL').addEventListener('mouseleave',()=>setL(false));
+
+document.getElementById('bR').addEventListener('mousedown', e=>{e.preventDefault();setR(true);});
+document.getElementById('bR').addEventListener('touchstart',e=>{e.preventDefault();setR(true);},{passive:false});
+document.getElementById('bR').addEventListener('mouseup',  ()=>setR(false));
+document.getElementById('bR').addEventListener('touchend', ()=>setR(false));
+document.getElementById('bR').addEventListener('mouseleave',()=>setR(false));
+
+// LAUNCH: mousedown+touchstart — no click, no pointer capture confusion
+const lb=document.getElementById('lbtn');
+function onLaunch(e){
+  e.preventDefault();
+  if(phase==='S') startCharge();
+  else if(phase==='C') doFire();
+}
+lb.addEventListener('mousedown', onLaunch);
+lb.addEventListener('touchstart',onLaunch,{passive:false});
+
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowLeft') setL(true);
+  if(e.key==='ArrowRight')setR(true);
+  if(e.key===' '){e.preventDefault();if(phase==='S')startCharge();else if(phase==='C')doFire();}
+});
+document.addEventListener('keyup',e=>{
+  if(e.key==='ArrowLeft') setL(false);
+  if(e.key==='ArrowRight')setR(false);
+});
+
+// ── update ───────────────────────────────────────────
+function update(){
+  if(phase==='W')return;
+  if(phase==='S'||phase==='C'){
+    const p=P[S.pi];
+    if(lh){S.a-=.03;S.ob=true;S.od=-1;}
+    else if(rh){S.a+=.03;S.ob=true;S.od=1;}
+    else S.ob=false;
+    S.x=p.x+Math.cos(S.a)*(p.r+GAP);
+    S.y=p.y+Math.sin(S.a)*(p.r+GAP);
+    return;
+  }
+  if(phase==='F'){
+    // gravity only from blocker planets (gk>0)
+    for(const p of P){
+      if(!p.gk)continue;
+      const dx=p.x-S.x,dy=p.y-S.y,d2=dx*dx+dy*dy,d=Math.sqrt(d2);
+      if(d<1)continue;
+      const f=p.gk/d2;
+      S.vx+=f*dx/d;S.vy+=f*dy/d;
+    }
+    const sp=Math.hypot(S.vx,S.vy);
+    if(sp>18){S.vx=S.vx/sp*18;S.vy=S.vy/sp*18;}
+    S.x+=S.vx;S.y+=S.vy;
+    trail.push({x:S.x,y:S.y});
+    if(trail.length>TMAX)trail.shift();
+    if(S.x<-80||S.x>W+80||S.y<-80||S.y>H+80){crash();return;}
+    for(let i=0;i<P.length;i++){
+      const p=P[i];
+      const d=Math.hypot(S.x-p.x,S.y-p.y);
+      if(d<=p.r+GAP-2){
+        if(Math.hypot(S.vx,S.vy)>SAFE){crash();}
+        else{
+          S.a=Math.atan2(S.y-p.y,S.x-p.x);
+          S.x=p.x+Math.cos(S.a)*(p.r+GAP);
+          S.y=p.y+Math.sin(S.a)*(p.r+GAP);
+          S.vx=0;S.vy=0;S.pi=i;S.ob=false;trail=[];
+          if(p.goal){phase='W';document.getElementById('oWin').style.display='flex';}
+          else phase='S';
+        }
+        return;
+      }
+    }
+  }
+}
+
+// ── draw ─────────────────────────────────────────────
+function draw(){
+  cx.clearRect(0,0,W,H);
+  // planets
+  for(const p of P){
+    if(p.orb>0){
+      cx.save();cx.beginPath();cx.arc(p.x,p.y,p.r+p.orb,0,Math.PI*2);
+      cx.setLineDash([4,7]);cx.strokeStyle=p.goal?'rgba(255,215,50,.4)':'rgba(255,255,255,.18)';
+      cx.lineWidth=1.2;cx.stroke();cx.setLineDash([]);cx.restore();
+    }
+    // glow
+    const g=cx.createRadialGradient(p.x,p.y,p.r*.3,p.x,p.y,p.r+(p.orb||p.r));
+    g.addColorStop(0,'transparent');g.addColorStop(1,p.goal?'rgba(255,210,40,.07)':'rgba(255,255,255,.025)');
+    cx.beginPath();cx.arc(p.x,p.y,p.r+(p.orb||p.r),0,Math.PI*2);cx.fillStyle=g;cx.fill();
+    // body
+    cx.beginPath();cx.arc(p.x,p.y,p.r,0,Math.PI*2);cx.fillStyle='#03030e';cx.fill();
+    const g2=cx.createRadialGradient(p.x-p.r*.28,p.y-p.r*.28,0,p.x,p.y,p.r);
+    g2.addColorStop(0,p.goal?'rgba(255,225,70,.2)':'rgba(255,255,255,.12)');g2.addColorStop(1,'transparent');
+    cx.beginPath();cx.arc(p.x,p.y,p.r,0,Math.PI*2);cx.fillStyle=g2;cx.fill();
+    cx.beginPath();cx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    cx.strokeStyle=p.goal?'#ffd732':'rgba(255,255,255,.85)';cx.lineWidth=p.goal?2.4:1.7;cx.stroke();
+    if(p.goal){
+      cx.save();cx.translate(p.x,p.y);cx.font='bold '+p.r*.75+'px serif';
+      cx.textAlign='center';cx.textBaseline='middle';cx.fillStyle='rgba(255,215,50,.85)';cx.fillText('✦',0,1);cx.restore();
+    }
+    if(p.start){
+      cx.save();cx.translate(p.x,p.y);cx.font='bold '+(p.r*.4|0)+'px monospace';
+      cx.textAlign='center';cx.textBaseline='middle';cx.fillStyle='rgba(255,255,255,.2)';cx.fillText('START',0,0);cx.restore();
+    }
+  }
+  // trail
+  for(let i=1;i<trail.length;i++){
+    const t=i/trail.length;
+    cx.beginPath();cx.moveTo(trail[i-1].x,trail[i-1].y);cx.lineTo(trail[i].x,trail[i].y);
+    cx.strokeStyle='rgba(120,195,255,'+(t*.28)+')';cx.lineWidth=t*2.2;cx.stroke();
+  }
+  // preview
+  if(phase==='C'){
+    const p=P[S.pi];
+    const spd=pw/100*6.5+0.8;
+    const ang=S.ob?S.a+(Math.PI/2)*S.od:S.a;
+    let px=S.x,py=S.y,pvx=Math.cos(ang)*spd,pvy=Math.sin(ang)*spd;
+    for(let i=0;i<65;i++){
+      for(const pl of P){
+        if(!pl.gk)continue;
+        const dx=pl.x-px,dy=pl.y-py,d2=dx*dx+dy*dy,d=Math.sqrt(d2);
+        if(d<1)continue;const f=pl.gk/d2;pvx+=f*dx/d;pvy+=f*dy/d;
+      }
+      px+=pvx;py+=pvy;
+      const t=1-i/65;
+      const col=pw>66?'rgba(255,65,65,'+(t*.6)+')':pw>33?'rgba(255,195,50,'+(t*.6)+')':'rgba(65,255,150,'+(t*.6)+')';
+      cx.beginPath();cx.arc(px,py,t*2.3+.3,0,Math.PI*2);cx.fillStyle=col;cx.fill();
+    }
+  }
+  // ship
+  cx.save();cx.translate(S.x,S.y);
+  let θ=(phase==='F'&&(S.vx||S.vy))?Math.atan2(S.vy,S.vx):S.a;
+  // rotate(θ + PI/2): aligns local -Y (nose) with world direction θ
+  cx.rotate(θ+Math.PI/2);
+  if(phase==='F'){
+    const fl=10+Math.random()*9;cx.save();cx.globalAlpha=.88;
+    const fg=cx.createLinearGradient(0,10,0,10+fl);
+    fg.addColorStop(0,'rgba(255,210,50,1)');fg.addColorStop(.5,'rgba(255,80,10,.7)');fg.addColorStop(1,'transparent');
+    cx.beginPath();cx.ellipse(0,10+fl*.5,3.4,fl*.58,0,0,Math.PI*2);cx.fillStyle=fg;cx.fill();cx.restore();
+  }
+  cx.beginPath();cx.moveTo(0,-10);cx.bezierCurveTo(6,-5,6,2,5,8);cx.lineTo(-5,8);cx.bezierCurveTo(-6,2,-6,-5,0,-10);
+  cx.fillStyle='#f0f0f0';cx.fill();
+  cx.beginPath();cx.moveTo(-4.5,0);cx.lineTo(4.5,0);cx.lineTo(3.8,8);cx.lineTo(-3.8,8);cx.closePath();cx.fillStyle='#5ab4f8';cx.fill();
+  cx.beginPath();cx.arc(0,-2,3.2,0,Math.PI*2);cx.fillStyle='#c8eeff';cx.fill();cx.strokeStyle='rgba(0,0,0,.2)';cx.lineWidth=.7;cx.stroke();
+  cx.beginPath();cx.arc(-1,-3,1.1,0,Math.PI*2);cx.fillStyle='rgba(255,255,255,.55)';cx.fill();
+  cx.beginPath();cx.moveTo(-5,3);cx.lineTo(-10,10);cx.lineTo(-4,9);cx.closePath();cx.fillStyle='#b0b0b0';cx.fill();
+  cx.beginPath();cx.moveTo(5,3);cx.lineTo(10,10);cx.lineTo(4,9);cx.closePath();cx.fillStyle='#b0b0b0';cx.fill();
+  cx.beginPath();cx.roundRect(-2.8,7.5,5.6,3,1.5);cx.fillStyle='#999';cx.fill();
+  cx.restore();
+  if(flash>0){cx.save();cx.globalAlpha=flash/22*.38;cx.fillStyle='#ff1010';cx.fillRect(0,0,W,H);cx.restore();flash--;}
+}
+
+// ── loop ─────────────────────────────────────────────
+function loop(){update();draw();requestAnimationFrame(loop);}
+
+// ── screens ──────────────────────────────────────────
+function hideOv(){document.getElementById('oStart').style.display='none';document.getElementById('oWin').style.display='none';}
+document.getElementById('bStart').addEventListener('mousedown',e=>{e.preventDefault();hideOv();lvl=0;build();spawn();});
+document.getElementById('bStart').addEventListener('touchstart',e=>{e.preventDefault();hideOv();lvl=0;build();spawn();},{passive:false});
+document.getElementById('bNext').addEventListener('mousedown',e=>{e.preventDefault();hideOv();lvl++;build();spawn();});
+document.getElementById('bNext').addEventListener('touchstart',e=>{e.preventDefault();hideOv();lvl++;build();spawn();},{passive:false});
+
+// ── boot ─────────────────────────────────────────────
+build();spawn();loop();
+</script>
+</body>
+</html>

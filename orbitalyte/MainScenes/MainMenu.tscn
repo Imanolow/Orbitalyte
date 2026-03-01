@@ -1,0 +1,56 @@
+[gd_scene load_steps=3 format=3 uid="uid://cctirlbsq47p7"]
+
+[ext_resource type="Script" uid="uid://cob5i5ddpju0d" path="res://MainScenes/main_menu.gd" id="1_fd5jv"]
+[ext_resource type="Texture2D" uid="uid://c451coa0b5gtf" path="res://MainMenuArt/Orbitalyte_MainMenu_Back.png" id="2_0uebn"]
+
+[node name="MainMenu" type="Node2D"]
+script = ExtResource("1_fd5jv")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="CanvasLayer"]
+z_index = -1
+texture = ExtResource("2_0uebn")
+centered = false
+
+[node name="ButtonManager" type="Control" parent="CanvasLayer/Sprite2D"]
+z_index = 1
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Play" type="Button" parent="CanvasLayer/Sprite2D/ButtonManager"]
+z_index = 1
+layout_mode = 0
+offset_left = 801.0
+offset_top = 555.0
+offset_right = 1016.41016
+offset_bottom = 674.57886
+scale = Vector2(1.3600049, 0.76000243)
+text = "Play"
+
+[node name="Options" type="Button" parent="CanvasLayer/Sprite2D/ButtonManager"]
+layout_mode = 0
+offset_left = 826.0
+offset_top = 651.0
+offset_right = 1015.0
+offset_bottom = 739.0
+scale = Vector2(1.3600049, 0.76000243)
+text = "Options
+"
+
+[node name="Quit" type="Button" parent="CanvasLayer/Sprite2D/ButtonManager"]
+layout_mode = 0
+offset_left = 826.0
+offset_top = 732.99994
+offset_right = 1015.0
+offset_bottom = 820.99994
+scale = Vector2(1.3600049, 0.76000243)
+text = "Exit
+"
+
+[connection signal="pressed" from="CanvasLayer/Sprite2D/ButtonManager/Play" to="." method="_on_play_pressed"]
+[connection signal="pressed" from="CanvasLayer/Sprite2D/ButtonManager/Options" to="." method="_on_options_pressed"]
+[connection signal="pressed" from="CanvasLayer/Sprite2D/ButtonManager/Quit" to="." method="_on_quit_pressed"]
+[connection signal="pressed" from="CanvasLayer/Sprite2D/ButtonManager/Quit" to="." method="_on_exit_pressed"]

@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://b5t82k3j8x9qm"]
+
+[ext_resource type="Script" path="res://GameManager/goal_planet.gd" id="1_goal_script"]
+
+[node name="GoalPlanet" type="Node2D"]
+script = ExtResource("1_goal_script")
+
+[node name="Marker2D" type="Marker2D" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
