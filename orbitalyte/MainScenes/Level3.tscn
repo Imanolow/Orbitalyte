@@ -1,20 +1,19 @@
-[gd_scene load_steps=16 format=3 uid="uid://cefmoqi5swjdw"]
+[gd_scene load_steps=15 format=3 uid="uid://toi2iboofpei"]
 
-[ext_resource type="PackedScene" uid="uid://ej6t4kuyttvk" path="res://Planets/BlockerPlanet.tscn" id="1_7pjwt"]
-[ext_resource type="Texture2D" uid="uid://isv51osr3tow" path="res://Planets/Background/Orbitalyte_Level_Back.png" id="1_f0v6q"]
-[ext_resource type="Texture2D" uid="uid://ds2pccf1afixf" path="res://Planets/Background/Orbitalyte_Stars_02.png" id="2_10i07"]
-[ext_resource type="PackedScene" uid="uid://b5t82k3j8yaqm" path="res://Planets/GoalPlanet.tscn" id="2_qqn4s"]
-[ext_resource type="PackedScene" uid="uid://cgpq84j1x5kh2" path="res://Planets/StartPlanet.tscn" id="3_4lhco"]
-[ext_resource type="Texture2D" uid="uid://cy58pgq27yej1" path="res://Planets/PlanetSprites/Planet_test_02.png" id="3_qyc2t"]
-[ext_resource type="Texture2D" uid="uid://csa17ej11qpr1" path="res://Planets/Background/Orbitalyte_Stars_01.png" id="3_ut1xd"]
-[ext_resource type="Script" uid="uid://byu70vdtw6cdi" path="res://GameManager/script_manager.gd" id="4_tlfsp"]
-[ext_resource type="Texture2D" uid="uid://q31rogyj0gbb" path="res://Planets/PlanetSprites/Planet_test_04.png" id="5_10i07"]
-[ext_resource type="Script" uid="uid://bx2k13553bdbe" path="res://GameManager/LaunchPreview.gd" id="6_preview_script"]
-[ext_resource type="Texture2D" uid="uid://bpgqschyb5f13" path="res://Planets/PlanetSprites/Planet_test_03.png" id="7_f0v6q"]
-[ext_resource type="Script" uid="uid://c260gfndy3tk6" path="res://GameManager/InputManager.gd" id="7_input_script"]
-[ext_resource type="Script" uid="uid://l1xqu3oenae6" path="res://GameManager/Ship.gd" id="8_ship_script"]
-[ext_resource type="Script" uid="uid://ck38s26tbc357" path="res://GameManager/trail_renderer.gd" id="9_trail_script"]
-[ext_resource type="Texture2D" uid="uid://btfmj6j3n7ynb" path="res://Ship/Orbitalyte_Ship_01.png" id="12_ut1xd"]
+[ext_resource type="Texture2D" uid="uid://isv51osr3tow" path="res://Planets/Background/Orbitalyte_Level_Back.png" id="1_hv2u1"]
+[ext_resource type="Texture2D" uid="uid://ds2pccf1afixf" path="res://Planets/Background/Orbitalyte_Stars_02.png" id="2_8jicb"]
+[ext_resource type="Texture2D" uid="uid://csa17ej11qpr1" path="res://Planets/Background/Orbitalyte_Stars_01.png" id="3_r2or2"]
+[ext_resource type="PackedScene" uid="uid://b5t82k3j8yaqm" path="res://Planets/GoalPlanet.tscn" id="4_efgot"]
+[ext_resource type="Texture2D" uid="uid://cy58pgq27yej1" path="res://Planets/PlanetSprites/Planet_test_02.png" id="5_7g58q"]
+[ext_resource type="PackedScene" uid="uid://cgpq84j1x5kh2" path="res://Planets/StartPlanet.tscn" id="6_v7ke3"]
+[ext_resource type="Script" uid="uid://ck38s26tbc357" path="res://GameManager/trail_renderer.gd" id="7_mblhe"]
+[ext_resource type="PackedScene" uid="uid://ej6t4kuyttvk" path="res://Planets/BlockerPlanet.tscn" id="7_r2or2"]
+[ext_resource type="Texture2D" uid="uid://q31rogyj0gbb" path="res://Planets/PlanetSprites/Planet_test_04.png" id="8_efgot"]
+[ext_resource type="Script" uid="uid://l1xqu3oenae6" path="res://GameManager/Ship.gd" id="8_p8irc"]
+[ext_resource type="Texture2D" uid="uid://btfmj6j3n7ynb" path="res://Ship/Orbitalyte_Ship_01.png" id="9_b7t0o"]
+[ext_resource type="Script" uid="uid://bx2k13553bdbe" path="res://GameManager/LaunchPreview.gd" id="10_qu5oa"]
+[ext_resource type="Script" uid="uid://byu70vdtw6cdi" path="res://GameManager/script_manager.gd" id="11_4rx4i"]
+[ext_resource type="Script" uid="uid://c260gfndy3tk6" path="res://GameManager/InputManager.gd" id="12_iwcex"]
 
 [node name="Main" type="Node2D"]
 
@@ -23,56 +22,58 @@ repeat_size = Vector2(1920, 1080)
 autoscroll = Vector2(10, 15)
 
 [node name="Sprite2D2" type="Sprite2D" parent="Parallax2D"]
-texture = ExtResource("1_f0v6q")
+texture = ExtResource("1_hv2u1")
 centered = false
 
 [node name="Sprite2D3" type="Sprite2D" parent="Parallax2D"]
 position = Vector2(46, 31)
-texture = ExtResource("2_10i07")
+texture = ExtResource("2_8jicb")
 centered = false
 
 [node name="Sprite2D" type="Sprite2D" parent="Parallax2D"]
 position = Vector2(69, 27)
-texture = ExtResource("3_ut1xd")
+texture = ExtResource("3_r2or2")
 centered = false
 
 [node name="GameContainer" type="Node2D" parent="."]
 
 [node name="PlanetsContainer" type="Node2D" parent="GameContainer"]
 
-[node name="BlockerPlanet4" parent="GameContainer/PlanetsContainer" instance=ExtResource("1_7pjwt")]
-position = Vector2(883, 570)
-scale = Vector2(1, 1.0024692)
+[node name="GoalPlanet" parent="GameContainer/PlanetsContainer" instance=ExtResource("4_efgot")]
+position = Vector2(883, 166)
+radius = 38.98
+sprite_texture = ExtResource("5_7g58q")
+
+[node name="StartPlanet" parent="GameContainer/PlanetsContainer" instance=ExtResource("6_v7ke3")]
+position = Vector2(883, 900)
+sprite_texture = ExtResource("5_7g58q")
+
+[node name="BlockerPlanet4" parent="GameContainer/PlanetsContainer" instance=ExtResource("7_r2or2")]
+position = Vector2(852, 540)
 radius = 70.795
 gravity = 3000.0
 orbital_multiplier = 2.225
-sprite_texture = ExtResource("5_10i07")
+sprite_texture = ExtResource("8_efgot")
 tint_color = Color(0.93145484, 0.93145484, 0.53623134, 1)
 
-[node name="GoalPlanet" parent="GameContainer/PlanetsContainer" instance=ExtResource("2_qqn4s")]
-position = Vector2(883, 166)
-radius = 53.415
-sprite_texture = ExtResource("3_qyc2t")
-
-[node name="StartPlanet" parent="GameContainer/PlanetsContainer" instance=ExtResource("3_4lhco")]
-position = Vector2(883, 900)
-sprite_texture = ExtResource("7_f0v6q")
+[node name="BlockerPlanet" parent="GameContainer/PlanetsContainer" instance=ExtResource("7_r2or2")]
+position = Vector2(1109, 729)
 
 [node name="ShipVisuals" type="Node2D" parent="GameContainer"]
 
 [node name="TrailRenderer" type="Node2D" parent="GameContainer/ShipVisuals"]
-script = ExtResource("9_trail_script")
+script = ExtResource("7_mblhe")
 
 [node name="ShipRenderer" type="Node2D" parent="GameContainer/ShipVisuals"]
-script = ExtResource("8_ship_script")
+script = ExtResource("8_p8irc")
 
 [node name="Sprite2D" type="Sprite2D" parent="GameContainer/ShipVisuals/ShipRenderer"]
 position = Vector2(883.00006, 862)
 scale = Vector2(0.5672705, 0.5672705)
-texture = ExtResource("12_ut1xd")
+texture = ExtResource("9_b7t0o")
 
 [node name="LaunchPreview" type="Node2D" parent="GameContainer/ShipVisuals"]
-script = ExtResource("6_preview_script")
+script = ExtResource("10_qu5oa")
 
 [node name="UIPanel" type="Control" parent="."]
 layout_mode = 3
@@ -125,10 +126,10 @@ scale = Vector2(1.3737091, 1.3737091)
 text = "LAUNCH"
 
 [node name="GameManager" type="Node2D" parent="."]
-script = ExtResource("4_tlfsp")
+script = ExtResource("11_4rx4i")
 
 [node name="InputManager" type="Node" parent="."]
-script = ExtResource("7_input_script")
+script = ExtResource("12_iwcex")
 
 [node name="OverlayScreens" type="CanvasLayer" parent="."]
 visible = false

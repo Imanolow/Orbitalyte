@@ -1,5 +1,6 @@
-[gd_scene load_steps=13 format=3 uid="uid://dqvmy7l7k5r8p"]
+[gd_scene load_steps=14 format=3 uid="uid://dqvmy7l7k5r8p"]
 
+[ext_resource type="PackedScene" uid="uid://ej6t4kuyttvk" path="res://Planets/BlockerPlanet.tscn" id="1_blocker"]
 [ext_resource type="Texture2D" uid="uid://isv51osr3tow" path="res://Planets/Background/Orbitalyte_Level_Back.png" id="1_f0v6q"]
 [ext_resource type="Texture2D" uid="uid://ds2pccf1afixf" path="res://Planets/Background/Orbitalyte_Stars_02.png" id="2_10i07"]
 [ext_resource type="PackedScene" uid="uid://cgpq84j1x5kh2" path="res://Planets/StartPlanet.tscn" id="3_4lhco"]
@@ -36,6 +37,14 @@ centered = false
 [node name="GameContainer" type="Node2D" parent="."]
 
 [node name="PlanetsContainer" type="Node2D" parent="GameContainer"]
+
+[node name="BlockerPlanetExample" parent="GameContainer/PlanetsContainer" instance=ExtResource("1_blocker")]
+position = Vector2(450, 400)
+radius = 80.0
+gravity = 2500.0
+orbital_multiplier = 1.5
+sprite_texture = ExtResource("3_qyc2t")
+tint_color = Color(0.95, 0.7, 0.2, 1)
 
 [node name="GoalPlanet" parent="GameContainer/PlanetsContainer" instance=ExtResource("2_qqn4s")]
 position = Vector2(883, 166)
