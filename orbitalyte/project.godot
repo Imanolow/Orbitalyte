@@ -15,6 +15,10 @@ run/main_scene="uid://cctirlbsq47p7"
 config/features=PackedStringArray("4.5", "Forward Plus")
 config/icon="res://icon.svg"
 
+[autoload]
+
+FadeTransitions="*res://MainMenuArt/fade_transitions.tscn"
+
 [display]
 
 window/size/viewport_width=1920

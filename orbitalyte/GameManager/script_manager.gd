@@ -40,6 +40,7 @@ func _ready() -> void:
 	await _find_ui_manager()
 	_setup_ui()
 	reset_level()
+	
 
 
 func _setup_level_manager() -> void:
