@@ -39,11 +39,12 @@ centered = false
 [node name="PlanetsContainer" type="Node2D" parent="GameContainer"]
 
 [node name="BlockerPlanet3" parent="GameContainer/PlanetsContainer" instance=ExtResource("1_blocker2")]
-position = Vector2(783, 472)
+position = Vector2(781, 350)
+orbital_multiplier = 2.245
 sprite_texture = ExtResource("3_tpag6")
 
 [node name="BlockerPlanet4" parent="GameContainer/PlanetsContainer" instance=ExtResource("1_blocker2")]
-position = Vector2(1205, 596)
+position = Vector2(1115, 555)
 radius = 120.0
 gravity = 3000.0
 orbital_multiplier = 1.75
