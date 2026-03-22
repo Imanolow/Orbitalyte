@@ -29,6 +29,7 @@ var asteroid_blocks: Array = []  # Destructive obstacles that crash on contact
 var current_planet: Node2D = null  # Planet ship is currently on
 var ship_rotation: float = 0.0  # 0 = up, π/2 = right, π = down, -π/2 = left
 var last_preview_power: float = -1.0  # Track power changes for preview updates
+var active_explosion: Node = null  # Track current explosion container
 
 # Keyboard input tracking for continuous rotation
 var key_left_held: bool = false  # Track A key
@@ -43,6 +44,16 @@ func _ready() -> void:
 	_setup_ui()
 	reset_level()
 	
+	# Auto-save current level when it loads
+	var current_scene = get_tree().current_scene.get_scene_file_path()
+	var level_name = "1-1"  # Default
+	if "Level 1-2" in current_scene:
+		level_name = "1-2"
+	elif "Level 1-3" in current_scene:
+		level_name = "1-3"
+	var save_manager = get_tree().root.get_node("SaveManager")
+	if save_manager:
+		save_manager.auto_save(level_name, _level_manager.lives if _level_manager else 3)
 
 
 func _setup_level_manager() -> void:
@@ -51,26 +62,12 @@ func _setup_level_manager() -> void:
 	_level_manager = get_tree().root.get_node_or_null("LevelManager")
 	
 	if not _level_manager:
-		# Detect current level from scene name
-		var scene_path = get_tree().current_scene.get_scene_file_path()
-		var level_num = 1
-		
-		if "Level" in scene_path:
-			# Extract number from "LevelX.tscn"
-			var parts = scene_path.split("Level")
-			if parts.size() > 1:
-				var num_str = parts[1].split(".")[0]
-				level_num = int(num_str) if num_str.is_valid_int() else 1
-		
-		# Create LevelManager
+		# Create LevelManager if doesn't exist
 		_level_manager = Node.new()
 		_level_manager.set_script(load("res://GameManager/LevelManager.gd"))
 		_level_manager.name = "LevelManager"
-		_level_manager.current_level = level_num
 		get_tree().root.add_child(_level_manager)
-		print("Created LevelManager. Starting at Level %d" % level_num)
-	else:
-		print("Using existing LevelManager at Level %d" % _level_manager.current_level)
+		print("Created new LevelManager")
 
 
 func _process(delta: float) -> void:
@@ -79,6 +76,7 @@ func _process(delta: float) -> void:
 			# Update hold button states before processing input
 			input_manager.update_hold_states()
 			_update_surface_phase()
+			# Explosions fade naturally over time - don't force cleanup
 		Phase.CHARGING:
 			# Update hold button states before processing input
 			input_manager.update_hold_states()
@@ -115,20 +113,10 @@ func _find_planets() -> void:
 		for child in asteroids_container.get_children():
 			if child.script:
 				var script_name = child.script.get_path()
-				print("Found asteroid: %s with script: %s" % [child.name, script_name])
 				
 				if script_name.ends_with("asteroid_blocker.gd"):
 					blocker_planets.append(child)
 					asteroid_blocks.append(child)
-					print("  → Added as AsteroidBlocker #%d" % asteroid_blocks.size())
-	
-	print("=== PLANETS FOUND ===")
-	print("Start: %s" % start_planet.name if start_planet else "Start: NOT FOUND")
-	print("Goal: %s" % goal_planet.name if goal_planet else "Goal: NOT FOUND")
-	print("Blockers: %d found" % blocker_planets.size())
-	for i in range(blocker_planets.size()):
-		print("  [%d] %s at pos %v with radius %.1f" % [i, blocker_planets[i].name, blocker_planets[i].global_position, blocker_planets[i].radius])
-	print("Asteroids: %d found" % asteroid_blocks.size())
 
 
 func _find_ui_manager() -> void:
@@ -245,26 +233,7 @@ func _update_surface_phase() -> void:
 
 func _update_charging_phase() -> void:
 	"""Handle charging phase - power bar oscillating."""
-	# Apply continuous rotation while held down (slower: 1 degree per frame)
-	if input_manager.left_held or key_left_held:
-		ship_rotation -= PI / 180.0  # 1 degree per frame for smooth hold
-		if current_planet and ship and current_phase == Phase.CHARGING:
-			var surface_pos: Vector2 = current_planet.get_surface_position(ship_rotation)
-			ship.position_ = surface_pos
-			ship.global_position = surface_pos
-			ship.angle = ship_rotation
-			ship.queue_redraw()
-		_update_trajectory_preview_static()
-	elif input_manager.right_held or key_right_held:
-		ship_rotation += PI / 180.0  # 1 degree per frame for smooth hold
-		if current_planet and ship and current_phase == Phase.CHARGING:
-			var surface_pos: Vector2 = current_planet.get_surface_position(ship_rotation)
-			ship.position_ = surface_pos
-			ship.global_position = surface_pos
-			ship.angle = ship_rotation
-			ship.queue_redraw()
-		_update_trajectory_preview_static()
-	
+	# During charging, NO rotation allowed - only power adjustment
 	# Launch preview visible, updated only when power changes significantly
 	launch_preview.show_preview()
 	
@@ -366,6 +335,12 @@ func _check_collisions() -> void:
 					current_phase = Phase.SURFACE
 					current_planet = blocker
 					ship.queue_redraw()
+					
+					# Reset power (numbers and triangle visual) when landing on blocker
+					input_manager.reset()
+					var power_bar_triangle = get_tree().root.get_node_or_null("Main/UIMain/PowerBarTriangleFill")
+					if power_bar_triangle and power_bar_triangle.has_method("reset"):
+						power_bar_triangle.reset()
 				else:
 					# Crash if going too fast
 					_on_crash()
@@ -374,11 +349,19 @@ func _check_collisions() -> void:
 
 func _on_left_button_pressed() -> void:
 	"""Handle left button down - start tracking time."""
+	if input_manager.inputs_blocked:
+		return
 	input_manager.record_left_press()
 
 
 func _on_left_button_released() -> void:
 	"""Handle left button up - check if it was a quick click."""
+	if input_manager.inputs_blocked:
+		return
+	# Only allow rotation during SURFACE phase
+	if current_phase != Phase.SURFACE:
+		input_manager.clear_press_states()
+		return
 	if input_manager.check_left_release():
 		# Quick click - rotate 1 degree
 		ship_rotation -= PI / 180.0
@@ -395,11 +378,19 @@ func _on_left_button_released() -> void:
 
 func _on_right_button_pressed() -> void:
 	"""Handle right button down - start tracking time."""
+	if input_manager.inputs_blocked:
+		return
 	input_manager.record_right_press()
 
 
 func _on_right_button_released() -> void:
 	"""Handle right button up - check if it was a quick click."""
+	if input_manager.inputs_blocked:
+		return
+	# Only allow rotation during SURFACE phase
+	if current_phase != Phase.SURFACE:
+		input_manager.clear_press_states()
+		return
 	if input_manager.check_right_release():
 		# Quick click - rotate 1 degree
 		ship_rotation += PI / 180.0
@@ -416,6 +407,8 @@ func _on_right_button_released() -> void:
 
 func _on_launch_button_pressed() -> void:
 	"""Handle launch button press."""
+	if input_manager.inputs_blocked:
+		return
 	if current_phase == Phase.SURFACE:
 		# Start charging
 		current_phase = Phase.CHARGING
@@ -431,6 +424,10 @@ func _on_launch_button_pressed() -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	"""Handle keyboard input (A, D for rotation, Space for launch)."""
+	# Ignore input if blocked
+	if input_manager and input_manager.inputs_blocked:
+		return
+	
 	if event is InputEventKey:
 		if event.keycode == KEY_A:
 			# Left rotation (A key)
@@ -468,8 +465,18 @@ func _on_goal_reached() -> void:
 
 func _on_crash() -> void:
 	"""Handle ship crash."""
+	# Clean up any existing explosion first
+	if active_explosion and is_instance_valid(active_explosion):
+		active_explosion.queue_free()
+		active_explosion = null
+	
 	current_phase = Phase.SURFACE
 	ship.is_flying = false
+	
+	# Create explosion effect at crash location
+	if ship:
+		_create_explosion(ship.global_position)
+	
 	ship_rotation = 0.0
 	input_manager.reset()
 	
@@ -490,9 +497,9 @@ func _on_crash() -> void:
 	else:
 		# Game over - go to Level 1
 		print("Game Over! Resetting to Level 1")
-		_level_manager.reset_to_level_one()
 		_level_manager.reset_lives()
-		get_tree().change_scene_to_file("res://MainScenes/Level1.tscn")
+		_level_manager.reset_first_entry()
+		get_tree().change_scene_to_file("res://MainScenes/Level 1-1.tscn")
 
 
 func _show_win_screen() -> void:
@@ -505,23 +512,83 @@ func _show_win_screen() -> void:
 
 func _on_next_level_pressed() -> void:
 	"""Load next level."""
-	var current_scene_path = get_tree().current_scene.get_scene_file_path()
-	print("Current scene: %s" % current_scene_path)
+	var current_scene = get_tree().current_scene.get_scene_file_path()
+	print("Current scene: %s" % current_scene)
 	
-	# Detectar qué número de nivel es
-	var level_number = 1
-	if "Level2" in current_scene_path:
-		level_number = 2
-	elif "Level3" in current_scene_path:
-		level_number = 3
+	# Ciclo de niveles: 1-1 → 1-2 → 1-3 → 1-1
+	var next_scene = "res://MainScenes/Level 1-1.tscn"
+	var next_level_name = "1-1"
+	if "Level 1-1" in current_scene:
+		next_scene = "res://MainScenes/Level 1-2.tscn"
+		next_level_name = "1-2"
+	elif "Level 1-2" in current_scene:
+		next_scene = "res://MainScenes/Level 1-3.tscn"
+		next_level_name = "1-3"
 	
-	# Ir al siguiente nivel
-	var next_level = level_number + 1
+	# Auto-save progress to current slot
+	var save_manager = get_tree().root.get_node("SaveManager")
+	if save_manager:
+		save_manager.auto_save(next_level_name, _level_manager.lives if _level_manager else 3)
 	
-	# Si pasamos el nivel 3, volver al 1
-	if next_level > 3:
-		next_level = 1
+	# Mark as first entry for next level
+	if _level_manager:
+		_level_manager.reset_first_entry()
 	
-	var next_scene = "res://MainScenes/Level%d.tscn" % next_level
 	print("Loading: %s" % next_scene)
 	get_tree().change_scene_to_file(next_scene)
+
+
+func _create_explosion(crash_pos: Vector2) -> void:
+	"""Create explosion - circular fireballs bursting radially from center."""
+	# Create container at crash position
+	active_explosion = Node2D.new()
+	active_explosion.position = crash_pos
+	get_parent().add_child(active_explosion)
+	
+	var particle_count = 24
+	var colors_start = [Color.YELLOW, Color(1.0, 0.9, 0.0)]
+	var colors_end = [Color(1.0, 0.3, 0.0), Color(1.0, 0.1, 0.0, 0.0)]
+	
+	for i in range(particle_count):
+		# Create circular fireball using Polygon2D
+		var particle = Polygon2D.new()
+		var start_color = colors_start[i % colors_start.size()]
+		particle.color = start_color
+		
+		# Initial radius - varied
+		var initial_radius = randf_range(4, 8)
+		
+		# Create circle polygon
+		var points = PackedVector2Array()
+		for angle_idx in range(0, 360, 20):
+			var point_angle = deg_to_rad(angle_idx)
+			var point = Vector2.RIGHT.rotated(point_angle) * initial_radius
+			points.append(point)
+		particle.polygon = points
+		particle.position = Vector2.ZERO
+		
+		# Radial direction with slight randomness
+		var burst_angle = (TAU / particle_count) * i + randf_range(-0.15, 0.15)
+		var direction = Vector2.RIGHT.rotated(burst_angle)
+		var travel_distance = randf_range(120, 180)
+		var end_pos = direction * travel_distance
+		
+		# Add to explosion
+		active_explosion.add_child(particle)
+		
+		# Simple animation: move outward and fade
+		var tween = create_tween()
+		tween.set_parallel(true)
+		tween.tween_property(particle, "position", end_pos, 2.0)
+		tween.tween_property(particle, "self_modulate:a", 0.0, 2.0)
+		
+		# Grow then shrink (color animation)
+		var color_tween = create_tween()
+		color_tween.tween_property(particle, "color", Color(1.0, 0.4, 0.0), 1.0)
+		color_tween.tween_property(particle, "color", colors_end[i % colors_end.size()], 1.0)
+	
+	# Clean up after animation
+	await get_tree().create_timer(2.1).timeout
+	if active_explosion and is_instance_valid(active_explosion):
+		active_explosion.queue_free()
+		active_explosion = null

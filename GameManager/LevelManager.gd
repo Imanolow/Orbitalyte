@@ -2,28 +2,18 @@ extends Node
 ## Global level manager - tracks current level progression
 class_name LevelManager
 
-var current_level: int = 1  # Start at Level1
+var is_first_entry: bool = true  # Track if first entry to this level
 var lives: int = 3  # Number of lives player has
 
 
-func get_current_level_path() -> String:
-	"""Get the scene path for the current level."""
-	return "res://MainScenes/Level%d.tscn" % current_level
+func mark_entry_shown() -> void:
+	"""Mark that we've shown the entry sequence for this level."""
+	is_first_entry = false
 
 
-func next_level() -> void:
-	"""Advance to next level."""
-	current_level += 1
-
-
-func go_to_level(level_number: int) -> void:
-	"""Jump to a specific level."""
-	current_level = level_number
-
-
-func reset_to_level_one() -> void:
-	"""Reset to Level 1."""
-	current_level = 1
+func reset_first_entry() -> void:
+	"""Reset for new level."""
+	is_first_entry = true
 
 
 func lose_life() -> bool:

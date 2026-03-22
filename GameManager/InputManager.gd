@@ -13,6 +13,7 @@ var right_press_time: float = 0.0	# Time when right button was pressed
 var left_clicked: bool = false		# Single click detected on left
 var right_clicked: bool = false		# Single click detected on right
 var click_threshold: float = 0.15	# Time in seconds to distinguish click from hold
+var inputs_blocked: bool = false  # Block all input during sequences
 
 @onready var power_meter = get_tree().root.get_node_or_null("Main/UIPanel/PowerMeter")
 
@@ -99,8 +100,23 @@ func check_right_release() -> bool:
 	return elapsed < click_threshold
 
 
+func block_inputs() -> void:
+	"""Block all player inputs."""
+	inputs_blocked = true
+	reset()
+
+
+func unblock_inputs() -> void:
+	"""Allow player inputs."""
+	inputs_blocked = false
+
+
 func update_hold_states() -> void:
 	"""Update hold states based on press time. Call this each frame."""
+	# Don't update if inputs are blocked
+	if inputs_blocked:
+		return
+	
 	if left_press_time > 0.0:
 		var elapsed = Time.get_ticks_msec() / 1000.0 - left_press_time
 		left_held = elapsed >= click_threshold
