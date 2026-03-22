@@ -9,6 +9,7 @@ var _level_manager: Node = null
 
 @onready var game_container: Node2D = get_node("../GameContainer")
 @onready var planets_container: Node2D = get_node("../GameContainer/PlanetsContainer")
+@onready var asteroids_container: Node2D = get_node_or_null("../GameContainer/Asteroids")
 @onready var ship_visuals: Node2D = get_node("../GameContainer/ShipVisuals")
 @onready var ship: Node2D = get_node("../GameContainer/ShipVisuals/ShipRenderer")
 @onready var trail_renderer: Node2D = get_node("../GameContainer/ShipVisuals/TrailRenderer")
@@ -24,6 +25,7 @@ var launch_button: Button
 var start_planet: Node2D = null
 var goal_planet: Node2D = null
 var blocker_planets: Array = []
+var asteroid_blocks: Array = []  # Destructive obstacles that crash on contact
 var current_planet: Node2D = null  # Planet ship is currently on
 var ship_rotation: float = 0.0  # 0 = up, π/2 = right, π = down, -π/2 = left
 var last_preview_power: float = -1.0  # Track power changes for preview updates
@@ -90,7 +92,9 @@ func _process(delta: float) -> void:
 func _find_planets() -> void:
 	"""Locate and categorize planets from the scene tree."""
 	blocker_planets.clear()
+	asteroid_blocks.clear()
 	
+	# Search in PlanetsContainer
 	for child in planets_container.get_children():
 		if child.script:
 			var script_name = child.script.get_path()
@@ -106,12 +110,25 @@ func _find_planets() -> void:
 				blocker_planets.append(child)
 				print("  → Added as BlockerPlanet #%d" % blocker_planets.size())
 	
+	# Search in Asteroids container if it exists
+	if asteroids_container:
+		for child in asteroids_container.get_children():
+			if child.script:
+				var script_name = child.script.get_path()
+				print("Found asteroid: %s with script: %s" % [child.name, script_name])
+				
+				if script_name.ends_with("asteroid_blocker.gd"):
+					blocker_planets.append(child)
+					asteroid_blocks.append(child)
+					print("  → Added as AsteroidBlocker #%d" % asteroid_blocks.size())
+	
 	print("=== PLANETS FOUND ===")
 	print("Start: %s" % start_planet.name if start_planet else "Start: NOT FOUND")
 	print("Goal: %s" % goal_planet.name if goal_planet else "Goal: NOT FOUND")
 	print("Blockers: %d found" % blocker_planets.size())
 	for i in range(blocker_planets.size()):
 		print("  [%d] %s at pos %v with radius %.1f" % [i, blocker_planets[i].name, blocker_planets[i].global_position, blocker_planets[i].radius])
+	print("Asteroids: %d found" % asteroid_blocks.size())
 
 
 func _find_ui_manager() -> void:
@@ -177,6 +194,12 @@ func reset_level() -> void:
 	ship_rotation = 0.0
 	last_preview_power = -1.0
 	input_manager.reset()
+	
+	# Reset the power meter triangle display
+	var power_bar_triangle = get_tree().root.get_node_or_null("Main/UIMain/PowerBarTriangleFill")
+	if power_bar_triangle and power_bar_triangle.has_method("reset"):
+		power_bar_triangle.reset()
+	
 	key_left_held = false
 	key_right_held = false
 	current_planet = start_planet
@@ -313,28 +336,39 @@ func _check_collisions() -> void:
 	for blocker in blocker_planets:
 		var dist_to_blocker: float = ship.position_.distance_to(blocker.global_position)
 		if dist_to_blocker < blocker.radius + PhysicsConfig.GAP:
-			var speed: float = ship.velocity.length()
-			if speed <= PhysicsConfig.SAFE:
-				# Safe landing on blocker planet
-				# Calculate radial angle from blocker center to ship position (atan2 + PI/2 for Godot coords)
-				var dx: float = ship.position_.x - blocker.global_position.x
-				var dy: float = ship.position_.y - blocker.global_position.y
-				ship_rotation = atan2(dy, dx) + PI / 2.0
-				
-				# Position ship on blocker surface
-				var surface_pos: Vector2 = blocker.get_surface_position(ship_rotation)
-				ship.position_ = surface_pos
-				ship.global_position = surface_pos
-				ship.angle = ship_rotation
-				ship.velocity = Vector2.ZERO
-				ship.is_flying = false
-				ship.trail.clear()
-				current_phase = Phase.SURFACE
-				current_planet = blocker
-				ship.queue_redraw()
-			else:
-				# Crash if going too fast
+			# Check if this is an asteroid blocker (always crashes)
+			var is_asteroid: bool = false
+			if blocker.script:
+				var script_name = blocker.script.get_path()
+				is_asteroid = script_name.ends_with("asteroid_blocker.gd")
+			
+			if is_asteroid:
+				# Asteroid blocker - always crash
 				_on_crash()
+			else:
+				# Regular blocker - check speed for landing
+				var speed: float = ship.velocity.length()
+				if speed <= PhysicsConfig.SAFE:
+					# Safe landing on blocker planet
+					# Calculate radial angle from blocker center to ship position (atan2 + PI/2 for Godot coords)
+					var dx: float = ship.position_.x - blocker.global_position.x
+					var dy: float = ship.position_.y - blocker.global_position.y
+					ship_rotation = atan2(dy, dx) + PI / 2.0
+					
+					# Position ship on blocker surface
+					var surface_pos: Vector2 = blocker.get_surface_position(ship_rotation)
+					ship.position_ = surface_pos
+					ship.global_position = surface_pos
+					ship.angle = ship_rotation
+					ship.velocity = Vector2.ZERO
+					ship.is_flying = false
+					ship.trail.clear()
+					current_phase = Phase.SURFACE
+					current_planet = blocker
+					ship.queue_redraw()
+				else:
+					# Crash if going too fast
+					_on_crash()
 			return
 
 
@@ -438,6 +472,12 @@ func _on_crash() -> void:
 	ship.is_flying = false
 	ship_rotation = 0.0
 	input_manager.reset()
+	
+	# Reset the power meter triangle display
+	var power_bar_triangle = get_tree().root.get_node_or_null("Main/UIMain/PowerBarTriangleFill")
+	if power_bar_triangle and power_bar_triangle.has_method("reset"):
+		power_bar_triangle.reset()
+	
 	key_left_held = false
 	key_right_held = false
 	

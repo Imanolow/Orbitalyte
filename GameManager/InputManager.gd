@@ -14,20 +14,20 @@ var left_clicked: bool = false		# Single click detected on left
 var right_clicked: bool = false		# Single click detected on right
 var click_threshold: float = 0.15	# Time in seconds to distinguish click from hold
 
-@onready var power_bar = get_tree().root.get_node_or_null("Main/UIPanel/PowerBar")
+@onready var power_meter = get_tree().root.get_node_or_null("Main/UIPanel/PowerMeter")
 
 
 func _ready() -> void:
-	if not power_bar:
-		power_bar = get_tree().root.get_node("Main/UIPanel/PowerBar")
+	if not power_meter:
+		power_meter = get_tree().root.get_node("Main/UIPanel/PowerMeter")
 
 
 func _process(delta: float) -> void:
 	if not is_charging:
 		return
 	
-	# Oscillate power between 0 and 100
-	power += power_direction * 200.0 * delta
+	# Oscillate power between 0 and 100 (medium speed)
+	power += power_direction * 125.0 * delta
 	
 	if power >= 100.0:
 		power = 100.0
@@ -36,9 +36,12 @@ func _process(delta: float) -> void:
 		power = 0.0
 		power_direction = 1.0
 	
-	# Update visual progress bar
-	if power_bar:
-		power_bar.value = power
+	# Update visual power meter
+	if power_meter:
+		var num_str = str(int(power))
+		while num_str.length() < 3:
+			num_str = " " + num_str
+		power_meter.text = num_str + "%"
 
 
 func start_charging() -> void:
@@ -54,9 +57,7 @@ func stop_charging() -> float:
 	var final_power = power
 	power = 0.0
 	power_direction = 1.0
-	# Update visual progress bar to zero
-	if power_bar:
-		power_bar.value = 0.0
+	# Keep the power meter display showing the launch power
 	return final_power
 
 
@@ -69,9 +70,9 @@ func reset() -> void:
 	right_held = false
 	left_clicked = false
 	right_clicked = false
-	# Update visual progress bar to zero
-	if power_bar:
-		power_bar.value = 0.0
+	# Update visual power meter to zero with proper formatting
+	if power_meter:
+		power_meter.text = "  0%"
 
 
 func record_left_press() -> void:

@@ -23,6 +23,10 @@ func _draw() -> void:
 	# Usar orbital_multiplier correcto
 	var orbit_radius: float = planet.radius * planet.orbital_multiplier
 	
+	# Skip drawing if orbit_radius is 0 (asteroids)
+	if orbit_radius <= 0.0:
+		return
+	
 	# Draw dashed circle (orbit visualization)
 	draw_dashed_circle(Vector2.ZERO, orbit_radius, Color.WHITE * 0.18, 4, 7)
 	

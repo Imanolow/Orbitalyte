@@ -1,6 +1,6 @@
 @tool
 extends Node2D
-## Script for blocking planets (gravity-affected obstacles).
+## Script for asteroid blockers (gravity-affected obstacles - ALWAYS crashes, no landing).
 
 @export var radius: float = 60.0:
 	set(value):
@@ -32,12 +32,16 @@ extends Node2D
 			sprite.self_modulate = tint_color
 
 var sprite: Sprite2D = null
+var rotation_speed: float = 0.0  # Random rotation speed in rad/s
 
 
 func _ready() -> void:
 	if not Engine.is_editor_hint():
 		if world_position != Vector2.ZERO:
 			global_position = world_position
+		
+		# Random rotation speed: between -0.1 and 0.1 rad/s (each asteroid rotates at different speed)
+		rotation_speed = randf_range(-0.1, 0.1)
 	
 	_update_sprite()
 
@@ -60,6 +64,12 @@ func _update_sprite() -> void:
 		sprite.visible = true
 	elif sprite:
 		sprite.visible = false
+
+
+func _process(delta: float) -> void:
+	"""Apply rotation to asteroid."""
+	if not Engine.is_editor_hint():
+		rotation += rotation_speed * delta
 
 
 func apply_gravity(ship_pos: Vector2, _ship_vel: Vector2) -> Vector2:
@@ -86,13 +96,8 @@ func get_orbit_radius() -> float:
 	return radius * 1.1
 
 
-func get_surface_position(angle: float) -> Vector2:
-	"""Get position on planet surface at given angle. Angle adjusted so 0 = top."""
-	return global_position + Vector2.UP.rotated(angle) * (radius + 13.0)
-
-
 func _draw() -> void:
-	"""Draw the blocker planet."""
+	"""Draw the asteroid blocker."""
 	# If sprite exists, it will handle rendering
 	if sprite:
 		# But still draw the orbital ring
@@ -152,9 +157,22 @@ func draw_orbital_ring() -> void:
 		
 		last_point = current_point
 	
-	# Semi-transparent circle area
-	var points: PackedVector2Array = []
-	for i in range(64):
-		var angle: float = (float(i) / float(64)) * TAU
-		points.append(Vector2.RIGHT.rotated(angle) * orbit_radius)
-	draw_colored_polygon(points, Color.WHITE * Color(1, 1, 1, 0.1))
+	# Radial pulse effect from circumference toward center
+	var radial_segments: int = 32
+	var steps: int = 16
+	
+	for i in range(radial_segments):
+		var angle: float = (float(i) / float(radial_segments)) * TAU
+		
+		# Draw multiple steps from circumference to center with decreasing opacity
+		for step in range(steps):
+			var progress: float = float(step) / float(steps)
+			var current_distance: float = orbit_radius * (1.0 - progress)
+			var next_distance: float = orbit_radius * (1.0 - float(step + 1) / float(steps))
+			
+			var current_point: Vector2 = Vector2.RIGHT.rotated(angle) * current_distance
+			var next_point: Vector2 = Vector2.RIGHT.rotated(angle) * next_distance
+			
+			# Opacity decreases as we move toward center
+			var alpha: float = 0.4 * (1.0 - progress)
+			draw_line(current_point, next_point, Color.WHITE * Color(1, 1, 1, alpha), 1.5)

@@ -7,11 +7,10 @@ class_name UIManager
 var left_button: Button
 var right_button: Button
 var launch_button: Button
-var power_bar: ProgressBar
-var power_bg: Panel
 var ui_panel: Control
 var win_overlay: Panel
-var lives_label: Label
+var lives_label1: Label
+var lives_label2: Label
 
 
 func _ready() -> void:
@@ -22,9 +21,8 @@ func _ready() -> void:
 	if not ui_panel:
 		_create_ui_from_scratch()
 	
-	# Ensure lives label exists and is updated
-	if not lives_label:
-		_create_lives_label()
+	# Ensure lives labels exist and are updated
+	_find_lives_labels()
 	
 	# Update lives display
 	_update_lives_display()
@@ -38,7 +36,6 @@ func _find_existing_ui() -> bool:
 		left_button = panel.get_node_or_null("LeftButton")
 		right_button = panel.get_node_or_null("RightButton")
 		launch_button = panel.get_node_or_null("LaunchButton")
-		power_bar = panel.get_node_or_null("PowerBar")
 		return left_button and right_button and launch_button
 	return false
 
@@ -95,28 +92,6 @@ func _create_ui_from_scratch() -> void:
 	spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	hbox.add_child(spacer)
 	
-	# Create power bar background
-	power_bg = Panel.new()
-	power_bg.name = "PowerBarBg"
-	power_bg.custom_minimum_size = Vector2(130, 54)
-	var bg_style = StyleBoxFlat.new()
-	bg_style.bg_color = Color(1.0, 0.85, 0.2, 0.1)
-	power_bg.add_theme_stylebox_override("panel", bg_style)
-	hbox.add_child(power_bg)
-	
-	# Create power bar
-	power_bar = ProgressBar.new()
-	power_bar.name = "PowerBar"
-	power_bar.min_value = 0.0
-	power_bar.max_value = 100.0
-	power_bar.value = 0.0
-	power_bar.anchor_left = 0.0
-	power_bar.anchor_top = 0.0
-	power_bar.anchor_right = 1.0
-	power_bar.anchor_bottom = 1.0
-	power_bar.modulate.a = 0.0  # Hide initially
-	power_bg.add_child(power_bar)
-	
 	# Create launch button
 	launch_button = Button.new()
 	launch_button.name = "LaunchButton"
@@ -124,20 +99,6 @@ func _create_ui_from_scratch() -> void:
 	launch_button.custom_minimum_size = Vector2(130, 54)
 	_style_launch_button(launch_button)
 	hbox.add_child(launch_button)
-	
-	# Create lives label in top-right corner
-	lives_label = Label.new()
-	lives_label.name = "LivesLabel"
-	lives_label.anchor_left = 1.0
-	lives_label.anchor_top = 0.0
-	lives_label.anchor_right = 1.0
-	lives_label.anchor_bottom = 0.0
-	lives_label.offset_left = -100
-	lives_label.offset_top = 10
-	lives_label.add_theme_font_size_override("font_size", 32)
-	lives_label.text = "❤ 3"
-	lives_label.add_theme_color_override("font_color", Color.WHITE)
-	add_child(lives_label)
 	
 	# Add UI panel to scene (this layer)
 	add_child(ui_panel)
@@ -195,23 +156,28 @@ func _style_launch_button(btn: Button) -> void:
 	btn.add_theme_stylebox_override("focused", hover_style)
 
 
-func _create_lives_label() -> void:
-	"""Create the lives label if it doesn't exist."""
-	if lives_label:
+func _find_lives_labels() -> void:
+	"""Find the lives labels in the scene (UIPanel/LivesLabel1 and LivesLabel2)."""
+	var ui_panel_node = get_tree().root.get_node_or_null("Main/UIPanel")
+	if ui_panel_node:
+		lives_label1 = ui_panel_node.get_node_or_null("LivesLabel1")
+		lives_label2 = ui_panel_node.get_node_or_null("LivesLabel2")
+
+
+func _update_lives_display() -> void:
+	"""Update the lives display with two-digit format."""
+	var level_manager = get_tree().root.get_node_or_null("LevelManager")
+	if not level_manager:
 		return
 	
-	lives_label = Label.new()
-	lives_label.name = "LivesLabel"
-	lives_label.anchor_left = 1.0
-	lives_label.anchor_top = 0.0
-	lives_label.anchor_right = 1.0
-	lives_label.anchor_bottom = 0.0
-	lives_label.offset_left = -100
-	lives_label.offset_top = 10
-	lives_label.add_theme_font_size_override("font_size", 32)
-	lives_label.text = "❤ 3"
-	lives_label.add_theme_color_override("font_color", Color.WHITE)
-	add_child(lives_label)
+	var lives = level_manager.lives
+	var tens = lives / 10
+	var ones = lives % 10
+	
+	if lives_label1:
+		lives_label1.text = str(tens)
+	if lives_label2:
+		lives_label2.text = str(ones)
 
 
 func show_win_screen() -> void:
@@ -299,24 +265,6 @@ func get_buttons() -> Dictionary:
 		"right": right_button,
 		"launch": launch_button
 	}
-
-
-func get_power_bar() -> ProgressBar:
-	"""Return power bar reference."""
-	return power_bar
-
-
-func _update_lives_display() -> void:
-	"""Update the lives label display."""
-	if not lives_label:
-		return
-	
-	var level_manager = get_tree().root.get_node_or_null("LevelManager")
-	if level_manager:
-		lives_label.text = "❤ %d" % level_manager.lives
-	else:
-		# Default to 3 if LevelManager not found yet
-		lives_label.text = "❤ 3"
 
 
 func update_lives() -> void:

@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=10 format=4 uid="uid://cod35j48raylt"]
+[gd_resource type="Theme" load_steps=9 format=4 uid="uid://cod35j48raylt"]
 
 [ext_resource type="Texture2D" uid="uid://xjkhhdjrqpg6" path="res://MainMenuArt/Main_Menu_GUI.png" id="1_6eegm"]
 
@@ -1150,10 +1150,6 @@ expand_margin_top = 2.0
 expand_margin_right = 2.0
 expand_margin_bottom = 2.0
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_6eegm"]
-texture = ExtResource("1_6eegm")
-region_rect = Rect2(0, 0, 259, 80)
-
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_qcwfo"]
 texture = ExtResource("1_6eegm")
 texture_margin_bottom = 76.0
@@ -1185,6 +1181,6 @@ Button/font_sizes/font_size = 16
 Button/fonts/font = SubResource("FontFile_q2acp")
 Button/styles/disabled = SubResource("StyleBoxFlat_4lot1")
 Button/styles/focus = SubResource("StyleBoxFlat_jo427")
-Button/styles/hover = SubResource("StyleBoxTexture_6eegm")
+Button/styles/hover = null
 Button/styles/normal = SubResource("StyleBoxTexture_qcwfo")
 Button/styles/pressed = SubResource("StyleBoxTexture_fur8i")
