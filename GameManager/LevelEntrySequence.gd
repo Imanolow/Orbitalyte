@@ -47,7 +47,18 @@ func _create_label() -> void:
 	add_child(label_node)
 	
 	label_node.text = ""
-	label_node.add_theme_font_size_override("font_size", 80)
+	
+	# Load and apply Arcade font
+	var arcade_font = load("res://Fonts/ARCADE_I.TTF")
+	if arcade_font:
+		label_node.add_theme_font_override("font", arcade_font)
+	
+	# Create LabelSettings for outline and font size
+	var label_settings = LabelSettings.new()
+	label_settings.font_size = 100
+	label_settings.outline_size = 10
+	label_settings.outline_color = Color.BLACK
+	label_node.label_settings = label_settings
 	label_node.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label_node.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	
