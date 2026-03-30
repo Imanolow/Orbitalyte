@@ -1,4 +1,4 @@
-[gd_scene load_steps=68 format=4 uid="uid://dldgqarmlytbs"]
+[gd_scene load_steps=69 format=4 uid="uid://dldgqarmlytbs"]
 
 [ext_resource type="Texture2D" uid="uid://bf6oqb0wb274f" path="res://MainMenuArt/Main_Menu_Back_01.png" id="1_5vbct"]
 [ext_resource type="Texture2D" uid="uid://be1706bgr58a6" path="res://MainMenuArt/Main_Menu_Back_Stars_01.png" id="2_lymk6"]
@@ -41,6 +41,7 @@
 [ext_resource type="Script" uid="uid://byu70vdtw6cdi" path="res://GameManager/script_manager.gd" id="39_3sgy0"]
 [ext_resource type="Script" uid="uid://c260gfndy3tk6" path="res://GameManager/InputManager.gd" id="40_jqx03"]
 [ext_resource type="Script" uid="uid://6fpsa815ubn8" path="res://GameManager/LevelEntrySequence.gd" id="41_r3apm"]
+[ext_resource type="Script" path="res://GameManager/LevelTool.gd" id="level_tool_script"]
 
 [sub_resource type="Image" id="Image_icxlx"]
 data = {
@@ -2285,6 +2286,9 @@ texture = ExtResource("14_00na2")
 
 [node name="LaunchPreview" type="Node2D" parent="GameContainer/ShipVisuals"]
 script = ExtResource("15_pg2ov")
+
+[node name="LevelTool" type="Node2D" parent="GameContainer/ShipVisuals"]
+script = ExtResource("level_tool_script")
 
 [node name="Asteroids" type="Node2D" parent="GameContainer"]
 

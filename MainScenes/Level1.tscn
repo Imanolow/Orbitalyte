@@ -1,4 +1,4 @@
-[gd_scene load_steps=67 format=4 uid="uid://bcdet2xamny40"]
+[gd_scene load_steps=68 format=4 uid="uid://bcdet2xamny40"]
 
 [ext_resource type="PackedScene" uid="uid://ej6t4kuyttvk" path="res://Planets/BlockerPlanet.tscn" id="1_7pjwt"]
 [ext_resource type="Texture2D" uid="uid://bf6oqb0wb274f" path="res://MainMenuArt/Main_Menu_Back_01.png" id="1_i2xej"]
@@ -40,6 +40,7 @@
 [ext_resource type="Theme" uid="uid://ddx1breaqg3vv" path="res://UI_Elements/LaunchLRButtons_GUI.tres" id="31_oua8n"]
 [ext_resource type="Texture2D" uid="uid://d1vynju7ontjb" path="res://UI_Elements/LaunchButtonslrTheme_GUI.png" id="32_wm5na"]
 [ext_resource type="Script" uid="uid://bktxpjp6y4rfe" path="res://GameManager/PowerBarTriangle.gd" id="33_powerbar"]
+[ext_resource type="Script" path="res://GameManager/LevelTool.gd" id="level_tool_script"]
 
 [sub_resource type="Image" id="Image_icxlx"]
 data = {
@@ -2284,6 +2285,9 @@ texture = ExtResource("13_wm5na")
 
 [node name="LaunchPreview" type="Node2D" parent="GameContainer/ShipVisuals"]
 script = ExtResource("6_preview_script")
+
+[node name="LevelTool" type="Node2D" parent="GameContainer/ShipVisuals"]
+script = ExtResource("level_tool_script")
 
 [node name="Asteroids" type="Node2D" parent="GameContainer"]
 

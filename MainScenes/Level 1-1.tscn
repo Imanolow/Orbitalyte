@@ -1,4 +1,4 @@
-[gd_scene load_steps=68 format=4 uid="uid://cefmoqi5swjdw"]
+[gd_scene load_steps=69 format=4 uid="uid://cefmoqi5swjdw"]
 
 [ext_resource type="Texture2D" uid="uid://bf6oqb0wb274f" path="res://MainMenuArt/Main_Menu_Back_01.png" id="1_cvkjp"]
 [ext_resource type="Texture2D" uid="uid://be1706bgr58a6" path="res://MainMenuArt/Main_Menu_Back_Stars_01.png" id="2_jegjm"]
@@ -16,6 +16,7 @@
 [ext_resource type="Texture2D" uid="uid://te2lg4ewlgue" path="res://Ship/Ship_New_01.png" id="14_8fet6"]
 [ext_resource type="Script" uid="uid://bx2k13553bdbe" path="res://GameManager/LaunchPreview.gd" id="15_nf266"]
 [ext_resource type="Script" uid="uid://bpwnw3ptu45ye" path="res://GameManager/asteroid_blocker.gd" id="16_6f22w"]
+[ext_resource type="Script" path="res://GameManager/LevelTool.gd" id="level_tool_script"]
 [ext_resource type="Texture2D" uid="uid://7no5e3tk6bew" path="res://Planets/Asteroids/Asteroid_Block_01.png" id="17_wen0l"]
 [ext_resource type="Texture2D" uid="uid://mothqqt7gja3" path="res://Planets/Asteroids/Asteroid_Block_02.png" id="18_bov2h"]
 [ext_resource type="Texture2D" uid="uid://c14v7s44nycew" path="res://Planets/Asteroids/Asteroid_Block_03.png" id="19_u5r75"]
@@ -2285,6 +2286,9 @@ texture = ExtResource("14_8fet6")
 
 [node name="LaunchPreview" type="Node2D" parent="GameContainer/ShipVisuals"]
 script = ExtResource("15_nf266")
+
+[node name="LevelTool" type="Node2D" parent="GameContainer/ShipVisuals"]
+script = ExtResource("level_tool_script")
 
 [node name="Asteroids" type="Node2D" parent="GameContainer"]
 

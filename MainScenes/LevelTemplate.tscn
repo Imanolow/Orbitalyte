@@ -1,4 +1,4 @@
-[gd_scene load_steps=68 format=4 uid="uid://dl88n4aspxwyv"]
+[gd_scene load_steps=69 format=4 uid="uid://dl88n4aspxwyv"]
 
 [ext_resource type="PackedScene" uid="uid://ej6t4kuyttvk" path="res://Planets/BlockerPlanet.tscn" id="1_blocker"]
 [ext_resource type="Texture2D" uid="uid://bf6oqb0wb274f" path="res://MainMenuArt/Main_Menu_Back_01.png" id="1_ibq04"]
@@ -11,6 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://vxji4madb3fm" path="res://Planets/PlanetSprites/Block_Planet_01.png" id="6_n0rou"]
 [ext_resource type="Script" uid="uid://bx2k13553bdbe" path="res://GameManager/LaunchPreview.gd" id="6_preview_script"]
 [ext_resource type="Script" uid="uid://c260gfndy3tk6" path="res://GameManager/InputManager.gd" id="7_input_script"]
+[ext_resource type="Script" path="res://GameManager/LevelTool.gd" id="level_tool_script"]
 [ext_resource type="Texture2D" uid="uid://de2ku168kal0f" path="res://Planets/PlanetSprites/Goal_Planet_01.png" id="8_fn6ah"]
 [ext_resource type="Script" uid="uid://l1xqu3oenae6" path="res://GameManager/Ship.gd" id="8_ship_script"]
 [ext_resource type="Script" uid="uid://ck38s26tbc357" path="res://GameManager/trail_renderer.gd" id="9_trail_script"]
@@ -2285,6 +2286,9 @@ texture = ExtResource("13_nwys6")
 
 [node name="LaunchPreview" type="Node2D" parent="GameContainer/ShipVisuals"]
 script = ExtResource("6_preview_script")
+
+[node name="LevelTool" type="Node2D" parent="GameContainer/ShipVisuals"]
+script = ExtResource("level_tool_script")
 
 [node name="Asteroids" type="Node2D" parent="GameContainer"]
 
