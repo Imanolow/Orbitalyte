@@ -21,3 +21,8 @@ func _draw() -> void:
 		var color: Color = Color.SKY_BLUE * (t * 0.6)
 		var width: float = t * 6.0
 		draw_line(ship.trail[i - 1], ship.trail[i], color, width)
+
+
+func clear_trail() -> void:
+	"""Limpiar el trail visualmente."""
+	queue_redraw()

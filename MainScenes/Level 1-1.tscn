@@ -2211,34 +2211,34 @@ Button/styles/pressed = SubResource("StyleBoxTexture_l4gva")
 
 [node name="Main" type="Node2D"]
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="StarsBack" type="Sprite2D" parent="."]
 z_index = -1
 texture = ExtResource("1_cvkjp")
 centered = false
 
-[node name="Parallax2D" type="Parallax2D" parent="Sprite2D"]
+[node name="Parallax2D" type="Parallax2D" parent="StarsBack"]
 repeat_size = Vector2(1920, 1080)
 autoscroll = Vector2(10, -15)
 
-[node name="Stars01" type="Sprite2D" parent="Sprite2D/Parallax2D"]
+[node name="Stars01" type="Sprite2D" parent="StarsBack/Parallax2D"]
 position = Vector2(63, 19)
 texture = ExtResource("2_jegjm")
 centered = false
 
-[node name="Parallax2D2" type="Parallax2D" parent="Sprite2D"]
+[node name="Parallax2D2" type="Parallax2D" parent="StarsBack"]
 repeat_size = Vector2(1920, 1080)
 autoscroll = Vector2(8, -15)
 
-[node name="Stars02" type="Sprite2D" parent="Sprite2D/Parallax2D2"]
+[node name="Stars02" type="Sprite2D" parent="StarsBack/Parallax2D2"]
 position = Vector2(81, -25)
 texture = ExtResource("3_otprt")
 centered = false
 
-[node name="Parallax2D3" type="Parallax2D" parent="Sprite2D"]
+[node name="Parallax2D3" type="Parallax2D" parent="StarsBack"]
 repeat_size = Vector2(1920, 1080)
 autoscroll = Vector2(13, -15)
 
-[node name="Stars03" type="Sprite2D" parent="Sprite2D/Parallax2D3"]
+[node name="Stars03" type="Sprite2D" parent="StarsBack/Parallax2D3"]
 position = Vector2(40, 3)
 texture = ExtResource("4_byx0x")
 centered = false
@@ -2553,7 +2553,7 @@ scale = Vector2(0.986, 0.941)
 script = ExtResource("32_vljgb")
 
 [node name="PowerBackBars" type="Sprite2D" parent="UIMain"]
-position = Vector2(1624, 486)
+position = Vector2(1573, 457)
 texture = ExtResource("33_1x6rc")
 centered = false
 

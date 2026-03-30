@@ -30,6 +30,7 @@ var current_planet: Node2D = null  # Planet ship is currently on
 var ship_rotation: float = 0.0  # 0 = up, π/2 = right, π = down, -π/2 = left
 var last_preview_power: float = -1.0  # Track power changes for preview updates
 var active_explosion: Node = null  # Track current explosion container
+var num_launches: int = 0  # Track number of launches for one-shot detection
 
 # Keyboard input tracking for continuous rotation
 var key_left_held: bool = false  # Track A key
@@ -181,6 +182,7 @@ func reset_level() -> void:
 	current_phase = Phase.SURFACE
 	ship_rotation = 0.0
 	last_preview_power = -1.0
+	# NO resetear num_launches - debe ser acumulativo en TODO el nivel
 	input_manager.reset()
 	
 	# Reset the power meter triangle display
@@ -200,6 +202,10 @@ func reset_level() -> void:
 		var surface_pos: Vector2 = start_planet.get_surface_position(ship_rotation)
 		ship.reset_ship(surface_pos)
 		ship.angle = ship_rotation
+	
+	# Clear trail renderer
+	if trail_renderer and trail_renderer.has_method("clear_trail"):
+		trail_renderer.clear_trail()
 	
 	launch_preview.hide_preview()
 
@@ -418,6 +424,7 @@ func _on_launch_button_pressed() -> void:
 		# Stop charging and launch
 		var power: float = input_manager.stop_charging()
 		current_phase = Phase.FLYING
+		num_launches += 1
 		ship.set_launch_velocity(power, ship_rotation)
 		launch_preview.hide_preview()
 
@@ -495,17 +502,20 @@ func _on_crash() -> void:
 			ui_manager.update_lives()
 		reset_level()
 	else:
-		# Game over - go to Level 1
-		print("Game Over! Resetting to Level 1")
-		_level_manager.reset_lives()
-		_level_manager.reset_first_entry()
-		get_tree().change_scene_to_file("res://MainScenes/Level 1-1.tscn")
+		# Game over - show lose screen
+		print("Game Over! Showing lose screen")
+		current_phase = Phase.WIN  # Prevent further updates
+		if ui_manager:
+			ui_manager.show_lose_screen()
 
 
 func _show_win_screen() -> void:
 	"""Display victory overlay screen through UIManager."""
 	if ui_manager:
-		ui_manager.show_win_screen()
+		var has_one_shot = num_launches == 1
+		var has_star = false  # Star system not yet implemented
+		print("SCRIPT_MANAGER - num_launches: ", num_launches, " has_one_shot: ", has_one_shot)
+		ui_manager.show_win_screen(has_one_shot, has_star)
 	else:
 		push_error("UIManager not available for showing win screen")
 

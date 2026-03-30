@@ -2369,58 +2369,58 @@ script = ExtResource("1_fd5jv")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
-[node name="Sprite2D" type="Sprite2D" parent="CanvasLayer"]
+[node name="StarsBack" type="Sprite2D" parent="CanvasLayer"]
 z_index = -1
 texture = ExtResource("2_pq6p2")
 centered = false
 
-[node name="Parallax2D" type="Parallax2D" parent="CanvasLayer/Sprite2D"]
+[node name="Parallax2D" type="Parallax2D" parent="CanvasLayer/StarsBack"]
 repeat_size = Vector2(1920, 1080)
 autoscroll = Vector2(10, -15)
 
-[node name="Stars01" type="Sprite2D" parent="CanvasLayer/Sprite2D/Parallax2D"]
+[node name="Stars01" type="Sprite2D" parent="CanvasLayer/StarsBack/Parallax2D"]
 position = Vector2(63, 19)
 texture = ExtResource("3_fghas")
 centered = false
 
-[node name="Parallax2D2" type="Parallax2D" parent="CanvasLayer/Sprite2D"]
+[node name="Parallax2D2" type="Parallax2D" parent="CanvasLayer/StarsBack"]
 repeat_size = Vector2(1920, 1080)
 autoscroll = Vector2(8, -15)
 
-[node name="Stars02" type="Sprite2D" parent="CanvasLayer/Sprite2D/Parallax2D2"]
+[node name="Stars02" type="Sprite2D" parent="CanvasLayer/StarsBack/Parallax2D2"]
 position = Vector2(81, -25)
 texture = ExtResource("4_pnujl")
 centered = false
 
-[node name="Parallax2D3" type="Parallax2D" parent="CanvasLayer/Sprite2D"]
+[node name="Parallax2D3" type="Parallax2D" parent="CanvasLayer/StarsBack"]
 repeat_size = Vector2(1920, 1080)
 autoscroll = Vector2(13, -15)
 
-[node name="Stars03" type="Sprite2D" parent="CanvasLayer/Sprite2D/Parallax2D3"]
+[node name="Stars03" type="Sprite2D" parent="CanvasLayer/StarsBack/Parallax2D3"]
 position = Vector2(40, 3)
 texture = ExtResource("5_h7vvw")
 centered = false
 
-[node name="Sprite2D" type="Sprite2D" parent="CanvasLayer/Sprite2D"]
+[node name="Sprite2D" type="Sprite2D" parent="CanvasLayer/StarsBack"]
 position = Vector2(960, 846)
 texture = ExtResource("6_fghas")
 
-[node name="Planet" type="Sprite2D" parent="CanvasLayer/Sprite2D"]
+[node name="Planet" type="Sprite2D" parent="CanvasLayer/StarsBack"]
 position = Vector2(960, 979)
 texture = ExtResource("6_kj2pr")
 
-[node name="Logo" type="Sprite2D" parent="CanvasLayer/Sprite2D"]
+[node name="Logo" type="Sprite2D" parent="CanvasLayer/StarsBack"]
 position = Vector2(960, 326)
 texture = ExtResource("7_lu3xc")
 
-[node name="ButtonManager" type="Control" parent="CanvasLayer/Sprite2D"]
+[node name="ButtonManager" type="Control" parent="CanvasLayer/StarsBack"]
 z_index = 1
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="Play" type="Button" parent="CanvasLayer/Sprite2D/ButtonManager"]
+[node name="Play" type="Button" parent="CanvasLayer/StarsBack/ButtonManager"]
 layout_mode = 0
 offset_left = 835.0
 offset_top = 556.0
@@ -2429,7 +2429,7 @@ offset_bottom = 632.0
 focus_mode = 0
 theme = SubResource("Theme_pddtd")
 
-[node name="Options" type="Button" parent="CanvasLayer/Sprite2D/ButtonManager"]
+[node name="Options" type="Button" parent="CanvasLayer/StarsBack/ButtonManager"]
 layout_mode = 0
 offset_left = 858.5
 offset_top = 656.0
@@ -2438,7 +2438,7 @@ offset_bottom = 710.0
 focus_mode = 0
 theme = SubResource("Theme_ffcpw")
 
-[node name="Quit" type="Button" parent="CanvasLayer/Sprite2D/ButtonManager"]
+[node name="Quit" type="Button" parent="CanvasLayer/StarsBack/ButtonManager"]
 layout_mode = 0
 offset_left = 871.0
 offset_top = 736.0
@@ -2447,7 +2447,7 @@ offset_bottom = 789.0
 focus_mode = 0
 theme = SubResource("Theme_fghas")
 
-[connection signal="pressed" from="CanvasLayer/Sprite2D/ButtonManager/Play" to="." method="_on_play_pressed"]
-[connection signal="pressed" from="CanvasLayer/Sprite2D/ButtonManager/Options" to="." method="_on_options_pressed"]
-[connection signal="pressed" from="CanvasLayer/Sprite2D/ButtonManager/Quit" to="." method="_on_quit_pressed"]
-[connection signal="pressed" from="CanvasLayer/Sprite2D/ButtonManager/Quit" to="." method="_on_exit_pressed"]
+[connection signal="pressed" from="CanvasLayer/StarsBack/ButtonManager/Play" to="." method="_on_play_pressed"]
+[connection signal="pressed" from="CanvasLayer/StarsBack/ButtonManager/Options" to="." method="_on_options_pressed"]
+[connection signal="pressed" from="CanvasLayer/StarsBack/ButtonManager/Quit" to="." method="_on_exit_pressed"]
+[connection signal="pressed" from="CanvasLayer/StarsBack/ButtonManager/Quit" to="." method="_on_quit_pressed"]

@@ -1,0 +1,60 @@
+[gd_scene load_steps=5 format=3 uid="uid://blxh2h5nbm5dh"]
+
+[ext_resource type="Script" path="res://LoseScreen/lose_screen.gd" id="1_lose_screen"]
+[ext_resource type="Texture2D" uid="uid://cjplc0ft6n7en" path="res://LoseScreen/Sprites/LoseBack.png" id="2_trygk"]
+[ext_resource type="FontFile" uid="uid://bio8op0gkolr6" path="res://Fonts/ARCADE_I.TTF" id="13_m7eqh"]
+[ext_resource type="Texture2D" uid="uid://cfcb5ttdebcdo" path="res://WinScreen/Sprites/RetryBack.png" id="14_41lj4"]
+[ext_resource type="Texture2D" uid="uid://cwjkjx2ul82dh" path="res://WinScreen/Sprites/NextBack.png" id="15_at4qa"]
+
+[node name="LoseScreen" type="Node2D"]
+script = ExtResource("1_lose_screen")
+
+[node name="LoseBack" type="Sprite2D" parent="."]
+texture = ExtResource("2_trygk")
+
+[node name="Level" type="Label" parent="."]
+offset_left = -127.0
+offset_top = -195.0
+offset_right = -48.0
+offset_bottom = -172.0
+scale = Vector2(0.9799524, 1.3305594)
+theme_override_colors/font_color = Color(0.9098039, 0.9019608, 0.42745098, 1)
+theme_override_fonts/font = ExtResource("13_m7eqh")
+theme_override_font_sizes/font_size = 54
+text = "LEVEL"
+
+[node name="Failed" type="Label" parent="."]
+offset_left = -210.0
+offset_top = -121.0
+offset_right = 107.0
+offset_bottom = -66.0
+scale = Vector2(1.3561318, 1.841328)
+theme_override_colors/font_color = Color(0.9098039, 0.9019608, 0.42745098, 1)
+theme_override_fonts/font = ExtResource("13_m7eqh")
+theme_override_font_sizes/font_size = 54
+text = "FAILED"
+
+[node name="Next Stage" type="Label" parent="."]
+offset_left = -229.00002
+offset_top = -5.000002
+offset_right = 274.0
+offset_bottom = 50.0
+scale = Vector2(0.9799524, 1.3305594)
+theme_override_colors/font_color = Color(0.9085759, 0.90228796, 0.42765054, 1)
+theme_override_fonts/font = ExtResource("13_m7eqh")
+theme_override_font_sizes/font_size = 19
+text = "Critical error... retry..."
+
+[node name="RetryButton" type="Button" parent="."]
+offset_left = -297.0
+offset_top = 206.0
+offset_right = -26.0
+offset_bottom = 326.0
+icon = ExtResource("14_41lj4")
+
+[node name="NextButton" type="Button" parent="."]
+offset_left = 25.0
+offset_top = 206.0
+offset_right = 296.0
+offset_bottom = 326.0
+icon = ExtResource("15_at4qa")

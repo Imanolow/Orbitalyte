@@ -1,0 +1,110 @@
+[gd_scene load_steps=15 format=3 uid="uid://bav3b86p82n5a"]
+
+[ext_resource type="Texture2D" uid="uid://da4n5sdx5xlbx" path="res://WinScreen/Sprites/WinBack.png" id="1_s88t3"]
+[ext_resource type="Texture2D" uid="uid://cv8taj6s4orel" path="res://WinScreen/Sprites/ScreenBack.png" id="2_jlsea"]
+[ext_resource type="Texture2D" uid="uid://dwx51ry84fta6" path="res://WinScreen/Sprites/Filler01.png" id="3_fmxcx"]
+[ext_resource type="Texture2D" uid="uid://crydnasu1v6cp" path="res://WinScreen/Sprites/FillerDown.png" id="4_ovlmi"]
+[ext_resource type="Texture2D" uid="uid://djpbao2cjrfmh" path="res://WinScreen/Sprites/FillerClicks.png" id="5_18wv4"]
+[ext_resource type="Texture2D" uid="uid://by3jmiypl75aj" path="res://WinScreen/Sprites/CheckBlack.png" id="6_2u4ip"]
+[ext_resource type="Texture2D" uid="uid://bxgb7m3t78cld" path="res://WinScreen/Sprites/CheckBlue.png" id="7_2sblj"]
+[ext_resource type="Texture2D" uid="uid://v6to33xah75c" path="res://WinScreen/Sprites/OneBlack.png" id="8_nn66w"]
+[ext_resource type="Texture2D" uid="uid://di5cs2wy8qb5v" path="res://WinScreen/Sprites/OneBlue.png" id="9_hx0fo"]
+[ext_resource type="Texture2D" uid="uid://bt13ha2beiobw" path="res://WinScreen/Sprites/StarBlack.png" id="10_2rst6"]
+[ext_resource type="Texture2D" uid="uid://bcprlgme1d6p7" path="res://WinScreen/Sprites/StarBlue.png" id="11_ntoxi"]
+[ext_resource type="FontFile" uid="uid://bio8op0gkolr6" path="res://Fonts/ARCADE_I.TTF" id="12_3k8ew"]
+[ext_resource type="Texture2D" uid="uid://cfcb5ttdebcdo" path="res://WinScreen/Sprites/RetryBack.png" id="13_f0ncr"]
+[ext_resource type="Texture2D" uid="uid://cwjkjx2ul82dh" path="res://WinScreen/Sprites/NextBack.png" id="14_loimn"]
+[ext_resource type="Script" path="res://WinScreen/win_screen.gd" id="15_script"]
+
+[node name="WinScreen" type="Node2D"]
+script = ExtResource("15_script")
+
+[node name="WinBack" type="Sprite2D" parent="."]
+texture = ExtResource("1_s88t3")
+
+[node name="ScreenBack" type="Sprite2D" parent="."]
+position = Vector2(0, -78)
+texture = ExtResource("2_jlsea")
+
+[node name="Fillerback" type="Sprite2D" parent="."]
+position = Vector2(0, 139)
+texture = ExtResource("3_fmxcx")
+
+[node name="Fillerback2" type="Sprite2D" parent="."]
+position = Vector2(0, 361)
+texture = ExtResource("4_ovlmi")
+
+[node name="FillerClicks" type="Sprite2D" parent="."]
+position = Vector2(0, -316)
+texture = ExtResource("5_18wv4")
+
+[node name="CheckBlack" type="Sprite2D" parent="."]
+position = Vector2(-117.5, -319)
+texture = ExtResource("6_2u4ip")
+
+[node name="CheckBlue" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(-117.5, -319)
+texture = ExtResource("7_2sblj")
+
+[node name="OneBlack" type="Sprite2D" parent="."]
+position = Vector2(117.5, -319)
+texture = ExtResource("8_nn66w")
+
+[node name="OneBlue" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(117.5, -319)
+texture = ExtResource("9_hx0fo")
+
+[node name="StarBlack" type="Sprite2D" parent="."]
+position = Vector2(0.5, -319)
+texture = ExtResource("10_2rst6")
+
+[node name="StarBlue" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(0.5, -319)
+texture = ExtResource("11_ntoxi")
+
+[node name="Level" type="Label" parent="."]
+offset_left = -127.0
+offset_top = -195.0
+offset_right = -48.0
+offset_bottom = -172.0
+scale = Vector2(0.9799524, 1.3305594)
+theme_override_fonts/font = ExtResource("12_3k8ew")
+theme_override_font_sizes/font_size = 54
+text = "LEVEL"
+
+[node name="Complete" type="Label" parent="."]
+offset_left = -204.0
+offset_top = -109.99999
+offset_right = 219.0
+offset_bottom = -54.999992
+scale = Vector2(0.9799524, 1.3305594)
+theme_override_fonts/font = ExtResource("12_3k8ew")
+theme_override_font_sizes/font_size = 54
+text = "COMPLETE"
+
+[node name="Next Stage" type="Label" parent="."]
+offset_left = -229.00002
+offset_top = -5.000002
+offset_right = 274.0
+offset_bottom = 50.0
+scale = Vector2(0.9799524, 1.3305594)
+theme_override_fonts/font = ExtResource("12_3k8ew")
+theme_override_font_sizes/font_size = 19
+text = "Proceed to the next mission"
+
+[node name="RetryButton" type="Button" parent="."]
+offset_left = -297.0
+offset_top = 206.0
+offset_right = -26.0
+offset_bottom = 326.0
+icon = ExtResource("13_f0ncr")
+
+[node name="NextButton" type="Button" parent="."]
+offset_left = 25.0
+offset_top = 206.0
+offset_right = 296.0
+offset_bottom = 326.0
+icon = ExtResource("14_loimn")
