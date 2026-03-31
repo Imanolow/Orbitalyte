@@ -2297,8 +2297,8 @@ script = ExtResource("6_preview_script")
 
 [node name="LevelTool" type="Node2D" parent="GameContainer/ShipVisuals"]
 script = ExtResource("level_tool_script")
-launch_power = 82.19
-launch_angle_degrees = 0.53
+launch_power = 61.975
+launch_angle_degrees = 26.64
 
 [node name="Asteroids" type="Node2D" parent="GameContainer"]
 

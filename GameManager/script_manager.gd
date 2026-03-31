@@ -26,11 +26,13 @@ var start_planet: Node2D = null
 var goal_planet: Node2D = null
 var blocker_planets: Array = []
 var asteroid_blocks: Array = []  # Destructive obstacles that crash on contact
+var star_win: Node2D = null  # Optional star collectible
 var current_planet: Node2D = null  # Planet ship is currently on
 var ship_rotation: float = 0.0  # 0 = up, π/2 = right, π = down, -π/2 = left
 var last_preview_power: float = -1.0  # Track power changes for preview updates
 var active_explosion: Node = null  # Track current explosion container
 var num_launches: int = 0  # Track number of launches for one-shot detection
+var has_star: bool = false  # Track if star was collected in this attempt
 
 # Keyboard input tracking for continuous rotation
 var key_left_held: bool = false  # Track A key
@@ -109,12 +111,19 @@ func _find_planets() -> void:
 				blocker_planets.append(child)
 				print("  → Added as BlockerPlanet #%d" % blocker_planets.size())
 	
+	# Search in GameContainer for StarWin
+	for child in game_container.get_children():
+		if child.script:
+			var script_name = child.script.get_path()
+			if script_name.ends_with("star_win.gd"):
+				star_win = child
+				print("Found StarWin in GameContainer")
+	
 	# Search in Asteroids container if it exists
 	if asteroids_container:
 		for child in asteroids_container.get_children():
 			if child.script:
 				var script_name = child.script.get_path()
-				
 				if script_name.ends_with("asteroid_blocker.gd"):
 					blocker_planets.append(child)
 					asteroid_blocks.append(child)
@@ -184,6 +193,11 @@ func reset_level() -> void:
 	last_preview_power = -1.0
 	# NO resetear num_launches - debe ser acumulativo en TODO el nivel
 	input_manager.reset()
+	
+	# Reset star (shows up again)
+	has_star = false
+	if star_win:
+		star_win.reset_star()
 	
 	# Reset the power meter triangle display
 	var power_bar_triangle = get_tree().root.get_node_or_null("Main/UIMain/PowerBarTriangleFill")
@@ -292,6 +306,12 @@ func _check_collisions() -> void:
 	"""Check if ship collided with any planet."""
 	if not ship or (not goal_planet and not start_planet):
 		return
+	
+	# Check collision with star (collectible - doesn't stop the ship)
+	if star_win and not has_star:
+		var dist_to_star: float = ship.position_.distance_to(star_win.global_position)
+		if dist_to_star < star_win.radius + PhysicsConfig.GAP:
+			_on_star_collected()
 	
 	# Check collision with goal planet - instant win, no speed check
 	if goal_planet:
@@ -509,12 +529,21 @@ func _on_crash() -> void:
 			ui_manager.show_lose_screen()
 
 
+func _on_star_collected() -> void:
+	"""Handle collecting the star bonus."""
+	if not star_win:
+		return
+	
+	has_star = true
+	star_win.collect_star()
+	print("Star collected!")
+
+
 func _show_win_screen() -> void:
 	"""Display victory overlay screen through UIManager."""
 	if ui_manager:
 		var has_one_shot = num_launches == 1
-		var has_star = false  # Star system not yet implemented
-		print("SCRIPT_MANAGER - num_launches: ", num_launches, " has_one_shot: ", has_one_shot)
+		print("SCRIPT_MANAGER - num_launches: ", num_launches, " has_one_shot: ", has_one_shot, " has_star: ", has_star)
 		ui_manager.show_win_screen(has_one_shot, has_star)
 	else:
 		push_error("UIManager not available for showing win screen")
