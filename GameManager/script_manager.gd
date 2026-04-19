@@ -34,6 +34,7 @@ var last_preview_power: float = -1.0  # Track power changes for preview updates
 var active_explosion: Node = null  # Track explosions (no longer used but kept for compatibility)
 var num_launches: int = 0  # Track number of launches for one-shot detection
 var has_star: bool = false  # Track if star was collected in this attempt
+var shake_tween: Tween = null  # Control screen shake animation
 
 # Keyboard input tracking for continuous rotation
 var key_left_held: bool = false  # Track A key
@@ -522,6 +523,7 @@ func _on_crash() -> void:
 	# Create explosion effect at crash location
 	if ship:
 		_create_explosion(ship.global_position)
+		_apply_camera_shake()
 	
 	input_manager.reset()
 	
@@ -636,61 +638,53 @@ func _level_exists(level_name: String) -> bool:
 
 
 func _create_explosion(crash_pos: Vector2) -> void:
-	"""Create explosion - circular fireballs bursting radially from center."""
-	# Create container at crash position
+	"""Create simple optimized explosion with ColorRects."""
 	var explosion = Node2D.new()
 	explosion.position = crash_pos
 	get_parent().add_child(explosion)
 	
-	var particle_count = 24
-	var colors_start = [Color.YELLOW, Color(1.0, 0.9, 0.0)]
-	var colors_end = [Color(1.0, 0.3, 0.0), Color(1.0, 0.1, 0.0, 0.0)]
-	
-	# Crear un grupo para controlar todas las animaciones de esta explosión
-	var explosion_tweens = []
+	var particle_count = 8
 	
 	for i in range(particle_count):
-		# Create circular fireball using Polygon2D
-		var particle = Polygon2D.new()
-		var start_color = colors_start[i % colors_start.size()]
-		particle.color = start_color
-		
-		# Initial radius - varied
-		var initial_radius = randf_range(4, 8)
-		
-		# Create circle polygon
-		var points = PackedVector2Array()
-		for angle_idx in range(0, 360, 20):
-			var point_angle = deg_to_rad(angle_idx)
-			var point = Vector2.RIGHT.rotated(point_angle) * initial_radius
-			points.append(point)
-		particle.polygon = points
+		var particle = ColorRect.new()
+		particle.size = Vector2(6, 6)
+		particle.color = Color.YELLOW
 		particle.position = Vector2.ZERO
 		
-		# Radial direction with slight randomness
-		var burst_angle = (TAU / particle_count) * i + randf_range(-0.15, 0.15)
+		# Radial direction
+		var burst_angle = (TAU / particle_count) * i
 		var direction = Vector2.RIGHT.rotated(burst_angle)
-		var travel_distance = randf_range(120, 180)
-		var end_pos = direction * travel_distance
+		var end_pos = direction * 150
 		
-		# Add to explosion
 		explosion.add_child(particle)
 		
-		# Simple animation: move outward and fade
+		# Simple tween: move and fade
 		var tween = create_tween()
 		tween.set_parallel(true)
-		tween.tween_property(particle, "position", end_pos, 2.0)
-		tween.tween_property(particle, "self_modulate:a", 0.0, 2.0)
-		
-		# Grow then shrink (color animation)
-		var color_tween = create_tween()
-		color_tween.tween_property(particle, "color", Color(1.0, 0.4, 0.0), 1.0)
-		color_tween.tween_property(particle, "color", colors_end[i % colors_end.size()], 1.0)
-		
-		explosion_tweens.append(tween)
+		tween.tween_property(particle, "position", end_pos, 1.0)
+		tween.tween_property(particle, "modulate:a", 0.0, 1.0)
+		tween.tween_property(particle, "color", Color(1.0, 0.3, 0.0), 1.0)
 	
-	# Clean up this explosion after all animations finish
-	if explosion_tweens.size() > 0:
-		await explosion_tweens[0].finished
-		if explosion and is_instance_valid(explosion):
-			explosion.free()
+	# Clean up after animation
+	await get_tree().create_timer(1.5).timeout
+	if explosion and is_instance_valid(explosion):
+		explosion.free()
+
+
+func _apply_camera_shake() -> void:
+	"""Apply screen shake effect by moving game container."""
+	if not game_container:
+		return
+	
+	# Kill previous shake if still active
+	if shake_tween:
+		shake_tween.kill()
+	
+	var original = game_container.position
+	shake_tween = create_tween()
+	
+	# Create 4 shakes with random offsets
+	shake_tween.tween_property(game_container, "position", original + Vector2(randf_range(-5, 5), randf_range(-5, 5)), 0.05)
+	shake_tween.tween_property(game_container, "position", original + Vector2(randf_range(-5, 5), randf_range(-5, 5)), 0.05)
+	shake_tween.tween_property(game_container, "position", original + Vector2(randf_range(-5, 5), randf_range(-5, 5)), 0.05)
+	shake_tween.tween_property(game_container, "position", original, 0.05)
