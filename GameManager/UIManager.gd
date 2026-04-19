@@ -223,19 +223,9 @@ func _load_win_screen() -> void:
 
 
 func _on_retry_pressed() -> void:
-	"""Handle retry button press - reset attempts and ship to center."""
-	# Reset attempts to 0 on retry
-	var level_manager = get_tree().root.get_node_or_null("LevelManager")
-	if level_manager:
-		level_manager.attempts = 0
-	
-	var script_mgr = get_tree().root.get_node_or_null("Main/GameManager")
-	if script_mgr and script_mgr.has_method("reset_level_retry"):
-		script_mgr.reset_level_retry()
-	elif script_mgr and script_mgr.has_method("reset_level"):
-		script_mgr.reset_level()
-	else:
-		push_error("Could not find script_manager to reset level")
+	"""Handle retry button press from win screen - handled by win_screen.gd itself."""
+	# The win_screen script handles this directly
+	pass
 
 
 func _on_next_level_pressed() -> void:

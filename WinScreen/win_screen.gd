@@ -77,7 +77,23 @@ func _activate_icon(icon: Sprite2D, delay: float):
 
 
 func _on_retry_pressed():
-	"""Se ejecuta cuando se presiona el botón Retry"""
+	"""Se ejecuta cuando se presiona el botón Retry - reinicia el nivel actual"""
+	# Obtener el nivel actual de la escena
+	var current_scene = get_tree().current_scene.get_scene_file_path()
+	var current_level = _extract_level_from_path(current_scene)
+	
+	print("WinScreen RETRY - Current level: ", current_level)
+	
+	# Resetear estado del juego
+	var level_manager = get_tree().root.get_node_or_null("LevelManager")
+	if level_manager:
+		level_manager.attempts = 0  # Resetear attempts
+		level_manager.reset_first_entry()
+	
+	# Recargar el nivel
+	var level_path = "res://MainScenes/Level " + current_level + ".tscn"
+	get_tree().change_scene_to_file(level_path)
+	
 	emit_signal("retry_pressed")
 	visible = false
 
@@ -86,3 +102,19 @@ func _on_next_level_pressed():
 	"""Se ejecuta cuando se presiona el botón Next Level"""
 	emit_signal("next_level_pressed")
 	visible = false
+
+
+func _extract_level_from_path(path: String) -> String:
+	"""Extrae el nombre del nivel del path de la escena (ej: 'Level 1-3' de 'res://MainScenes/Level 1-3.tscn')"""
+	# El path será algo como: "res://MainScenes/Level 1-3.tscn"
+	# Queremos extraer "1-3"
+	
+	if "Level " in path:
+		# Buscar "Level " y tomar lo que sigue hasta .tscn
+		var start_index = path.find("Level ") + 6  # 6 es la longitud de "Level "
+		var end_index = path.find(".tscn")
+		if start_index > 5 and end_index > start_index:
+			return path.substr(start_index, end_index - start_index)
+	
+	# Default si no se puede extraer
+	return "1-1"
