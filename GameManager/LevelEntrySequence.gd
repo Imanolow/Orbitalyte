@@ -41,6 +41,12 @@ func _ready() -> void:
 		level_manager.mark_entry_shown()
 
 
+func show_intro_sequence() -> void:
+	"""Public method to manually trigger the intro sequence (e.g., on retry)."""
+	print("LevelEntrySequence.show_intro_sequence() - Disparando secuencia de entrada")
+	await _show_entry_sequence()
+
+
 func _create_label() -> void:
 	"""Create the rótulo label."""
 	label_node = Label.new()
@@ -78,6 +84,11 @@ func _show_entry_sequence() -> void:
 	# Block inputs
 	input_manager.block_inputs()
 	
+	# Disable options menu button during entry sequence
+	var ui_manager = get_tree().root.get_node_or_null("Main/UILayer")
+	if ui_manager and ui_manager.has_method("set_options_button_disabled"):
+		ui_manager.set_options_button_disabled(true)
+	
 	# Extract level name from scene file path
 	var scene_path = get_tree().current_scene.get_scene_file_path()
 	# Extract "1-1" from "res://MainScenes/Level 1-1.tscn"
@@ -100,6 +111,10 @@ func _show_entry_sequence() -> void:
 	
 	# Unblock inputs
 	input_manager.unblock_inputs()
+	
+	# Re-enable options menu button
+	if ui_manager and ui_manager.has_method("set_options_button_disabled"):
+		ui_manager.set_options_button_disabled(false)
 
 
 func _animate_label(text: String) -> void:

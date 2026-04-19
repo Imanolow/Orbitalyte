@@ -1,4 +1,4 @@
-[gd_scene load_steps=69 format=4 uid="uid://m26ug5c006oc"]
+[gd_scene load_steps=70 format=4 uid="uid://m26ug5c006oc"]
 
 [ext_resource type="Texture2D" uid="uid://bf6oqb0wb274f" path="res://MainMenuArt/Main_Menu_Back_01.png" id="1_1vr4x"]
 [ext_resource type="PackedScene" uid="uid://ej6t4kuyttvk" path="res://Planets/BlockerPlanet.tscn" id="1_blocker2"]
@@ -25,6 +25,7 @@
 [ext_resource type="Texture2D" uid="uid://d1fub13xks1o7" path="res://Planets/Asteroids/Asteroid_Block_04.png" id="20_emq24"]
 [ext_resource type="Texture2D" uid="uid://cpak8rq35nv5w" path="res://UI_Elements/Panels_Back.png" id="21_v48p3"]
 [ext_resource type="Texture2D" uid="uid://ds0f1c7y7fm1s" path="res://UI_Elements/Game_Frame.png" id="22_8ebj6"]
+[ext_resource type="PackedScene" uid="uid://nfaem6a5f84q" path="res://Planets/StarWin/StarWin.tscn" id="22_h0f7d"]
 [ext_resource type="Texture2D" uid="uid://dfte8jbtfgqkx" path="res://UI_Elements/Orbitalyte_Panel_Button_01.png" id="23_7akt3"]
 [ext_resource type="Texture2D" uid="uid://smutvq0m6s5i" path="res://UI_Elements/Logo_Back.png" id="24_qq5r5"]
 [ext_resource type="Texture2D" uid="uid://bvl1qphj0gwj3" path="res://UI_Elements/Settings_Button_01.png" id="25_wp0pj"]
@@ -2502,6 +2503,9 @@ script = ExtResource("16_ndxeo")
 radius = 36.565
 orbital_multiplier = 0.0
 sprite_texture = ExtResource("20_emq24")
+
+[node name="StarWin" parent="GameContainer" instance=ExtResource("22_h0f7d")]
+position = Vector2(570, 349)
 
 [node name="UIMain" type="Control" parent="."]
 layout_mode = 3

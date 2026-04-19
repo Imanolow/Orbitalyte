@@ -7,10 +7,13 @@ class_name UIManager
 var left_button: Button
 var right_button: Button
 var launch_button: Button
+var options_button: Button
 var ui_panel: Control
 var win_overlay: Panel
 var win_screen: Node2D
 var lose_screen: Node2D
+var options_screen: Node2D
+var previous_phase: int = 2  # Guardar phase anterior a pausa (por defecto FLYING=2)
 var lives_label1: Label
 var lives_label2: Label
 
@@ -38,6 +41,10 @@ func _find_existing_ui() -> bool:
 		left_button = panel.get_node_or_null("LeftButton")
 		right_button = panel.get_node_or_null("RightButton")
 		launch_button = panel.get_node_or_null("LaunchButton")
+		options_button = panel.get_node_or_null("OptionsMenu")
+		# Connect options button if it exists
+		if options_button:
+			options_button.pressed.connect(_on_options_menu_button_pressed)
 		return left_button and right_button and launch_button
 	return false
 
@@ -167,14 +174,14 @@ func _find_lives_labels() -> void:
 
 
 func _update_lives_display() -> void:
-	"""Update the lives display with two-digit format."""
+	"""Update the attempts display with two-digit format."""
 	var level_manager = get_tree().root.get_node_or_null("LevelManager")
 	if not level_manager:
 		return
 	
-	var lives = level_manager.lives
-	var tens = lives / 10
-	var ones = lives % 10
+	var attempts = level_manager.attempts
+	var tens = attempts / 10
+	var ones = attempts % 10
 	
 	if lives_label1:
 		lives_label1.text = str(tens)
@@ -216,9 +223,16 @@ func _load_win_screen() -> void:
 
 
 func _on_retry_pressed() -> void:
-	"""Handle retry button press."""
+	"""Handle retry button press - reset attempts and ship to center."""
+	# Reset attempts to 0 on retry
+	var level_manager = get_tree().root.get_node_or_null("LevelManager")
+	if level_manager:
+		level_manager.attempts = 0
+	
 	var script_mgr = get_tree().root.get_node_or_null("Main/GameManager")
-	if script_mgr and script_mgr.has_method("reset_level"):
+	if script_mgr and script_mgr.has_method("reset_level_retry"):
+		script_mgr.reset_level_retry()
+	elif script_mgr and script_mgr.has_method("reset_level"):
 		script_mgr.reset_level()
 	else:
 		push_error("Could not find script_manager to reset level")
@@ -289,3 +303,110 @@ func _on_lose_menu_pressed() -> void:
 	"""Handle lose screen menu button press - handled by lose_screen.gd itself."""
 	# The lose_screen script handles this directly
 	pass
+
+
+func show_options_menu() -> void:
+	"""Display the options menu."""
+	print("UIManager.show_options_menu() - llamado")
+	if not options_screen:
+		_load_options_screen()
+	
+	if options_screen:
+		print("UIManager - Conectando señales de OptionsScreen")
+		# Connect signals if not already connected
+		if not options_screen.resume_pressed.is_connected(_on_options_resume_pressed):
+			options_screen.resume_pressed.connect(_on_options_resume_pressed)
+			print("UIManager - resume_pressed conectada")
+		if not options_screen.menu_pressed.is_connected(_on_options_menu_pressed):
+			options_screen.menu_pressed.connect(_on_options_menu_pressed)
+			print("UIManager - menu_pressed conectada")
+		if not options_screen.exit_pressed.is_connected(_on_options_exit_pressed):
+			options_screen.exit_pressed.connect(_on_options_exit_pressed)
+			print("UIManager - exit_pressed conectada")
+		
+		# Show the options menu
+		print("UIManager - Mostrando OptionsScreen")
+		options_screen.show_options_menu()
+		
+		# Guardar phase actual y cambiar a PAUSED
+		var script_mgr = get_tree().root.get_node_or_null("Main/GameManager")
+		if script_mgr:
+			previous_phase = script_mgr.current_phase
+			print("UIManager - Phase anterior guardado: ", previous_phase)
+			script_mgr.current_phase = 4  # Phase.PAUSED = 4
+			print("UIManager - Phase cambiado a PAUSED")
+
+
+func hide_options_menu() -> void:
+	"""Hide the options menu."""
+	if options_screen:
+		options_screen.visible = false
+		get_tree().paused = false
+
+
+func _load_options_screen() -> void:
+	"""Load the OptionsScreen scene."""
+	var options_screen_scene = load("res://OptionsScreen/OptionsScreen.tscn")
+	if options_screen_scene:
+		options_screen = options_screen_scene.instantiate()
+		add_child(options_screen)
+	else:
+		push_error("Could not load OptionsScreen scene")
+
+
+func _on_options_resume_pressed() -> void:
+	"""Handle options resume button press - return to game."""
+	print("UIManager._on_options_resume_pressed() - Volviendo al juego")
+	
+	# Restaurar phase anterior
+	var script_mgr = get_tree().root.get_node_or_null("Main/GameManager")
+	if script_mgr:
+		script_mgr.current_phase = previous_phase
+		print("UIManager - Phase restaurado a: ", previous_phase)
+
+
+func _on_options_menu_pressed() -> void:
+	"""Handle options menu button press - return to main menu."""
+	print("UIManager._on_options_menu_pressed() - HANDLER EJECUTADO")
+	
+	# Guardar progreso antes de volver al menú
+	var level_manager = get_tree().root.get_node_or_null("LevelManager")
+	if level_manager:
+		level_manager.is_first_entry = true
+		print("UIManager - is_first_entry reseteado a true")
+		
+		# Guardar el nivel actual con los attempts
+		var scene_path = get_tree().current_scene.get_scene_file_path()
+		var level_name = _extract_level_name(scene_path)
+		var save_manager = get_tree().root.get_node_or_null("SaveManager")
+		if save_manager:
+			save_manager.auto_save(level_name, level_manager.attempts)
+			print("UIManager - Guardado automático: ", level_name, " - ", level_manager.attempts, " attempts")
+	
+	get_tree().change_scene_to_file("res://MainScenes/MainMenu.tscn")
+
+
+func _extract_level_name(scene_path: String) -> String:
+	"""Extract level name from scene path (e.g., '1-1' from 'Level 1-1')."""
+	if "Level " in scene_path:
+		var parts = scene_path.split("Level ")
+		if parts.size() > 1:
+			return parts[1].split(".")[0]
+	return "1-1"
+
+
+func _on_options_exit_pressed() -> void:
+	"""Handle options exit button press - quit game."""
+	print("UIManager._on_options_exit_pressed() - HANDLER EJECUTADO")
+	get_tree().quit()
+
+
+func _on_options_menu_button_pressed() -> void:
+	"""Handle options menu button press (when clicking the OptionsMenu button in the scene)."""
+	show_options_menu()
+
+
+func set_options_button_disabled(disabled: bool) -> void:
+	"""Disable/enable the options menu button (called during LevelEntrySequence)."""
+	if options_button:
+		options_button.disabled = disabled

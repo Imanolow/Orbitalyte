@@ -2,7 +2,7 @@ extends Node2D
 ## Main game manager handling game state, physics, and level progression.
 
 # Game phases
-enum Phase { SURFACE, CHARGING, FLYING, WIN }
+enum Phase { SURFACE, CHARGING, FLYING, WIN, PAUSED }
 
 # Singleton-like level tracking
 var _level_manager: Node = null
@@ -29,8 +29,9 @@ var asteroid_blocks: Array = []  # Destructive obstacles that crash on contact
 var star_win: Node2D = null  # Optional star collectible
 var current_planet: Node2D = null  # Planet ship is currently on
 var ship_rotation: float = 0.0  # 0 = up, π/2 = right, π = down, -π/2 = left
+var last_launch_rotation: float = 0.0  # Rotation from which ship was last launched (for respawn position)
 var last_preview_power: float = -1.0  # Track power changes for preview updates
-var active_explosion: Node = null  # Track current explosion container
+var active_explosion: Node = null  # Track explosions (no longer used but kept for compatibility)
 var num_launches: int = 0  # Track number of launches for one-shot detection
 var has_star: bool = false  # Track if star was collected in this attempt
 
@@ -49,14 +50,20 @@ func _ready() -> void:
 	
 	# Auto-save current level when it loads
 	var current_scene = get_tree().current_scene.get_scene_file_path()
-	var level_name = "1-1"  # Default
-	if "Level 1-2" in current_scene:
-		level_name = "1-2"
-	elif "Level 1-3" in current_scene:
-		level_name = "1-3"
+	var level_name = _extract_level_name(current_scene)
 	var save_manager = get_tree().root.get_node("SaveManager")
 	if save_manager:
-		save_manager.auto_save(level_name, _level_manager.lives if _level_manager else 3)
+		save_manager.auto_save(level_name, _level_manager.attempts if _level_manager else 0)
+
+
+
+func _extract_level_name(scene_path: String) -> String:
+	"""Extract level name from scene path (e.g., 'Level 1-1' from 'res://MainScenes/Level 1-1.tscn')."""
+	if "Level " in scene_path:
+		var parts = scene_path.split("Level ")
+		if parts.size() > 1:
+			return parts[1].split(".")[0]  # Get everything until .tscn
+	return "1-1"  # Default fallback
 
 
 func _setup_level_manager() -> void:
@@ -187,9 +194,23 @@ func _setup_ui() -> void:
 
 
 func reset_level() -> void:
-	"""Reset the current level to initial state."""
+	"""Reset the current level to initial state (after crash - keeps last launch rotation)."""
+	_reset_level_internal(false)
+
+
+func reset_level_retry() -> void:
+	"""Reset the entire level for retry from win screen (goes to center)."""
+	_reset_level_internal(true)
+
+
+func _reset_level_internal(is_complete_retry: bool) -> void:
+	"""Internal reset function.
+	is_complete_retry = true: reset to center (from win screen retry)
+	is_complete_retry = false: keep last position (from crash)
+	"""
 	current_phase = Phase.SURFACE
-	ship_rotation = 0.0
+	if is_complete_retry:
+		last_launch_rotation = 0.0  # Go to center on complete retry
 	last_preview_power = -1.0
 	# NO resetear num_launches - debe ser acumulativo en TODO el nivel
 	input_manager.reset()
@@ -213,9 +234,10 @@ func reset_level() -> void:
 		ui_manager.hide_win_screen()
 	
 	if start_planet and ship:
-		var surface_pos: Vector2 = start_planet.get_surface_position(ship_rotation)
+		var surface_pos: Vector2 = start_planet.get_surface_position(last_launch_rotation)
 		ship.reset_ship(surface_pos)
-		ship.angle = ship_rotation
+		ship.angle = last_launch_rotation
+		ship_rotation = last_launch_rotation  # Set to last launch rotation
 	
 	# Clear trail renderer
 	if trail_renderer and trail_renderer.has_method("clear_trail"):
@@ -445,6 +467,7 @@ func _on_launch_button_pressed() -> void:
 		var power: float = input_manager.stop_charging()
 		current_phase = Phase.FLYING
 		num_launches += 1
+		last_launch_rotation = ship_rotation  # Save rotation for respawn
 		ship.set_launch_velocity(power, ship_rotation)
 		launch_preview.hide_preview()
 
@@ -492,11 +515,7 @@ func _on_goal_reached() -> void:
 
 func _on_crash() -> void:
 	"""Handle ship crash."""
-	# Clean up any existing explosion first
-	if active_explosion and is_instance_valid(active_explosion):
-		active_explosion.queue_free()
-		active_explosion = null
-	
+	# No limpiar explosiones anteriores - dejar que se animen completamente
 	current_phase = Phase.SURFACE
 	ship.is_flying = false
 	
@@ -504,7 +523,6 @@ func _on_crash() -> void:
 	if ship:
 		_create_explosion(ship.global_position)
 	
-	ship_rotation = 0.0
 	input_manager.reset()
 	
 	# Reset the power meter triangle display
@@ -515,18 +533,11 @@ func _on_crash() -> void:
 	key_left_held = false
 	key_right_held = false
 	
-	# Handle lives
-	if _level_manager.lose_life():
-		# Still have lives - reset level
-		if ui_manager:
-			ui_manager.update_lives()
-		reset_level()
-	else:
-		# Game over - show lose screen
-		print("Game Over! Showing lose screen")
-		current_phase = Phase.WIN  # Prevent further updates
-		if ui_manager:
-			ui_manager.show_lose_screen()
+	# Handle attempts
+	_level_manager.increment_attempts()
+	if ui_manager:
+		ui_manager.update_lives()
+	reset_level()
 
 
 func _on_star_collected() -> void:
@@ -551,23 +562,21 @@ func _show_win_screen() -> void:
 
 func _on_next_level_pressed() -> void:
 	"""Load next level."""
+	# Reset attempts for new level
+	if _level_manager:
+		_level_manager.attempts = 0
+	
 	var current_scene = get_tree().current_scene.get_scene_file_path()
 	print("Current scene: %s" % current_scene)
 	
-	# Ciclo de niveles: 1-1 → 1-2 → 1-3 → 1-1
-	var next_scene = "res://MainScenes/Level 1-1.tscn"
-	var next_level_name = "1-1"
-	if "Level 1-1" in current_scene:
-		next_scene = "res://MainScenes/Level 1-2.tscn"
-		next_level_name = "1-2"
-	elif "Level 1-2" in current_scene:
-		next_scene = "res://MainScenes/Level 1-3.tscn"
-		next_level_name = "1-3"
+	# Get next level intelligently by parsing current level
+	var next_level_name = _get_next_level_name(current_scene)
+	var next_scene = "res://MainScenes/Level " + next_level_name + ".tscn"
 	
 	# Auto-save progress to current slot
 	var save_manager = get_tree().root.get_node("SaveManager")
 	if save_manager:
-		save_manager.auto_save(next_level_name, _level_manager.lives if _level_manager else 3)
+		save_manager.auto_save(next_level_name, _level_manager.attempts if _level_manager else 0)
 	
 	# Mark as first entry for next level
 	if _level_manager:
@@ -577,16 +586,68 @@ func _on_next_level_pressed() -> void:
 	get_tree().change_scene_to_file(next_scene)
 
 
+func _get_next_level_name(current_scene: String) -> String:
+	"""Parse current scene and return next level name (e.g. '1-2', '2-1')."""
+	# Extract current level from scene path (e.g., 'Level 1-3' -> '1-3')
+	var current_level = ""
+	if "Level 1-1" in current_scene:
+		current_level = "1-1"
+	elif "Level 1-2" in current_scene:
+		current_level = "1-2"
+	elif "Level 1-3" in current_scene:
+		current_level = "1-3"
+	elif "Level 1-4" in current_scene:
+		current_level = "1-4"
+	elif "Level 2-1" in current_scene:
+		current_level = "2-1"
+	elif "Level 2-2" in current_scene:
+		current_level = "2-2"
+	else:
+		# Default to 1-1 if can't parse
+		return "1-1"
+	
+	# Parse zone and number
+	var parts = current_level.split("-")
+	if parts.size() != 2:
+		return "1-1"
+	
+	var zone = int(parts[0])
+	var num = int(parts[1])
+	
+	# Try incrementing within the zone first
+	var next_level = str(zone) + "-" + str(num + 1)
+	if _level_exists(next_level):
+		return next_level
+	
+	# Try next zone, level 1
+	var next_zone = zone + 1
+	next_level = str(next_zone) + "-1"
+	if _level_exists(next_level):
+		return next_level
+	
+	# If no more levels, cycle back to 1-1
+	return "1-1"
+
+
+func _level_exists(level_name: String) -> bool:
+	"""Check if a level file exists."""
+	var level_path = "res://MainScenes/Level " + level_name + ".tscn"
+	return ResourceLoader.exists(level_path)
+
+
 func _create_explosion(crash_pos: Vector2) -> void:
 	"""Create explosion - circular fireballs bursting radially from center."""
 	# Create container at crash position
-	active_explosion = Node2D.new()
-	active_explosion.position = crash_pos
-	get_parent().add_child(active_explosion)
+	var explosion = Node2D.new()
+	explosion.position = crash_pos
+	get_parent().add_child(explosion)
 	
 	var particle_count = 24
 	var colors_start = [Color.YELLOW, Color(1.0, 0.9, 0.0)]
 	var colors_end = [Color(1.0, 0.3, 0.0), Color(1.0, 0.1, 0.0, 0.0)]
+	
+	# Crear un grupo para controlar todas las animaciones de esta explosión
+	var explosion_tweens = []
 	
 	for i in range(particle_count):
 		# Create circular fireball using Polygon2D
@@ -613,7 +674,7 @@ func _create_explosion(crash_pos: Vector2) -> void:
 		var end_pos = direction * travel_distance
 		
 		# Add to explosion
-		active_explosion.add_child(particle)
+		explosion.add_child(particle)
 		
 		# Simple animation: move outward and fade
 		var tween = create_tween()
@@ -625,9 +686,11 @@ func _create_explosion(crash_pos: Vector2) -> void:
 		var color_tween = create_tween()
 		color_tween.tween_property(particle, "color", Color(1.0, 0.4, 0.0), 1.0)
 		color_tween.tween_property(particle, "color", colors_end[i % colors_end.size()], 1.0)
+		
+		explosion_tweens.append(tween)
 	
-	# Clean up after animation
-	await get_tree().create_timer(2.1).timeout
-	if active_explosion and is_instance_valid(active_explosion):
-		active_explosion.queue_free()
-		active_explosion = null
+	# Clean up this explosion after all animations finish
+	if explosion_tweens.size() > 0:
+		await explosion_tweens[0].finished
+		if explosion and is_instance_valid(explosion):
+			explosion.free()

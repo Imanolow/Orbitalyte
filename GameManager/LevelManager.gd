@@ -3,7 +3,7 @@ extends Node
 class_name LevelManager
 
 var is_first_entry: bool = true  # Track if first entry to this level
-var lives: int = 3  # Number of lives player has
+var attempts: int = 0  # Number of attempts (increases with each death)
 
 
 func mark_entry_shown() -> void:
@@ -16,12 +16,6 @@ func reset_first_entry() -> void:
 	is_first_entry = true
 
 
-func lose_life() -> bool:
-	"""Lose a life. Returns true if player still has lives, false if game over."""
-	lives -= 1
-	return lives > 0
-
-
-func reset_lives() -> void:
-	"""Reset lives to 3."""
-	lives = 3
+func increment_attempts() -> void:
+	"""Increment attempt counter (called on death)."""
+	attempts += 1

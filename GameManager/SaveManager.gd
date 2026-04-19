@@ -25,14 +25,14 @@ func slot_exists(slot: int) -> bool:
 	return file != null
 
 
-func save_game(slot: int, level: String, lives: int) -> bool:
+func save_game(slot: int, level: String, attempts: int) -> bool:
 	"""Save game state to a slot."""
 	if slot < 0 or slot > 2:
 		return false
 	
 	var save_data = {
 		"level": level,
-		"lives": lives,
+		"attempts": attempts,
 		"timestamp": Time.get_datetime_string_from_system()
 	}
 	
@@ -73,15 +73,15 @@ func get_slot_info(slot: int) -> Dictionary:
 	return {
 		"empty": false,
 		"level": data.get("level", "Unknown"),
-		"lives": data.get("lives", 0),
+		"attempts": data.get("attempts", 0),
 		"display": "Level " + data.get("level", "Unknown"),
 		"timestamp": data.get("timestamp", "")
 	}
 
 
-func auto_save(level: String, lives: int) -> void:
+func auto_save(level: String, attempts: int) -> void:
 	"""Auto-save to current slot when level is completed."""
-	save_game(current_slot, level, lives)
+	save_game(current_slot, level, attempts)
 
 
 func set_current_slot(slot: int) -> void:
@@ -104,7 +104,7 @@ func load_and_start(slot: int) -> bool:
 	# Update LevelManager with loaded data
 	var level_manager = get_tree().root.get_node_or_null("LevelManager")
 	if level_manager:
-		level_manager.lives = data.get("lives", 3)
+		level_manager.attempts = data.get("attempts", 0)
 	
 	get_tree().change_scene_to_file(level_path)
 	return true
