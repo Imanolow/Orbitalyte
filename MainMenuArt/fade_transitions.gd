@@ -5,6 +5,9 @@ signal on_transition_finished
 @onready var color_rect = $ColorRect
 @onready var animation_player = $AnimationPlayer
 
+var auto_fade_out: bool = true
+
+
 func _ready():
 	color_rect.visible = false
 	animation_player.animation_finished.connect(_on_animation_finished)
@@ -12,10 +15,15 @@ func _ready():
 func _on_animation_finished(anim_name):
 		if anim_name == "fade_in":
 			on_transition_finished.emit()
-			animation_player.play("fade_out")
+			if auto_fade_out:
+				animation_player.play("fade_out")
 		elif anim_name == "fade_out":
 			color_rect.visible = false
+			on_transition_finished.emit()
 
 func transition():
-			color_rect.visible = true
-			animation_player.play("fade_in")
+		color_rect.visible = true
+		animation_player.play("fade_in")
+
+func fade_out():
+		animation_player.play("fade_out")

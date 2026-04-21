@@ -11,13 +11,14 @@ config_version=5
 [application]
 
 config/name="Orbitalyte"
-run/main_scene="uid://cctirlbsq47p7"
+run/main_scene="uid://bl6myyi586hxe"
 config/features=PackedStringArray("4.5", "Forward Plus")
 config/icon="res://icon.svg"
 
 [autoload]
 
 FadeTransitions="*res://MainMenuArt/fade_transitions.tscn"
+IntroManager="*res://GameManager/IntroManager.gd"
 SaveManager="*res://GameManager/SaveManager.gd"
 
 [display]

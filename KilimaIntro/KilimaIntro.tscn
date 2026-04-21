@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://bl6myyi586hxe"]
+
+[ext_resource type="Texture2D" uid="uid://decyuqni1k8g5" path="res://KilimaIntro/Sprite/Kilima_intro.png" id="1_71vg4"]
+[ext_resource type="Script" path="res://KilimaIntro/KilimaIntro.gd" id="2_m0yk3"]
+
+[node name="KilimaIntro" type="Node2D"]
+script = ExtResource("2_m0yk3")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_71vg4")
+centered = false
