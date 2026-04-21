@@ -2,6 +2,10 @@ extends Node2D
 
 
 func _ready() -> void:
+	# Start background music on first load
+	if not AudioManager.is_playing():
+		AudioManager.play_music("res://Music/melodyayresgriffiths-last-ship-to-titan-space-scifi-dance-instrumental-edm-soundtrack-144381.mp3")
+	
 	# If intro already shown in this session, go directly to menu
 	if IntroManager.intro_shown:
 		get_tree().change_scene_to_file("res://MainScenes/MainMenu.tscn")
