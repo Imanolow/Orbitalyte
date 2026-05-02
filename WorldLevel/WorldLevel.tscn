@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://bwlmsch5hfaoi"]
+[gd_scene load_steps=28 format=3 uid="uid://bwlmsch5hfaoi"]
 
 [ext_resource type="Texture2D" uid="uid://bf6oqb0wb274f" path="res://MainMenuArt/Main_Menu_Back_01.png" id="1_pyn8l"]
 [ext_resource type="Texture2D" uid="uid://be1706bgr58a6" path="res://MainMenuArt/Main_Menu_Back_Stars_01.png" id="2_3ihcb"]
@@ -26,8 +26,10 @@
 [ext_resource type="Texture2D" uid="uid://68dnsr0tugem" path="res://WorldLevel/Sprites/Planet07.png" id="24_1h3ty"]
 [ext_resource type="Texture2D" uid="uid://dvppt5nu5320r" path="res://WorldLevel/Sprites/Planet08.png" id="25_nhoo4"]
 [ext_resource type="Texture2D" uid="uid://dfg0nh6onnkhg" path="res://WorldLevel/Sprites/Planet09.png" id="26_50jgn"]
+[ext_resource type="Script" path="res://WorldLevel/WorldLevel.gd" id="27_world_level"]
 
 [node name="WorldLevel" type="Node2D"]
+script = ExtResource("27_world_level")
 
 [node name="StarsBack" type="Sprite2D" parent="."]
 z_index = -1

@@ -564,28 +564,48 @@ func _show_win_screen() -> void:
 
 func _on_next_level_pressed() -> void:
 	"""Load next level."""
-	# Reset attempts for new level
-	if _level_manager:
-		_level_manager.attempts = 0
-	
 	var current_scene = get_tree().current_scene.get_scene_file_path()
 	print("Current scene: %s" % current_scene)
+	
+	# Extract current level name for saving
+	var current_level_name = _extract_current_level_name(current_scene)
+	var current_attempts = _level_manager.attempts if _level_manager else 0
+	
+	# Auto-save progress for CURRENT level before moving to next
+	var save_manager = get_tree().root.get_node("SaveManager")
+	if save_manager:
+		save_manager.auto_save(current_level_name, current_attempts)
+		print("Saved current level: %s with %d attempts" % [current_level_name, current_attempts])
 	
 	# Get next level intelligently by parsing current level
 	var next_level_name = _get_next_level_name(current_scene)
 	var next_scene = "res://MainScenes/Level " + next_level_name + ".tscn"
 	
-	# Auto-save progress to current slot
-	var save_manager = get_tree().root.get_node("SaveManager")
-	if save_manager:
-		save_manager.auto_save(next_level_name, _level_manager.attempts if _level_manager else 0)
-	
-	# Mark as first entry for next level
+	# Reset attempts for new level
 	if _level_manager:
+		_level_manager.attempts = 0
 		_level_manager.reset_first_entry()
 	
 	print("Loading: %s" % next_scene)
 	get_tree().change_scene_to_file(next_scene)
+
+
+func _extract_current_level_name(scene_path: String) -> String:
+	"""Extract current level name from scene path."""
+	if "Level 1-1" in scene_path:
+		return "1-1"
+	elif "Level 1-2" in scene_path:
+		return "1-2"
+	elif "Level 1-3" in scene_path:
+		return "1-3"
+	elif "Level 1-4" in scene_path:
+		return "1-4"
+	elif "Level 2-1" in scene_path:
+		return "2-1"
+	elif "Level 2-2" in scene_path:
+		return "2-2"
+	else:
+		return "1-1"  # Default
 
 
 func _get_next_level_name(current_scene: String) -> String:

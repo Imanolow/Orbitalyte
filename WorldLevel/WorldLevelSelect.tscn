@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://bu2ihnv8thq6d"]
+[gd_scene load_steps=8 format=3 uid="uid://bu2ihnv8thq6d"]
 
 [ext_resource type="Texture2D" uid="uid://dxeb1u1pyvhqd" path="res://WorldLevel/Sprites/WorldLevelBack01.png" id="1_eq2f6"]
 [ext_resource type="Texture2D" uid="uid://bknaqk2l5ahv8" path="res://WorldLevel/Sprites/WLDetails.png" id="2_rch70"]
@@ -6,8 +6,11 @@
 [ext_resource type="PackedScene" uid="uid://dmi22mgn2o5ru" path="res://WorldLevel/FolderWL.tscn" id="3_rch70"]
 [ext_resource type="FontFile" uid="uid://bio8op0gkolr6" path="res://Fonts/ARCADE_I.TTF" id="4_s36fl"]
 [ext_resource type="Texture2D" uid="uid://cwjkjx2ul82dh" path="res://WinScreen/Sprites/NextBack.png" id="5_ymlbx"]
+[ext_resource type="Script" uid="uid://bin23mgb2qbwu" path="res://WorldLevel/WorldLevelSelect.gd" id="6_world_select"]
 
 [node name="WorldLevelSelect" type="Node2D"]
+position = Vector2(960, 540)
+script = ExtResource("6_world_select")
 
 [node name="WorldLevelback" type="Sprite2D" parent="."]
 texture = ExtResource("1_eq2f6")
@@ -16,7 +19,7 @@ texture = ExtResource("1_eq2f6")
 position = Vector2(-16, -273)
 texture = ExtResource("2_rch70")
 
-[node name="FolderWL" parent="." instance=ExtResource("3_rch70")]
+[node name="FolderWL1" parent="." instance=ExtResource("3_rch70")]
 position = Vector2(-302, -128)
 
 [node name="FolderWL2" parent="." instance=ExtResource("3_rch70")]
@@ -40,14 +43,14 @@ position = Vector2(101, 57)
 [node name="FolderWL8" parent="." instance=ExtResource("3_rch70")]
 position = Vector2(303, 57)
 
-[node name="RetryButton" type="Button" parent="."]
+[node name="BackButton" type="Button" parent="."]
 offset_left = -299.0
 offset_top = 311.0
 offset_right = -28.0
 offset_bottom = 431.0
 icon = ExtResource("3_c17wd")
 
-[node name="RetryLabel" type="Label" parent="RetryButton"]
+[node name="RetryLabel" type="Label" parent="BackButton"]
 layout_mode = 0
 offset_left = 66.0
 offset_top = 37.0
@@ -58,14 +61,14 @@ theme_override_fonts/font = ExtResource("4_s36fl")
 theme_override_font_sizes/font_size = 35
 text = "BACK"
 
-[node name="NextButton" type="Button" parent="."]
+[node name="GoButton" type="Button" parent="."]
 offset_left = 23.0
 offset_top = 311.0
 offset_right = 294.0
 offset_bottom = 431.0
 icon = ExtResource("5_ymlbx")
 
-[node name="NextLabel" type="Label" parent="NextButton"]
+[node name="NextLabel" type="Label" parent="GoButton"]
 layout_mode = 0
 offset_left = 90.0
 offset_top = 37.0

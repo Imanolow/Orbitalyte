@@ -133,12 +133,12 @@ func _on_save_slot_pressed(slot: int) -> void:
 	FadeTransitions.transition()
 	await FadeTransitions.on_transition_finished
 	
-	# Now change scene (which will show its own entry sequence)
-	if save_manager.slot_exists(slot):
-		save_manager.load_and_start(slot)
-	else:
-		# Start new game with this slot
-		get_tree().change_scene_to_file("res://MainScenes/Level 1-1.tscn")
+	# If slot doesn't exist, initialize it with first level
+	if not save_manager.slot_exists(slot):
+		save_manager.save_game(slot, "1-1", 0)
+	
+	# Now change scene to WorldLevel
+	save_manager.load_and_start_world(slot)
 
 
 func _on_clear_slot_pressed(slot: int) -> void:
