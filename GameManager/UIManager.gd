@@ -359,19 +359,12 @@ func _on_options_menu_pressed() -> void:
 	"""Handle options menu button press - return to main menu."""
 	print("UIManager._on_options_menu_pressed() - HANDLER EJECUTADO")
 	
-	# Guardar progreso antes de volver al menú
+	# Reset level manager but DON'T save attempts
+	# Attempts are only saved when level is completed (via script_manager._on_next_level_pressed)
 	var level_manager = get_tree().root.get_node_or_null("LevelManager")
 	if level_manager:
 		level_manager.is_first_entry = true
 		print("UIManager - is_first_entry reseteado a true")
-		
-		# Guardar el nivel actual con los attempts
-		var scene_path = get_tree().current_scene.get_scene_file_path()
-		var level_name = _extract_level_name(scene_path)
-		var save_manager = get_tree().root.get_node_or_null("SaveManager")
-		if save_manager:
-			save_manager.auto_save(level_name, level_manager.attempts)
-			print("UIManager - Guardado automático: ", level_name, " - ", level_manager.attempts, " attempts")
 	
 	get_tree().change_scene_to_file("res://MainScenes/MainMenu.tscn")
 

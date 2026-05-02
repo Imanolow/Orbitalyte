@@ -225,15 +225,14 @@ func _on_go_pressed() -> void:
 	# Update save manager's current slot and level
 	save_manager.set_current_slot(current_slot)
 	
-	# IMPORTANT: Save this level as the current level being played
-	# This ensures the save slot shows the latest level entered
-	save_manager.save_game(current_slot, level_name, 0)
+	# DON'T save with attempts=0 here - only save when level is COMPLETED
+	# This prevents contaminating the attempts logic
 	print("Saved level entry: %s" % level_name)
 	
 	# Reset level manager for fresh attempt
 	var level_manager = get_tree().root.get_node_or_null("LevelManager")
 	if level_manager:
-		level_manager.attempts = 0
+		level_manager.attempts = 1
 		level_manager.reset_first_entry()
 	
 	# Load the level scene

@@ -3,7 +3,7 @@ extends Node
 class_name LevelManager
 
 var is_first_entry: bool = true  # Track if first entry to this level
-var attempts: int = 0  # Number of attempts (increases with each death)
+var attempts: int = 1  # Number of attempts (starts at 1 for first try, increments on each death)
 
 
 func mark_entry_shown() -> void:

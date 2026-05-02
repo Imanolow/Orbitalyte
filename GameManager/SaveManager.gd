@@ -38,7 +38,12 @@ func _create_default_attempts_dict() -> Dictionary:
 
 
 func save_game(slot: int, level: String, attempts: int) -> bool:
-	"""Save game state to a slot."""
+	"""Save game state to a slot.
+	
+	Logic:
+	- attempts == 0: Only save if first time (current == 0). Don't overwrite with 0.
+	- attempts > 0: Save if better record (attempts < current) or first time (current == 0).
+	"""
 	if slot < 0 or slot > 2:
 		return false
 	
@@ -47,18 +52,15 @@ func save_game(slot: int, level: String, attempts: int) -> bool:
 	var world_attempts = existing_data.get("world_attempts", _create_default_attempts_dict())
 	var world_unlocked = existing_data.get("world_unlocked", 1)
 	
-	# Update attempts for this level only if:
-	# - It's the first attempt (current == 0) and new attempts > 0, OR
-	# - It's a level entry (attempts == 0) and current == 0, OR
-	# - It's a new record (attempts > 0 and attempts < current)
 	var current_attempts = world_attempts.get(level, 0)
 	
 	if attempts == 0:
-		# Level entry/start: only set if never played before (current == 0)
+		# Only save 0 if it's a brand new level (never played before)
 		if current_attempts == 0:
 			world_attempts[level] = 0
+		# If current_attempts > 0, don't overwrite with 0 (don't record failed attempts)
 	else:
-		# Level completion: only update if better record or first time
+		# Level completion: save if better record or first time
 		if attempts < current_attempts or current_attempts == 0:
 			world_attempts[level] = attempts
 	
@@ -115,13 +117,37 @@ func get_slot_info(slot: int) -> Dictionary:
 	if data.is_empty():
 		return {"empty": true, "display": "Empty Slot"}
 	
+	# Get the world unlocked and find the last unlocked level
+	var world_unlocked = data.get("world_unlocked", 1)
+	var world_attempts = data.get("world_attempts", _create_default_attempts_dict())
+	
+	# Find the last level with attempts > 0 (the highest level that was played)
+	var last_level = "1-1"
+	var last_attempts = 0
+	
+	# Start from the highest world and work backwards to find the last played level
+	for world in range(world_unlocked, 0, -1):
+		for level_num in range(LEVELS_PER_WORLD, 0, -1):
+			var level_key = "%d-%d" % [world, level_num]
+			var attempts = world_attempts.get(level_key, 0)
+			
+			# If this level has been played, or we're at the first level of unlocked world
+			if attempts > 0 or (world == world_unlocked and level_num == 1):
+				last_level = level_key
+				last_attempts = attempts
+				break
+		
+		# If we found a level, stop searching
+		if last_level != "1-1" or (world == world_unlocked and last_attempts >= 0):
+			break
+	
 	return {
 		"empty": false,
-		"level": data.get("level", "Unknown"),
-		"attempts": data.get("attempts", 0),
-		"display": "Level " + data.get("level", "Unknown"),
+		"level": last_level,
+		"attempts": last_attempts,
+		"display": "Level " + last_level,
 		"timestamp": data.get("timestamp", ""),
-		"world_unlocked": data.get("world_unlocked", 1)
+		"world_unlocked": world_unlocked
 	}
 
 

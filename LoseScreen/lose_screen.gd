@@ -44,6 +44,7 @@ func _on_retry_pressed():
 	# Resetear estado del juego
 	var level_manager = get_tree().root.get_node_or_null("LevelManager")
 	if level_manager:
+		level_manager.attempts = 1
 		level_manager.reset_first_entry()
 	
 	# Cargar el nivel
