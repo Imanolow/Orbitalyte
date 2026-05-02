@@ -1,0 +1,30 @@
+[gd_scene load_steps=4 format=3 uid="uid://dmi22mgn2o5ru"]
+
+[ext_resource type="Texture2D" uid="uid://c6eqb787v0n8b" path="res://WorldLevel/Sprites/FolderBase.png" id="1_apvgb"]
+[ext_resource type="Texture2D" uid="uid://cwrq7gfj838rb" path="res://WorldLevel/Sprites/FolderBaseSelected.png" id="2_1ltd6"]
+[ext_resource type="FontFile" uid="uid://bio8op0gkolr6" path="res://Fonts/ARCADE_I.TTF" id="2_aspei"]
+
+[node name="FolderWL" type="Node2D"]
+
+[node name="FolderBase" type="Sprite2D" parent="."]
+texture = ExtResource("1_apvgb")
+
+[node name="FolderBaseSelected" type="Sprite2D" parent="."]
+visible = false
+texture = ExtResource("2_1ltd6")
+
+[node name="Attempts" type="Label" parent="."]
+offset_left = -59.0
+offset_top = -4.0
+offset_right = 67.0
+offset_bottom = 19.0
+theme_override_fonts/font = ExtResource("2_aspei")
+text = "Attempts"
+
+[node name="AttemptsNumber" type="Label" parent="."]
+offset_left = -59.0
+offset_top = 17.0
+offset_right = 67.0
+offset_bottom = 40.0
+theme_override_fonts/font = ExtResource("2_aspei")
+text = "01"

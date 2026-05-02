@@ -13,7 +13,7 @@ func _ready() -> void:
 	audio_player.bus = "Master"
 	add_child(audio_player)
 	# Set volume to 50%
-	set_volume(0.2)
+	set_volume(0.08)
 
 
 func play_music(music_path: String, loop: bool = true) -> void:

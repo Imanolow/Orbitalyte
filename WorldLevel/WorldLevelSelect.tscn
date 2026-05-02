@@ -1,0 +1,185 @@
+[gd_scene load_steps=7 format=3 uid="uid://bu2ihnv8thq6d"]
+
+[ext_resource type="Texture2D" uid="uid://dxeb1u1pyvhqd" path="res://WorldLevel/Sprites/WorldLevelBack01.png" id="1_eq2f6"]
+[ext_resource type="Texture2D" uid="uid://bknaqk2l5ahv8" path="res://WorldLevel/Sprites/WLDetails.png" id="2_rch70"]
+[ext_resource type="Texture2D" uid="uid://cfcb5ttdebcdo" path="res://WinScreen/Sprites/RetryBack.png" id="3_c17wd"]
+[ext_resource type="PackedScene" uid="uid://dmi22mgn2o5ru" path="res://WorldLevel/FolderWL.tscn" id="3_rch70"]
+[ext_resource type="FontFile" uid="uid://bio8op0gkolr6" path="res://Fonts/ARCADE_I.TTF" id="4_s36fl"]
+[ext_resource type="Texture2D" uid="uid://cwjkjx2ul82dh" path="res://WinScreen/Sprites/NextBack.png" id="5_ymlbx"]
+
+[node name="WorldLevelSelect" type="Node2D"]
+
+[node name="WorldLevelback" type="Sprite2D" parent="."]
+texture = ExtResource("1_eq2f6")
+
+[node name="WLDetails" type="Sprite2D" parent="."]
+position = Vector2(-16, -273)
+texture = ExtResource("2_rch70")
+
+[node name="FolderWL" parent="." instance=ExtResource("3_rch70")]
+position = Vector2(-302, -128)
+
+[node name="FolderWL2" parent="." instance=ExtResource("3_rch70")]
+position = Vector2(-100, -128)
+
+[node name="FolderWL3" parent="." instance=ExtResource("3_rch70")]
+position = Vector2(101, -128)
+
+[node name="FolderWL4" parent="." instance=ExtResource("3_rch70")]
+position = Vector2(303, -128)
+
+[node name="FolderWL5" parent="." instance=ExtResource("3_rch70")]
+position = Vector2(-302, 57)
+
+[node name="FolderWL6" parent="." instance=ExtResource("3_rch70")]
+position = Vector2(-100, 57)
+
+[node name="FolderWL7" parent="." instance=ExtResource("3_rch70")]
+position = Vector2(101, 57)
+
+[node name="FolderWL8" parent="." instance=ExtResource("3_rch70")]
+position = Vector2(303, 57)
+
+[node name="RetryButton" type="Button" parent="."]
+offset_left = -299.0
+offset_top = 311.0
+offset_right = -28.0
+offset_bottom = 431.0
+icon = ExtResource("3_c17wd")
+
+[node name="RetryLabel" type="Label" parent="RetryButton"]
+layout_mode = 0
+offset_left = 66.0
+offset_top = 37.0
+offset_right = 244.58011
+offset_bottom = 73.0
+scale = Vector2(0.9799524, 1.3305594)
+theme_override_fonts/font = ExtResource("4_s36fl")
+theme_override_font_sizes/font_size = 35
+text = "BACK"
+
+[node name="NextButton" type="Button" parent="."]
+offset_left = 23.0
+offset_top = 311.0
+offset_right = 294.0
+offset_bottom = 431.0
+icon = ExtResource("5_ymlbx")
+
+[node name="NextLabel" type="Label" parent="NextButton"]
+layout_mode = 0
+offset_left = 90.0
+offset_top = 37.0
+offset_right = 268.5801
+offset_bottom = 73.0
+scale = Vector2(0.9799524, 1.3305594)
+theme_override_fonts/font = ExtResource("4_s36fl")
+theme_override_font_sizes/font_size = 35
+text = "GO!"
+
+[node name="World" type="Label" parent="."]
+offset_left = -211.0
+offset_top = -289.0
+offset_right = 83.0
+offset_bottom = -228.0
+theme_override_fonts/font = ExtResource("4_s36fl")
+theme_override_font_sizes/font_size = 60
+text = "WORLD"
+
+[node name="Number" type="Label" parent="."]
+offset_left = 103.0
+offset_top = -289.0
+offset_right = 397.0
+offset_bottom = -228.0
+theme_override_fonts/font = ExtResource("4_s36fl")
+theme_override_font_sizes/font_size = 60
+text = "01"
+
+[node name="Details" type="Label" parent="."]
+offset_left = -459.0
+offset_top = -301.0
+offset_right = -419.0
+offset_bottom = -278.0
+theme_override_fonts/font = ExtResource("4_s36fl")
+text = "OBT-24
+READY
+Ram ok."
+
+[node name="Level01" type="Label" parent="."]
+offset_left = -376.0
+offset_top = -54.0
+offset_right = -219.0
+offset_bottom = -31.0
+scale = Vector2(1, 1.1599994)
+theme_override_fonts/font = ExtResource("4_s36fl")
+theme_override_font_sizes/font_size = 20
+text = "Level 01"
+
+[node name="Level02" type="Label" parent="."]
+offset_left = -175.0
+offset_top = -54.0
+offset_right = -18.0
+offset_bottom = -31.0
+scale = Vector2(1, 1.1599994)
+theme_override_fonts/font = ExtResource("4_s36fl")
+theme_override_font_sizes/font_size = 20
+text = "Level 02"
+
+[node name="Level03" type="Label" parent="."]
+offset_left = 25.0
+offset_top = -54.0
+offset_right = 182.0
+offset_bottom = -31.0
+scale = Vector2(1, 1.1599994)
+theme_override_fonts/font = ExtResource("4_s36fl")
+theme_override_font_sizes/font_size = 20
+text = "Level 03"
+
+[node name="Level04" type="Label" parent="."]
+offset_left = 228.0
+offset_top = -54.0
+offset_right = 385.0
+offset_bottom = -31.0
+scale = Vector2(1, 1.1599994)
+theme_override_fonts/font = ExtResource("4_s36fl")
+theme_override_font_sizes/font_size = 20
+text = "Level 04"
+
+[node name="Level05" type="Label" parent="."]
+offset_left = -376.0
+offset_top = 129.0
+offset_right = -219.0
+offset_bottom = 152.0
+scale = Vector2(1, 1.1599994)
+theme_override_fonts/font = ExtResource("4_s36fl")
+theme_override_font_sizes/font_size = 20
+text = "Level 05"
+
+[node name="Level06" type="Label" parent="."]
+offset_left = -175.0
+offset_top = 129.0
+offset_right = -18.0
+offset_bottom = 152.0
+scale = Vector2(1, 1.1599994)
+theme_override_fonts/font = ExtResource("4_s36fl")
+theme_override_font_sizes/font_size = 20
+text = "Level 06"
+
+[node name="Level07" type="Label" parent="."]
+offset_left = 25.0
+offset_top = 129.0
+offset_right = 182.0
+offset_bottom = 152.0
+scale = Vector2(1, 1.1599994)
+theme_override_fonts/font = ExtResource("4_s36fl")
+theme_override_font_sizes/font_size = 20
+text = "Level 07"
+
+[node name="Level08" type="Label" parent="."]
+offset_left = 228.0
+offset_top = 129.0
+offset_right = 385.0
+offset_bottom = 152.0
+scale = Vector2(1, 1.1599994)
+theme_override_fonts/font = ExtResource("4_s36fl")
+theme_override_font_sizes/font_size = 20
+text = "Level 08"

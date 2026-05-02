@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://bav3b86p82n5a"]
+[gd_scene load_steps=16 format=3 uid="uid://bav3b86p82n5a"]
 
 [ext_resource type="Texture2D" uid="uid://da4n5sdx5xlbx" path="res://WinScreen/Sprites/WinBack.png" id="1_s88t3"]
 [ext_resource type="Texture2D" uid="uid://cv8taj6s4orel" path="res://WinScreen/Sprites/ScreenBack.png" id="2_jlsea"]
@@ -14,7 +14,7 @@
 [ext_resource type="FontFile" uid="uid://bio8op0gkolr6" path="res://Fonts/ARCADE_I.TTF" id="12_3k8ew"]
 [ext_resource type="Texture2D" uid="uid://cfcb5ttdebcdo" path="res://WinScreen/Sprites/RetryBack.png" id="13_f0ncr"]
 [ext_resource type="Texture2D" uid="uid://cwjkjx2ul82dh" path="res://WinScreen/Sprites/NextBack.png" id="14_loimn"]
-[ext_resource type="Script" path="res://WinScreen/win_screen.gd" id="15_script"]
+[ext_resource type="Script" uid="uid://bs1fdy6dwdaav" path="res://WinScreen/win_screen.gd" id="15_script"]
 
 [node name="WinScreen" type="Node2D"]
 script = ExtResource("15_script")
@@ -102,9 +102,31 @@ offset_right = -26.0
 offset_bottom = 326.0
 icon = ExtResource("13_f0ncr")
 
+[node name="RetryLabel" type="Label" parent="RetryButton"]
+layout_mode = 0
+offset_left = 45.0
+offset_top = 37.0
+offset_right = 223.58011
+offset_bottom = 73.0
+scale = Vector2(0.9799524, 1.3305594)
+theme_override_fonts/font = ExtResource("12_3k8ew")
+theme_override_font_sizes/font_size = 35
+text = "RETRY"
+
 [node name="NextButton" type="Button" parent="."]
 offset_left = 25.0
 offset_top = 206.0
 offset_right = 296.0
 offset_bottom = 326.0
 icon = ExtResource("14_loimn")
+
+[node name="NextLabel" type="Label" parent="NextButton"]
+layout_mode = 0
+offset_left = 65.0
+offset_top = 37.0
+offset_right = 243.58011
+offset_bottom = 73.0
+scale = Vector2(0.9799524, 1.3305594)
+theme_override_fonts/font = ExtResource("12_3k8ew")
+theme_override_font_sizes/font_size = 35
+text = "NEXT"
