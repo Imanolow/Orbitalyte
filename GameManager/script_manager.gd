@@ -48,13 +48,7 @@ func _ready() -> void:
 	await _find_ui_manager()
 	_setup_ui()
 	reset_level()
-	
-	# Auto-save current level when it loads
-	var current_scene = get_tree().current_scene.get_scene_file_path()
-	var level_name = _extract_level_name(current_scene)
-	var save_manager = get_tree().root.get_node("SaveManager")
-	if save_manager:
-		save_manager.auto_save(level_name, _level_manager.attempts if _level_manager else 0)
+	# Do NOT auto-save on level load - only save when completed/progressed
 
 
 

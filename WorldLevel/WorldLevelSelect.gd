@@ -166,10 +166,17 @@ func _is_level_unlocked(level_number: int) -> bool:
 	if level_number == 1:
 		return true
 	
-	# Other levels are unlocked if the previous level has been played (attempts > 0)
+	# Other levels are unlocked if:
+	# - Previous level was played (attempts > 0), OR
+	# - Current level was played/completed (attempts > 0)
 	var previous_level_key = "%d-%d" % [current_world, level_number - 1]
-	var attempts = save_manager.get_level_attempts(current_slot, previous_level_key)
-	return attempts > 0
+	var current_level_key = "%d-%d" % [current_world, level_number]
+	
+	var previous_attempts = save_manager.get_level_attempts(current_slot, previous_level_key)
+	var current_attempts = save_manager.get_level_attempts(current_slot, current_level_key)
+	
+	# Unlocked if previous level was played OR current level has been played/completed
+	return previous_attempts > 0 or current_attempts > 0
 
 
 func _on_folder_clicked(level_number: int) -> void:
