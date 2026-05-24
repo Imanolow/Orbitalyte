@@ -7,6 +7,9 @@ var options_menu_scene: PackedScene
 
 func _ready() -> void:
 	"""Initialize main menu."""
+	# Set fullscreen mode for build exports
+	get_window().mode = Window.MODE_FULLSCREEN
+	
 	# Load SaveSlotsScreen scene
 	save_slots_scene = load("res://MainMenuArt/SaveSlots/SaveSlotsScreen.tscn")
 	

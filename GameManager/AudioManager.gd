@@ -20,6 +20,10 @@ func _ready() -> void:
 		AudioServer.add_bus()
 		AudioServer.set_bus_name(AudioServer.get_bus_count() - 1, "Music")
 	
+	if AudioServer.get_bus_index("SFX") == -1:
+		AudioServer.add_bus()
+		AudioServer.set_bus_name(AudioServer.get_bus_count() - 1, "SFX")
+	
 	audio_player = AudioStreamPlayer.new()
 	audio_player.bus = "Master"
 	add_child(audio_player)
@@ -50,7 +54,7 @@ func _setup_button_click_players() -> void:
 	for i in range(2):
 		var p = AudioStreamPlayer.new()
 		p.volume_db = 0
-		p.bus = "Master"
+		p.bus = "SFX"
 		p.stream = sounds[i]
 		add_child(p)
 		button_click_players.append(p)
@@ -60,31 +64,31 @@ func _setup_gameplay_players() -> void:
 	for i in range(2):
 		var p = AudioStreamPlayer.new()
 		p.volume_db = 0
-		p.bus = "Master"
+		p.bus = "SFX"
 		add_child(p)
 		explosion_players.append(p)
 	
 	ship_travel_player = AudioStreamPlayer.new()
 	ship_travel_player.volume_db = 0
-	ship_travel_player.bus = "Master"
+	ship_travel_player.bus = "SFX"
 	ship_travel_player.stream = load("res://Sounds/Gameplay/ship_travel.mp3")
 	add_child(ship_travel_player)
 	
 	power_bar_player = AudioStreamPlayer.new()
 	power_bar_player.volume_db = 0
-	power_bar_player.bus = "Master"
+	power_bar_player.bus = "SFX"
 	power_bar_player.stream = load("res://Sounds/UI/button_click_02.mp3")
 	add_child(power_bar_player)
 	
 	star_collect_player = AudioStreamPlayer.new()
 	star_collect_player.volume_db = 0
-	star_collect_player.bus = "Master"
+	star_collect_player.bus = "SFX"
 	star_collect_player.stream = load("res://Sounds/Gameplay/star_collect.mp3")
 	add_child(star_collect_player)
 	
 	victory_player = AudioStreamPlayer.new()
 	victory_player.volume_db = 0
-	victory_player.bus = "Master"
+	victory_player.bus = "SFX"
 	victory_player.stream = load("res://Sounds/Gameplay/victory.mp3")
 	add_child(victory_player)
 
@@ -94,7 +98,7 @@ func _setup_achievement_pop_players() -> void:
 	for i in range(3):
 		var p = AudioStreamPlayer.new()
 		p.volume_db = 0
-		p.bus = "Master"
+		p.bus = "SFX"
 		p.stream = sound
 		add_child(p)
 		achievement_pop_players.append(p)
@@ -187,6 +191,9 @@ func get_music_volume() -> float:
 
 func set_sfx_volume(volume: float) -> void:
 	sfx_volume = clamp(volume, 0.0, 1.0)
+	var idx = AudioServer.get_bus_index("SFX")
+	if idx >= 0:
+		AudioServer.set_bus_volume_db(idx, linear_to_db(max(sfx_volume, 0.01)))
 
 
 func get_sfx_volume() -> float:
