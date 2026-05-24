@@ -1,0 +1,441 @@
+[gd_scene load_steps=8 format=3 uid="uid://c4862udoru8pu"]
+
+[ext_resource type="Texture2D" uid="uid://dxeb1u1pyvhqd" path="res://WorldLevel/Sprites/WorldLevelBack01.png" id="2_mkpsp"]
+[ext_resource type="Texture2D" uid="uid://bknaqk2l5ahv8" path="res://WorldLevel/Sprites/WLDetails.png" id="3_owjrt"]
+[ext_resource type="Texture2D" uid="uid://dueow1h7hhmua" path="res://MainMenuArt/SaveSlots/SaveSlotBack.png" id="3_rn720"]
+[ext_resource type="Texture2D" uid="uid://cfcb5ttdebcdo" path="res://WinScreen/Sprites/RetryBack.png" id="5_wyd47"]
+[ext_resource type="FontFile" uid="uid://bio8op0gkolr6" path="res://Fonts/ARCADE_I.TTF" id="6_e0lgr"]
+[ext_resource type="Texture2D" uid="uid://cwjkjx2ul82dh" path="res://WinScreen/Sprites/NextBack.png" id="7_iqx72"]
+[ext_resource type="Script" uid="uid://dwffijywy7brw" path="res://MainMenuArt/SaveSlots/SaveSlotsScreen.gd" id="8_saveslots"]
+
+[node name="WorldLevelSelect" type="Node2D"]
+position = Vector2(960, 540)
+script = ExtResource("8_saveslots")
+
+[node name="WorldLevelback" type="Sprite2D" parent="."]
+texture = ExtResource("2_mkpsp")
+
+[node name="WLDetails" type="Sprite2D" parent="."]
+position = Vector2(-16, -273)
+texture = ExtResource("3_owjrt")
+
+[node name="BackButton" type="Button" parent="."]
+offset_left = -299.0
+offset_top = 311.0
+offset_right = -28.0
+offset_bottom = 431.0
+icon = ExtResource("5_wyd47")
+
+[node name="RetryLabel" type="Label" parent="BackButton"]
+layout_mode = 0
+offset_left = 66.0
+offset_top = 37.0
+offset_right = 244.58011
+offset_bottom = 73.0
+scale = Vector2(0.9799524, 1.3305594)
+theme_override_fonts/font = ExtResource("6_e0lgr")
+theme_override_font_sizes/font_size = 35
+text = "BACK"
+
+[node name="GoButton" type="Button" parent="."]
+offset_left = 23.0
+offset_top = 311.0
+offset_right = 294.0
+offset_bottom = 431.0
+icon = ExtResource("7_iqx72")
+
+[node name="NextLabel" type="Label" parent="GoButton"]
+layout_mode = 0
+offset_left = 90.0
+offset_top = 37.0
+offset_right = 268.5801
+offset_bottom = 73.0
+scale = Vector2(0.9799524, 1.3305594)
+theme_override_fonts/font = ExtResource("6_e0lgr")
+theme_override_font_sizes/font_size = 35
+text = "GO!"
+
+[node name="Save" type="Label" parent="."]
+offset_left = -248.0
+offset_top = -289.0
+offset_right = 46.0
+offset_bottom = -228.0
+theme_override_fonts/font = ExtResource("6_e0lgr")
+theme_override_font_sizes/font_size = 60
+text = "Save"
+
+[node name="Slots" type="Label" parent="."]
+offset_left = 5.0
+offset_top = -289.0
+offset_right = 299.0
+offset_bottom = -228.0
+theme_override_fonts/font = ExtResource("6_e0lgr")
+theme_override_font_sizes/font_size = 60
+text = "Slots"
+
+[node name="Details" type="Label" parent="."]
+offset_left = -459.0
+offset_top = -301.0
+offset_right = -349.0
+offset_bottom = -244.0
+theme_override_fonts/font = ExtResource("6_e0lgr")
+text = "OBT-24
+READY
+Ram ok."
+
+[node name="Save Slot 01" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 250.0
+offset_top = 86.0
+offset_right = 290.0
+offset_bottom = 126.0
+
+[node name="SaveSlot01" type="Sprite2D" parent="Save Slot 01"]
+position = Vector2(-566, -110)
+texture = ExtResource("3_rn720")
+
+[node name="Save2" type="Label" parent="Save Slot 01"]
+layout_mode = 0
+offset_left = -663.0
+offset_top = -266.0
+offset_right = -134.0
+offset_bottom = -205.0
+scale = Vector2(0.3967091, 0.49479365)
+theme_override_fonts/font = ExtResource("6_e0lgr")
+theme_override_font_sizes/font_size = 60
+text = "Save"
+
+[node name="DotDotDot" type="Label" parent="Save Slot 01"]
+layout_mode = 0
+offset_left = -670.0
+offset_top = -155.0
+offset_right = -141.0
+offset_bottom = -94.0
+scale = Vector2(0.3967091, 0.49479365)
+theme_override_fonts/font = ExtResource("6_e0lgr")
+theme_override_font_sizes/font_size = 60
+text = "---------"
+
+[node name="Slot" type="Label" parent="Save Slot 01"]
+layout_mode = 0
+offset_left = -559.0
+offset_top = -266.0
+offset_right = -324.0
+offset_bottom = -205.0
+scale = Vector2(0.3967091, 0.49479365)
+theme_override_fonts/font = ExtResource("6_e0lgr")
+theme_override_font_sizes/font_size = 60
+text = "Slot"
+
+[node name="Level" type="Label" parent="Save Slot 01"]
+layout_mode = 0
+offset_left = -623.0
+offset_top = -114.0
+offset_right = -329.0
+offset_bottom = -53.0
+scale = Vector2(0.3967091, 0.49479365)
+theme_override_fonts/font = ExtResource("6_e0lgr")
+theme_override_font_sizes/font_size = 60
+text = "Level"
+
+[node name="WorldLabel" type="Label" parent="Save Slot 01"]
+layout_mode = 0
+offset_left = -622.0
+offset_top = -71.0
+offset_right = -541.3364
+offset_bottom = -10.0
+scale = Vector2(0.62791103, 0.78315926)
+theme_override_fonts/font = ExtResource("6_e0lgr")
+theme_override_font_sizes/font_size = 60
+text = "0"
+
+[node name="-" type="Label" parent="Save Slot 01"]
+layout_mode = 0
+offset_left = -584.0
+offset_top = -71.0
+offset_right = -503.33643
+offset_bottom = -10.0
+scale = Vector2(0.62791103, 0.78315926)
+theme_override_fonts/font = ExtResource("6_e0lgr")
+theme_override_font_sizes/font_size = 60
+text = "-"
+
+[node name="LevelLabel1" type="Label" parent="Save Slot 01"]
+layout_mode = 0
+offset_left = -547.0
+offset_top = -71.0
+offset_right = -466.33643
+offset_bottom = -10.0
+scale = Vector2(0.62791103, 0.78315926)
+theme_override_fonts/font = ExtResource("6_e0lgr")
+theme_override_font_sizes/font_size = 60
+text = "0"
+
+[node name="ClearButton" type="Button" parent="Save Slot 01"]
+layout_mode = 0
+offset_left = -638.0
+offset_right = -367.0
+offset_bottom = 120.0
+scale = Vector2(0.52516824, 0.52516824)
+theme_override_colors/icon_normal_color = Color(1, 0.62369734, 0.9467742, 1)
+icon = ExtResource("7_iqx72")
+
+[node name="NextLabel" type="Label" parent="Save Slot 01/ClearButton"]
+layout_mode = 0
+offset_left = 49.50795
+offset_top = 37.0
+offset_right = 228.08806
+offset_bottom = 73.0
+scale = Vector2(0.9799524, 1.3305594)
+theme_override_fonts/font = ExtResource("6_e0lgr")
+theme_override_font_sizes/font_size = 35
+text = "Clear"
+
+[node name="01" type="Label" parent="Save Slot 01"]
+layout_mode = 0
+offset_left = -623.0
+offset_top = -230.0
+offset_right = -506.0
+offset_bottom = -169.0
+theme_override_fonts/font = ExtResource("6_e0lgr")
+theme_override_font_sizes/font_size = 60
+text = "01"
+
+[node name="Save Slot 02" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = -373.0
+offset_top = -144.0
+offset_right = -333.0
+offset_bottom = -104.0
+
+[node name="SaveSlot02" type="Sprite2D" parent="Save Slot 02"]
+position = Vector2(373, 120)
+texture = ExtResource("3_rn720")
+
+[node name="DotDotDot2" type="Label" parent="Save Slot 02"]
+layout_mode = 0
+offset_left = 270.0
+offset_top = 75.0
+offset_right = 799.0
+offset_bottom = 136.0
+scale = Vector2(0.3967091, 0.49479365)
+theme_override_fonts/font = ExtResource("6_e0lgr")
+theme_override_font_sizes/font_size = 60
+text = "---------"
+
+[node name="Save3" type="Label" parent="Save Slot 02"]
+layout_mode = 0
+offset_left = 278.0
+offset_top = -36.0
+offset_right = 807.0
+offset_bottom = 25.0
+scale = Vector2(0.3967091, 0.49479365)
+theme_override_fonts/font = ExtResource("6_e0lgr")
+theme_override_font_sizes/font_size = 60
+text = "Save"
+
+[node name="Slot2" type="Label" parent="Save Slot 02"]
+layout_mode = 0
+offset_left = 382.0
+offset_top = -36.0
+offset_right = 617.0
+offset_bottom = 25.0
+scale = Vector2(0.3967091, 0.49479365)
+theme_override_fonts/font = ExtResource("6_e0lgr")
+theme_override_font_sizes/font_size = 60
+text = "Slot"
+
+[node name="Level02" type="Label" parent="Save Slot 02"]
+layout_mode = 0
+offset_left = 320.0
+offset_top = 116.0
+offset_right = 614.0
+offset_bottom = 177.0
+scale = Vector2(0.3967091, 0.49479365)
+theme_override_fonts/font = ExtResource("6_e0lgr")
+theme_override_font_sizes/font_size = 60
+text = "Level"
+
+[node name="WorldLabel2" type="Label" parent="Save Slot 02"]
+layout_mode = 0
+offset_left = 322.0
+offset_top = 159.0
+offset_right = 402.66357
+offset_bottom = 220.0
+scale = Vector2(0.62791103, 0.78315926)
+theme_override_fonts/font = ExtResource("6_e0lgr")
+theme_override_font_sizes/font_size = 60
+text = "0"
+
+[node name="-2" type="Label" parent="Save Slot 02"]
+layout_mode = 0
+offset_left = 360.0
+offset_top = 159.0
+offset_right = 440.66357
+offset_bottom = 220.0
+scale = Vector2(0.62791103, 0.78315926)
+theme_override_fonts/font = ExtResource("6_e0lgr")
+theme_override_font_sizes/font_size = 60
+text = "-"
+
+[node name="LevelLabel2" type="Label" parent="Save Slot 02"]
+layout_mode = 0
+offset_left = 397.0
+offset_top = 159.0
+offset_right = 477.66357
+offset_bottom = 220.0
+scale = Vector2(0.62791103, 0.78315926)
+theme_override_fonts/font = ExtResource("6_e0lgr")
+theme_override_font_sizes/font_size = 60
+text = "0"
+
+[node name="ClearButton2" type="Button" parent="Save Slot 02"]
+layout_mode = 0
+offset_left = 307.0
+offset_top = 230.0
+offset_right = 578.0
+offset_bottom = 350.0
+scale = Vector2(0.52516824, 0.52516824)
+theme_override_colors/icon_normal_color = Color(1, 0.62369734, 0.9467742, 1)
+icon = ExtResource("7_iqx72")
+
+[node name="NextLabel" type="Label" parent="Save Slot 02/ClearButton2"]
+layout_mode = 0
+offset_left = 49.50795
+offset_top = 37.0
+offset_right = 228.08806
+offset_bottom = 73.0
+scale = Vector2(0.9799524, 1.3305594)
+theme_override_fonts/font = ExtResource("6_e0lgr")
+theme_override_font_sizes/font_size = 35
+text = "Clear"
+
+[node name="02" type="Label" parent="Save Slot 02"]
+layout_mode = 0
+offset_left = 318.0
+offset_top = 6.1035156e-05
+offset_right = 435.0
+offset_bottom = 61.00006
+theme_override_fonts/font = ExtResource("6_e0lgr")
+theme_override_font_sizes/font_size = 60
+text = "02"
+
+[node name="Save Slot 03" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 258.0
+offset_top = -144.0
+offset_right = 298.0
+offset_bottom = -104.0
+
+[node name="SaveSlot03" type="Sprite2D" parent="Save Slot 03"]
+position = Vector2(58, 120)
+texture = ExtResource("3_rn720")
+
+[node name="DotDotDot3" type="Label" parent="Save Slot 03"]
+layout_mode = 0
+offset_left = -45.0
+offset_top = 75.0
+offset_right = 484.0
+offset_bottom = 136.0
+scale = Vector2(0.3967091, 0.49479365)
+theme_override_fonts/font = ExtResource("6_e0lgr")
+theme_override_font_sizes/font_size = 60
+text = "---------"
+
+[node name="Save4" type="Label" parent="Save Slot 03"]
+layout_mode = 0
+offset_left = -40.0
+offset_top = -36.0
+offset_right = 489.0
+offset_bottom = 25.0
+scale = Vector2(0.3967091, 0.49479365)
+theme_override_fonts/font = ExtResource("6_e0lgr")
+theme_override_font_sizes/font_size = 60
+text = "Save"
+
+[node name="Level03" type="Label" parent="Save Slot 03"]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 116.0
+offset_right = 296.0
+offset_bottom = 177.0
+scale = Vector2(0.3967091, 0.49479365)
+theme_override_fonts/font = ExtResource("6_e0lgr")
+theme_override_font_sizes/font_size = 60
+text = "Level"
+
+[node name="WorldLabel3" type="Label" parent="Save Slot 03"]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 159.0
+offset_right = 82.663574
+offset_bottom = 220.0
+scale = Vector2(0.62791103, 0.78315926)
+theme_override_fonts/font = ExtResource("6_e0lgr")
+theme_override_font_sizes/font_size = 60
+text = "0"
+
+[node name="-3" type="Label" parent="Save Slot 03"]
+layout_mode = 0
+offset_left = 40.0
+offset_top = 159.0
+offset_right = 120.663574
+offset_bottom = 220.0
+scale = Vector2(0.62791103, 0.78315926)
+theme_override_fonts/font = ExtResource("6_e0lgr")
+theme_override_font_sizes/font_size = 60
+text = "-"
+
+[node name="LevelLabel3" type="Label" parent="Save Slot 03"]
+layout_mode = 0
+offset_left = 77.0
+offset_top = 159.0
+offset_right = 157.66357
+offset_bottom = 220.0
+scale = Vector2(0.62791103, 0.78315926)
+theme_override_fonts/font = ExtResource("6_e0lgr")
+theme_override_font_sizes/font_size = 60
+text = "0"
+
+[node name="Slot3" type="Label" parent="Save Slot 03"]
+layout_mode = 0
+offset_left = 64.0
+offset_top = -36.0
+offset_right = 299.0
+offset_bottom = 25.0
+scale = Vector2(0.3967091, 0.49479365)
+theme_override_fonts/font = ExtResource("6_e0lgr")
+theme_override_font_sizes/font_size = 60
+text = "Slot"
+
+[node name="ClearButton3" type="Button" parent="Save Slot 03"]
+layout_mode = 0
+offset_left = -8.0
+offset_top = 230.0
+offset_right = 263.0
+offset_bottom = 350.0
+scale = Vector2(0.52516824, 0.52516824)
+theme_override_colors/icon_normal_color = Color(1, 0.62369734, 0.9467742, 1)
+icon = ExtResource("7_iqx72")
+
+[node name="NextLabel" type="Label" parent="Save Slot 03/ClearButton3"]
+layout_mode = 0
+offset_left = 49.50795
+offset_top = 37.0
+offset_right = 228.08806
+offset_bottom = 73.0
+scale = Vector2(0.9799524, 1.3305594)
+theme_override_fonts/font = ExtResource("6_e0lgr")
+theme_override_font_sizes/font_size = 35
+text = "Clear"
+
+[node name="03" type="Label" parent="Save Slot 03"]
+layout_mode = 0
+offset_right = 117.0
+offset_bottom = 61.0
+theme_override_fonts/font = ExtResource("6_e0lgr")
+theme_override_font_sizes/font_size = 60
+text = "03"

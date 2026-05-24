@@ -29,6 +29,11 @@ func show_lose_screen():
 
 func _on_retry_pressed():
 	"""Se ejecuta cuando se presiona el botón Retry - va al primer nivel de la zona actual"""
+	# Play button click sound
+	var audio_manager = get_tree().root.get_node_or_null("AudioManager")
+	if audio_manager:
+		audio_manager.play_button_click()
+	
 	# Obtener el nivel actual de la escena
 	var current_scene = get_tree().current_scene.get_scene_file_path()
 	var current_level = _extract_level_from_path(current_scene)
@@ -57,6 +62,11 @@ func _on_retry_pressed():
 
 func _on_menu_pressed():
 	"""Se ejecuta cuando se presiona el botón Menú - vuelve al menú principal"""
+	# Play button click sound
+	var audio_manager = get_tree().root.get_node_or_null("AudioManager")
+	if audio_manager:
+		audio_manager.play_button_click()
+	
 	# Resetear estado del juego
 	var level_manager = get_tree().root.get_node_or_null("LevelManager")
 	if level_manager:

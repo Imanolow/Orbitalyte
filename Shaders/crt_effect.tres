@@ -1,0 +1,8 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://b5c1n4gajjh88"]
+
+[ext_resource type="Shader" path="res://Shaders/crt_effect.gdshader" id="1_wfbqb"]
+
+[resource]
+shader = ExtResource("1_wfbqb")
+shader_parameter/scanline_intensity = 0.5
+shader_parameter/scanline_frequency = 4.0

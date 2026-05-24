@@ -181,6 +181,7 @@ func _is_level_unlocked(level_number: int) -> bool:
 
 func _on_folder_clicked(level_number: int) -> void:
 	"""Handle folder click - select this level."""
+	AudioManager.play_button_click()
 	_select_level(level_number)
 
 
@@ -210,12 +211,14 @@ func _select_level(level_number: int) -> void:
 
 func _on_back_pressed() -> void:
 	"""Handle back button - close this screen."""
+	AudioManager.play_button_click()
 	closed.emit()
 	queue_free()
 
 
 func _on_go_pressed() -> void:
 	"""Handle go button - launch selected level."""
+	AudioManager.play_button_click()
 	if selected_level <= 0:
 		push_error("No level selected!")
 		return

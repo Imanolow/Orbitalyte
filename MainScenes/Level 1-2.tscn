@@ -1,4 +1,4 @@
-[gd_scene load_steps=70 format=4 uid="uid://m26ug5c006oc"]
+[gd_scene load_steps=71 format=4 uid="uid://m26ug5c006oc"]
 
 [ext_resource type="Texture2D" uid="uid://bf6oqb0wb274f" path="res://MainMenuArt/Main_Menu_Back_01.png" id="1_1vr4x"]
 [ext_resource type="PackedScene" uid="uid://ej6t4kuyttvk" path="res://Planets/BlockerPlanet.tscn" id="1_blocker2"]
@@ -42,6 +42,7 @@
 [ext_resource type="Texture2D" uid="uid://d1vynju7ontjb" path="res://UI_Elements/LaunchButtonslrTheme_GUI.png" id="36_7rtb2"]
 [ext_resource type="Theme" uid="uid://ddx1breaqg3vv" path="res://UI_Elements/LaunchLRButtons_GUI.tres" id="37_2kpjq"]
 [ext_resource type="FontFile" uid="uid://bio8op0gkolr6" path="res://Fonts/ARCADE_I.TTF" id="38_a4526"]
+[ext_resource type="Script" uid="uid://5t3iw55xjd8m" path="res://Shaders/CRTEffect.gd" id="crt_script"]
 [ext_resource type="Script" uid="uid://dowpjjauaj5p4" path="res://GameManager/LevelTool.gd" id="level_tool_script"]
 
 [sub_resource type="Image" id="Image_icxlx"]
@@ -2507,11 +2508,13 @@ sprite_texture = ExtResource("20_emq24")
 [node name="StarWin" parent="GameContainer" instance=ExtResource("22_h0f7d")]
 position = Vector2(570, 349)
 
+[node name="CRTEffect" type="Node2D" parent="."]
+z_index = 1
+script = ExtResource("crt_script")
+
 [node name="UIMain" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
 
 [node name="Frame02" type="Sprite2D" parent="UIMain"]
 position = Vector2(1468, 0)

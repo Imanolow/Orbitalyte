@@ -130,6 +130,7 @@ func _on_planet_unhover(world: int) -> void:
 func _on_planet_clicked(world: int) -> void:
 	"""Handle planet click - open WorldLevelSelect."""
 	if save_manager.is_world_unlocked(current_slot, world):
+		AudioManager.play_button_click()
 		selected_world = world
 		_open_world_level_select(world)
 
@@ -173,6 +174,11 @@ func _on_world_select_closed() -> void:
 
 func _on_options_menu_button_pressed() -> void:
 	"""Handle options menu button press."""
+	# Play button click sound
+	var audio_manager = get_tree().root.get_node_or_null("AudioManager")
+	if audio_manager:
+		audio_manager.play_button_click()
+	
 	_show_options_menu()
 
 
@@ -201,6 +207,9 @@ func _load_options_screen() -> void:
 	
 	if options_screen_scene:
 		options_screen = options_screen_scene.instantiate()
+		
+		# Establecer offset para mover 200px a la derecha en WorldLevel
+		options_screen.offset_x = 200
 		
 		# Add to a CanvasLayer with high layer value to ensure it's on top
 		var options_canvas_layer = get_tree().root.get_node_or_null("OptionsCanvasLayer")

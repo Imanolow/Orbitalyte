@@ -2,7 +2,7 @@
 extends Node2D
 ## Level design tool: Simple trajectory preview.
 
-class_name LevelTool
+class_name LevelToolNew
 
 # Public exports for real-time editing
 @export var launch_power: float = 50.0:
@@ -50,16 +50,15 @@ func _recalculate_trajectory() -> void:
 			blockers.append(child)
 	
 	# Initial position and velocity
-	# Start trajectory FROM the center of StartPlanet
-	var pos = start_planet.global_position
+	var pos = start_planet.global_position + Vector2.UP * (start_planet.radius + PhysicsConfig.GAP)
 	var angle_rad = deg_to_rad(launch_angle_degrees)
 	var power_multiplier = PhysicsConfig.LAUNCH_BASE + (launch_power / 100.0) * PhysicsConfig.LAUNCH_MAX
 	var velocity = Vector2.UP.rotated(angle_rad) * power_multiplier
 	
 	trajectory_points.append(pos)
 	
-	# Simulate with 5000 iterations for precision
-	for i in range(5000):
+	# Simulate
+	for i in range(1000):
 		# Apply ONLY blocker gravity
 		for blocker in blockers:
 			var to_blocker = blocker.global_position - pos

@@ -386,6 +386,11 @@ func _on_options_exit_pressed() -> void:
 
 func _on_options_menu_button_pressed() -> void:
 	"""Handle options menu button press (when clicking the OptionsMenu button in the scene)."""
+	# Play button click sound
+	var audio_manager = get_tree().root.get_node_or_null("AudioManager")
+	if audio_manager:
+		audio_manager.play_button_click()
+	
 	show_options_menu()
 
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=70 format=4 uid="uid://dldgqarmlytbs"]
+[gd_scene load_steps=71 format=4 uid="uid://dldgqarmlytbs"]
 
 [ext_resource type="Texture2D" uid="uid://bf6oqb0wb274f" path="res://MainMenuArt/Main_Menu_Back_01.png" id="1_5vbct"]
 [ext_resource type="Texture2D" uid="uid://be1706bgr58a6" path="res://MainMenuArt/Main_Menu_Back_Stars_01.png" id="2_lymk6"]
@@ -42,6 +42,7 @@
 [ext_resource type="Script" uid="uid://byu70vdtw6cdi" path="res://GameManager/script_manager.gd" id="39_3sgy0"]
 [ext_resource type="Script" uid="uid://c260gfndy3tk6" path="res://GameManager/InputManager.gd" id="40_jqx03"]
 [ext_resource type="Script" uid="uid://6fpsa815ubn8" path="res://GameManager/LevelEntrySequence.gd" id="41_r3apm"]
+[ext_resource type="Script" uid="uid://5t3iw55xjd8m" path="res://Shaders/CRTEffect.gd" id="crt_script"]
 [ext_resource type="Script" uid="uid://dowpjjauaj5p4" path="res://GameManager/LevelTool.gd" id="level_tool_script"]
 
 [sub_resource type="Image" id="Image_icxlx"]
@@ -2250,7 +2251,7 @@ centered = false
 [node name="PlanetsContainer" type="Node2D" parent="GameContainer"]
 
 [node name="BlockerPlanet4" parent="GameContainer/PlanetsContainer" instance=ExtResource("5_atdyg")]
-position = Vector2(622, 580)
+position = Vector2(641, 612)
 scale = Vector2(1, 1.0024692)
 radius = 70.795
 gravity = 3000.0
@@ -2258,7 +2259,15 @@ orbital_multiplier = 2.225
 sprite_texture = ExtResource("6_3ehjq")
 
 [node name="BlockerPlanet5" parent="GameContainer/PlanetsContainer" instance=ExtResource("5_atdyg")]
-position = Vector2(883, 409)
+position = Vector2(686, 252)
+scale = Vector2(1, 1.0024692)
+radius = 52.48
+gravity = 3000.0
+orbital_multiplier = 2.225
+sprite_texture = ExtResource("6_3ehjq")
+
+[node name="BlockerPlanet6" parent="GameContainer/PlanetsContainer" instance=ExtResource("5_atdyg")]
+position = Vector2(982, 505)
 scale = Vector2(1, 1.0024692)
 radius = 52.48
 gravity = 3000.0
@@ -2266,7 +2275,7 @@ orbital_multiplier = 2.225
 sprite_texture = ExtResource("6_3ehjq")
 
 [node name="GoalPlanet" parent="GameContainer/PlanetsContainer" instance=ExtResource("7_a7ipx")]
-position = Vector2(695, 186)
+position = Vector2(1017, 130)
 radius = 45.23
 sprite_texture = ExtResource("8_4e5v8")
 
@@ -2298,8 +2307,8 @@ script = ExtResource("15_pg2ov")
 
 [node name="LevelTool" type="Node2D" parent="GameContainer/ShipVisuals"]
 script = ExtResource("level_tool_script")
-launch_power = 61.975
-launch_angle_degrees = 26.64
+launch_power = 56.105
+launch_angle_degrees = -48.235
 
 [node name="Asteroids" type="Node2D" parent="GameContainer"]
 
@@ -2320,7 +2329,7 @@ orbital_multiplier = 0.0
 sprite_texture = ExtResource("18_e0cpq")
 
 [node name="AsteroidBlock3" parent="GameContainer/Asteroids" instance=ExtResource("5_atdyg")]
-position = Vector2(1169, 362)
+position = Vector2(1201, 426)
 scale = Vector2(1, 1.0024692)
 script = ExtResource("16_1w6tb")
 radius = 36.705
@@ -2328,7 +2337,7 @@ orbital_multiplier = 0.0
 sprite_texture = ExtResource("18_e0cpq")
 
 [node name="AsteroidBlock23" parent="GameContainer/Asteroids" instance=ExtResource("5_atdyg")]
-position = Vector2(1057, 729)
+position = Vector2(1093, 778)
 scale = Vector2(1, 1.0024692)
 script = ExtResource("16_1w6tb")
 radius = 36.705
@@ -2336,7 +2345,7 @@ orbital_multiplier = 0.0
 sprite_texture = ExtResource("18_e0cpq")
 
 [node name="AsteroidBlock4" parent="GameContainer/Asteroids" instance=ExtResource("5_atdyg")]
-position = Vector2(893, 167)
+position = Vector2(829, 431)
 scale = Vector2(1, 1.0024692)
 script = ExtResource("16_1w6tb")
 radius = 30.095
@@ -2451,7 +2460,7 @@ orbital_multiplier = 0.0
 sprite_texture = ExtResource("18_e0cpq")
 
 [node name="AsteroidBlock21" parent="GameContainer/Asteroids" instance=ExtResource("5_atdyg")]
-position = Vector2(1091, 91.00003)
+position = Vector2(1160, 231.99994)
 rotation = 0.84854764
 scale = Vector2(1, 1.0024692)
 script = ExtResource("16_1w6tb")
@@ -2478,7 +2487,7 @@ orbital_multiplier = 0.0
 sprite_texture = ExtResource("18_e0cpq")
 
 [node name="AsteroidBlock10" parent="GameContainer/Asteroids" instance=ExtResource("5_atdyg")]
-position = Vector2(1242, 158)
+position = Vector2(1231, 118.99997)
 rotation = 0.84854764
 scale = Vector2(1, 1.0024692)
 script = ExtResource("16_1w6tb")
@@ -2505,13 +2514,15 @@ orbital_multiplier = 0.0
 sprite_texture = ExtResource("20_tr3pf")
 
 [node name="StarWin" parent="GameContainer" instance=ExtResource("22_2v710")]
-position = Vector2(817, 252)
+position = Vector2(864, 145)
+
+[node name="CRTEffect" type="Node2D" parent="."]
+z_index = 1
+script = ExtResource("crt_script")
 
 [node name="UIMain" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
 
 [node name="Frame02" type="Sprite2D" parent="UIMain"]
 position = Vector2(1468, 0)

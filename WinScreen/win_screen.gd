@@ -69,6 +69,11 @@ func _activate_icon(icon: Sprite2D, delay: float):
 	# Hacer visible el icono
 	icon.visible = true
 	
+	# Play achievement pop sound
+	var audio_manager = get_tree().root.get_node_or_null("AudioManager")
+	if audio_manager:
+		audio_manager.play_achievement_pop()
+	
 	# Animar la opacidad del 0 al 1
 	var tween = create_tween()
 	tween.set_trans(Tween.TRANS_QUAD)
@@ -78,6 +83,11 @@ func _activate_icon(icon: Sprite2D, delay: float):
 
 func _on_retry_pressed():
 	"""Se ejecuta cuando se presiona el botón Retry - reinicia el nivel actual"""
+	# Play button click sound
+	var audio_manager = get_tree().root.get_node_or_null("AudioManager")
+	if audio_manager:
+		audio_manager.play_button_click()
+	
 	# Obtener el nivel actual de la escena
 	var current_scene = get_tree().current_scene.get_scene_file_path()
 	var current_level = _extract_level_from_path(current_scene)
@@ -100,6 +110,11 @@ func _on_retry_pressed():
 
 func _on_next_level_pressed():
 	"""Se ejecuta cuando se presiona el botón Next Level"""
+	# Play button click sound
+	var audio_manager = get_tree().root.get_node_or_null("AudioManager")
+	if audio_manager:
+		audio_manager.play_button_click()
+	
 	emit_signal("next_level_pressed")
 	visible = false
 

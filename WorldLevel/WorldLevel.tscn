@@ -1,4 +1,4 @@
-[gd_scene load_steps=39 format=4 uid="uid://bwlmsch5hfaoi"]
+[gd_scene load_steps=41 format=4 uid="uid://bwlmsch5hfaoi"]
 
 [ext_resource type="Texture2D" uid="uid://bf6oqb0wb274f" path="res://MainMenuArt/Main_Menu_Back_01.png" id="1_pyn8l"]
 [ext_resource type="Texture2D" uid="uid://be1706bgr58a6" path="res://MainMenuArt/Main_Menu_Back_Stars_01.png" id="2_3ihcb"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://bu4yxkm5d5kpl" path="res://WorldLevel/Sprites/WL_Asteroids.png" id="5_3ihcb"]
 [ext_resource type="Texture2D" uid="uid://b7jratslqwman" path="res://WorldLevel/Sprites/Planet01BW.png" id="6_yr84m"]
 [ext_resource type="Texture2D" uid="uid://dgnu404w5dqt7" path="res://WorldLevel/Sprites/Planet10BW.png" id="7_ite47"]
+[ext_resource type="Texture2D" uid="uid://b6nc5rumn75ts" path="res://WorldLevel/Sprites/FrameWorld.png" id="7_rbc87"]
 [ext_resource type="Texture2D" uid="uid://c0xwfhoqai4fm" path="res://WorldLevel/Sprites/LinesBW.png" id="8_j3o67"]
 [ext_resource type="Texture2D" uid="uid://bjs3ri6u4regq" path="res://WorldLevel/Sprites/Planet02BW.png" id="9_shrhg"]
 [ext_resource type="Texture2D" uid="uid://bynmpyw2xem47" path="res://WorldLevel/Sprites/Planet03BW.png" id="10_wp40g"]
@@ -27,6 +28,7 @@
 [ext_resource type="Texture2D" uid="uid://dvppt5nu5320r" path="res://WorldLevel/Sprites/Planet08.png" id="25_nhoo4"]
 [ext_resource type="Texture2D" uid="uid://dfg0nh6onnkhg" path="res://WorldLevel/Sprites/Planet09.png" id="26_50jgn"]
 [ext_resource type="Script" uid="uid://rkmnkvtcoopr" path="res://WorldLevel/WorldLevel.gd" id="27_world_level"]
+[ext_resource type="Script" uid="uid://5t3iw55xjd8m" path="res://Shaders/CRTEffect.gd" id="28_h8418"]
 
 [sub_resource type="Image" id="Image_dxvvs"]
 data = {
@@ -1254,9 +1256,19 @@ visible = false
 position = Vector2(988, 579)
 texture = ExtResource("18_dxvvs")
 
+[node name="CRTEffect" type="Node2D" parent="."]
+z_index = -1
+script = ExtResource("28_h8418")
+
+[node name="FrameWorld" type="Sprite2D" parent="."]
+z_index = 1
+texture = ExtResource("7_rbc87")
+centered = false
+
 [node name="OptionsMenu" type="Button" parent="."]
-offset_left = 1778.0
-offset_top = 20.0
-offset_right = 1900.0
-offset_bottom = 137.0
+z_index = 2
+offset_left = 1816.0
+offset_top = 13.0
+offset_right = 1907.7607
+offset_bottom = 101.0
 theme = SubResource("Theme_1h3ty")

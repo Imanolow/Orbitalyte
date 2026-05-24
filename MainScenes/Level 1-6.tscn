@@ -1,49 +1,49 @@
-[gd_scene load_steps=71 format=4 uid="uid://b30ef44083m7b"]
+[gd_scene load_steps=71 format=4 uid="uid://cdiy24stl4wg6"]
 
-[ext_resource type="Texture2D" uid="uid://bf6oqb0wb274f" path="res://MainMenuArt/Main_Menu_Back_01.png" id="1_incs0"]
-[ext_resource type="Texture2D" uid="uid://be1706bgr58a6" path="res://MainMenuArt/Main_Menu_Back_Stars_01.png" id="2_mw225"]
-[ext_resource type="Texture2D" uid="uid://ce3olqr7jc6sr" path="res://MainMenuArt/Main_Menu_Back_Stars_02.png" id="3_wyipp"]
-[ext_resource type="Texture2D" uid="uid://e4jvbgp6e83i" path="res://MainMenuArt/Main_Menu_Back_Stars_03.png" id="4_adjc8"]
-[ext_resource type="PackedScene" uid="uid://ej6t4kuyttvk" path="res://Planets/BlockerPlanet.tscn" id="5_bwgm8"]
-[ext_resource type="Texture2D" uid="uid://vxji4madb3fm" path="res://Planets/PlanetSprites/Block_Planet_01.png" id="6_vwl7l"]
-[ext_resource type="PackedScene" uid="uid://b5t82k3j8yaqm" path="res://Planets/GoalPlanet.tscn" id="7_q5h8d"]
-[ext_resource type="Texture2D" uid="uid://de2ku168kal0f" path="res://Planets/PlanetSprites/Goal_Planet_01.png" id="8_jvp2m"]
-[ext_resource type="Texture2D" uid="uid://b2ppbvitepwx4" path="res://Planets/PlanetSprites/Goal_Flag.png" id="9_hv4on"]
-[ext_resource type="PackedScene" uid="uid://cgpq84j1x5kh2" path="res://Planets/StartPlanet.tscn" id="10_78j02"]
-[ext_resource type="Texture2D" uid="uid://dbuof4y8kbtvb" path="res://Planets/PlanetSprites/Start_Planet_01.png" id="11_u74vy"]
-[ext_resource type="Script" uid="uid://ck38s26tbc357" path="res://GameManager/trail_renderer.gd" id="12_sii70"]
-[ext_resource type="Script" uid="uid://l1xqu3oenae6" path="res://GameManager/Ship.gd" id="13_pyg73"]
-[ext_resource type="Texture2D" uid="uid://te2lg4ewlgue" path="res://Ship/Ship_New_01.png" id="14_t60s8"]
-[ext_resource type="Script" uid="uid://bx2k13553bdbe" path="res://GameManager/LaunchPreview.gd" id="15_hfhtm"]
-[ext_resource type="Script" uid="uid://dowpjjauaj5p4" path="res://GameManager/LevelTool.gd" id="16_8vthk"]
-[ext_resource type="Script" uid="uid://bpwnw3ptu45ye" path="res://GameManager/asteroid_blocker.gd" id="17_bcgkv"]
-[ext_resource type="Texture2D" uid="uid://7no5e3tk6bew" path="res://Planets/Asteroids/Asteroid_Block_01.png" id="18_rim6l"]
-[ext_resource type="Texture2D" uid="uid://mothqqt7gja3" path="res://Planets/Asteroids/Asteroid_Block_02.png" id="19_ontqx"]
-[ext_resource type="Texture2D" uid="uid://c14v7s44nycew" path="res://Planets/Asteroids/Asteroid_Block_03.png" id="20_tb1rx"]
-[ext_resource type="Texture2D" uid="uid://d1fub13xks1o7" path="res://Planets/Asteroids/Asteroid_Block_04.png" id="21_0l7i7"]
-[ext_resource type="PackedScene" uid="uid://nfaem6a5f84q" path="res://Planets/StarWin/StarWin.tscn" id="22_4ea8n"]
-[ext_resource type="Texture2D" uid="uid://cpak8rq35nv5w" path="res://UI_Elements/Panels_Back.png" id="23_iwj1k"]
-[ext_resource type="Script" uid="uid://5t3iw55xjd8m" path="res://Shaders/CRTEffect.gd" id="23_mw225"]
-[ext_resource type="Texture2D" uid="uid://ds0f1c7y7fm1s" path="res://UI_Elements/Game_Frame.png" id="24_3u52w"]
-[ext_resource type="Texture2D" uid="uid://dfte8jbtfgqkx" path="res://UI_Elements/Orbitalyte_Panel_Button_01.png" id="25_tcw1k"]
-[ext_resource type="Texture2D" uid="uid://smutvq0m6s5i" path="res://UI_Elements/Logo_Back.png" id="26_xmvvx"]
-[ext_resource type="Texture2D" uid="uid://bvl1qphj0gwj3" path="res://UI_Elements/Settings_Button_01.png" id="27_godjs"]
-[ext_resource type="Texture2D" uid="uid://bwrkid5e1cq86" path="res://UI_Elements/Filler_Panel_01.png" id="28_qigvo"]
-[ext_resource type="Texture2D" uid="uid://bdtbhyjfynly2" path="res://UI_Elements/Attempts_Back_01.png" id="29_kfqic"]
-[ext_resource type="Texture2D" uid="uid://cjixp0kmrcal1" path="res://UI_Elements/Attempt_Screen_01.png" id="30_u8qw3"]
-[ext_resource type="Texture2D" uid="uid://0kufek67603c" path="res://UI_Elements/Lives_Number_01.png" id="31_f2ttu"]
-[ext_resource type="Texture2D" uid="uid://bpx6ute0s4hyc" path="res://UI_Elements/Power_Back.png" id="32_j8g73"]
-[ext_resource type="Texture2D" uid="uid://c20fpr2kf67dp" path="res://UI_Elements/TriangleBase.png" id="33_vvdrh"]
-[ext_resource type="Script" uid="uid://bktxpjp6y4rfe" path="res://GameManager/PowerBarTriangle.gd" id="34_sxy7q"]
-[ext_resource type="Texture2D" uid="uid://103pnfqp7fbr" path="res://UI_Elements/Power_Back_Bars.png" id="35_kgxb1"]
-[ext_resource type="Texture2D" uid="uid://djeamim6rdh5f" path="res://UI_Elements/Launch_Back.png" id="36_kkuri"]
-[ext_resource type="Texture2D" uid="uid://bw5bfvo4tyijx" path="res://UI_Elements/Arrows_Back.png" id="37_luywl"]
-[ext_resource type="Texture2D" uid="uid://d1vynju7ontjb" path="res://UI_Elements/LaunchButtonslrTheme_GUI.png" id="38_juv77"]
-[ext_resource type="Theme" uid="uid://ddx1breaqg3vv" path="res://UI_Elements/LaunchLRButtons_GUI.tres" id="39_rk8yb"]
-[ext_resource type="FontFile" uid="uid://bio8op0gkolr6" path="res://Fonts/ARCADE_I.TTF" id="40_2in1w"]
-[ext_resource type="Script" uid="uid://byu70vdtw6cdi" path="res://GameManager/script_manager.gd" id="41_qdvvn"]
-[ext_resource type="Script" uid="uid://c260gfndy3tk6" path="res://GameManager/InputManager.gd" id="42_tc80m"]
-[ext_resource type="Script" uid="uid://6fpsa815ubn8" path="res://GameManager/LevelEntrySequence.gd" id="43_5ak30"]
+[ext_resource type="Texture2D" uid="uid://bf6oqb0wb274f" path="res://MainMenuArt/Main_Menu_Back_01.png" id="1_0uqha"]
+[ext_resource type="Texture2D" uid="uid://be1706bgr58a6" path="res://MainMenuArt/Main_Menu_Back_Stars_01.png" id="2_yhi6h"]
+[ext_resource type="Texture2D" uid="uid://ce3olqr7jc6sr" path="res://MainMenuArt/Main_Menu_Back_Stars_02.png" id="3_acqpg"]
+[ext_resource type="Texture2D" uid="uid://e4jvbgp6e83i" path="res://MainMenuArt/Main_Menu_Back_Stars_03.png" id="4_5xxc6"]
+[ext_resource type="PackedScene" uid="uid://ej6t4kuyttvk" path="res://Planets/BlockerPlanet.tscn" id="5_b6nm5"]
+[ext_resource type="Texture2D" uid="uid://vxji4madb3fm" path="res://Planets/PlanetSprites/Block_Planet_01.png" id="6_a17eo"]
+[ext_resource type="PackedScene" uid="uid://b5t82k3j8yaqm" path="res://Planets/GoalPlanet.tscn" id="7_1ih1j"]
+[ext_resource type="Texture2D" uid="uid://de2ku168kal0f" path="res://Planets/PlanetSprites/Goal_Planet_01.png" id="8_atmrr"]
+[ext_resource type="Texture2D" uid="uid://b2ppbvitepwx4" path="res://Planets/PlanetSprites/Goal_Flag.png" id="9_2pe7x"]
+[ext_resource type="PackedScene" uid="uid://cgpq84j1x5kh2" path="res://Planets/StartPlanet.tscn" id="10_lsejj"]
+[ext_resource type="Texture2D" uid="uid://dbuof4y8kbtvb" path="res://Planets/PlanetSprites/Start_Planet_01.png" id="11_cctoy"]
+[ext_resource type="Script" uid="uid://ck38s26tbc357" path="res://GameManager/trail_renderer.gd" id="12_vxfym"]
+[ext_resource type="Script" uid="uid://l1xqu3oenae6" path="res://GameManager/Ship.gd" id="13_t1ol1"]
+[ext_resource type="Texture2D" uid="uid://te2lg4ewlgue" path="res://Ship/Ship_New_01.png" id="14_qbskh"]
+[ext_resource type="Script" uid="uid://bx2k13553bdbe" path="res://GameManager/LaunchPreview.gd" id="15_nwnwb"]
+[ext_resource type="Script" uid="uid://dowpjjauaj5p4" path="res://GameManager/LevelTool.gd" id="16_e1ek0"]
+[ext_resource type="Script" uid="uid://bpwnw3ptu45ye" path="res://GameManager/asteroid_blocker.gd" id="17_b1es4"]
+[ext_resource type="Texture2D" uid="uid://7no5e3tk6bew" path="res://Planets/Asteroids/Asteroid_Block_01.png" id="18_cnom4"]
+[ext_resource type="Texture2D" uid="uid://mothqqt7gja3" path="res://Planets/Asteroids/Asteroid_Block_02.png" id="19_sc1tb"]
+[ext_resource type="Texture2D" uid="uid://c14v7s44nycew" path="res://Planets/Asteroids/Asteroid_Block_03.png" id="20_dn4yx"]
+[ext_resource type="Texture2D" uid="uid://d1fub13xks1o7" path="res://Planets/Asteroids/Asteroid_Block_04.png" id="21_nu4ls"]
+[ext_resource type="PackedScene" uid="uid://nfaem6a5f84q" path="res://Planets/StarWin/StarWin.tscn" id="22_m8hom"]
+[ext_resource type="Script" uid="uid://5t3iw55xjd8m" path="res://Shaders/CRTEffect.gd" id="23_qt87p"]
+[ext_resource type="Texture2D" uid="uid://cpak8rq35nv5w" path="res://UI_Elements/Panels_Back.png" id="24_h6gxb"]
+[ext_resource type="Texture2D" uid="uid://ds0f1c7y7fm1s" path="res://UI_Elements/Game_Frame.png" id="25_v56sg"]
+[ext_resource type="Texture2D" uid="uid://dfte8jbtfgqkx" path="res://UI_Elements/Orbitalyte_Panel_Button_01.png" id="26_6gd6e"]
+[ext_resource type="Texture2D" uid="uid://smutvq0m6s5i" path="res://UI_Elements/Logo_Back.png" id="27_htbe7"]
+[ext_resource type="Texture2D" uid="uid://bvl1qphj0gwj3" path="res://UI_Elements/Settings_Button_01.png" id="28_jnxmy"]
+[ext_resource type="Texture2D" uid="uid://bwrkid5e1cq86" path="res://UI_Elements/Filler_Panel_01.png" id="29_a8et8"]
+[ext_resource type="Texture2D" uid="uid://bdtbhyjfynly2" path="res://UI_Elements/Attempts_Back_01.png" id="30_vqola"]
+[ext_resource type="Texture2D" uid="uid://cjixp0kmrcal1" path="res://UI_Elements/Attempt_Screen_01.png" id="31_4w3bm"]
+[ext_resource type="Texture2D" uid="uid://0kufek67603c" path="res://UI_Elements/Lives_Number_01.png" id="32_0qqio"]
+[ext_resource type="Texture2D" uid="uid://bpx6ute0s4hyc" path="res://UI_Elements/Power_Back.png" id="33_skbwt"]
+[ext_resource type="Texture2D" uid="uid://c20fpr2kf67dp" path="res://UI_Elements/TriangleBase.png" id="34_nshyk"]
+[ext_resource type="Script" uid="uid://bktxpjp6y4rfe" path="res://GameManager/PowerBarTriangle.gd" id="35_n0n23"]
+[ext_resource type="Texture2D" uid="uid://103pnfqp7fbr" path="res://UI_Elements/Power_Back_Bars.png" id="36_3qx31"]
+[ext_resource type="Texture2D" uid="uid://djeamim6rdh5f" path="res://UI_Elements/Launch_Back.png" id="37_5ehpq"]
+[ext_resource type="Texture2D" uid="uid://bw5bfvo4tyijx" path="res://UI_Elements/Arrows_Back.png" id="38_wsyd1"]
+[ext_resource type="Texture2D" uid="uid://d1vynju7ontjb" path="res://UI_Elements/LaunchButtonslrTheme_GUI.png" id="39_503f0"]
+[ext_resource type="Theme" uid="uid://ddx1breaqg3vv" path="res://UI_Elements/LaunchLRButtons_GUI.tres" id="40_ltuvt"]
+[ext_resource type="FontFile" uid="uid://bio8op0gkolr6" path="res://Fonts/ARCADE_I.TTF" id="41_05ni1"]
+[ext_resource type="Script" uid="uid://byu70vdtw6cdi" path="res://GameManager/script_manager.gd" id="42_l32ve"]
+[ext_resource type="Script" uid="uid://c260gfndy3tk6" path="res://GameManager/InputManager.gd" id="43_0adg4"]
+[ext_resource type="Script" uid="uid://6fpsa815ubn8" path="res://GameManager/LevelEntrySequence.gd" id="44_5tcwx"]
 
 [sub_resource type="Image" id="Image_icxlx"]
 data = {
@@ -1039,7 +1039,7 @@ corner_radius_bottom_left = 3
 corner_detail = 5
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_wm5na"]
-texture = ExtResource("38_juv77")
+texture = ExtResource("39_503f0")
 region_rect = Rect2(1, 182, 121, 121)
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_7qnck"]
@@ -1083,7 +1083,7 @@ Button/styles/normal = SubResource("StyleBoxTexture_j7otg")
 Button/styles/pressed = SubResource("StyleBoxTexture_2ssgj")
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_htv6h"]
-texture = ExtResource("38_juv77")
+texture = ExtResource("39_503f0")
 region_rect = Rect2(3, 0, 169, 168)
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_2ssgj"]
@@ -1094,7 +1094,7 @@ texture = SubResource("CompressedTexture2D_2ssgj")
 region_rect = Rect2(3, 0, 169, 168)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_opvto"]
-texture = ExtResource("38_juv77")
+texture = ExtResource("39_503f0")
 region_rect = Rect2(188, 0, 165, 165)
 
 [sub_resource type="Theme" id="Theme_llyub"]
@@ -2216,7 +2216,7 @@ Button/styles/pressed = SubResource("StyleBoxTexture_l4gva")
 
 [node name="StarsBack" type="Sprite2D" parent="."]
 z_index = -1
-texture = ExtResource("1_incs0")
+texture = ExtResource("1_0uqha")
 centered = false
 
 [node name="Parallax2D" type="Parallax2D" parent="StarsBack"]
@@ -2225,7 +2225,7 @@ autoscroll = Vector2(10, -15)
 
 [node name="Stars01" type="Sprite2D" parent="StarsBack/Parallax2D"]
 position = Vector2(63, 19)
-texture = ExtResource("2_mw225")
+texture = ExtResource("2_yhi6h")
 centered = false
 
 [node name="Parallax2D2" type="Parallax2D" parent="StarsBack"]
@@ -2234,7 +2234,7 @@ autoscroll = Vector2(8, -15)
 
 [node name="Stars02" type="Sprite2D" parent="StarsBack/Parallax2D2"]
 position = Vector2(81, -25)
-texture = ExtResource("3_wyipp")
+texture = ExtResource("3_acqpg")
 centered = false
 
 [node name="Parallax2D3" type="Parallax2D" parent="StarsBack"]
@@ -2243,274 +2243,282 @@ autoscroll = Vector2(13, -15)
 
 [node name="Stars03" type="Sprite2D" parent="StarsBack/Parallax2D3"]
 position = Vector2(40, 3)
-texture = ExtResource("4_adjc8")
+texture = ExtResource("4_5xxc6")
 centered = false
 
 [node name="GameContainer" type="Node2D" parent="."]
 
 [node name="PlanetsContainer" type="Node2D" parent="GameContainer"]
 
-[node name="BlockerPlanet5" parent="GameContainer/PlanetsContainer" instance=ExtResource("5_bwgm8")]
-position = Vector2(402, 450)
+[node name="BlockerPlanet5" parent="GameContainer/PlanetsContainer" instance=ExtResource("5_b6nm5")]
+position = Vector2(1164, 397)
 scale = Vector2(1, 1.0024692)
 radius = 52.48
 gravity = 3000.0
 orbital_multiplier = 2.225
-sprite_texture = ExtResource("6_vwl7l")
+sprite_texture = ExtResource("6_a17eo")
 
-[node name="BlockerPlanet6" parent="GameContainer/PlanetsContainer" instance=ExtResource("5_bwgm8")]
-position = Vector2(939, 633)
+[node name="BlockerPlanet7" parent="GameContainer/PlanetsContainer" instance=ExtResource("5_b6nm5")]
+position = Vector2(688, 241)
+scale = Vector2(1, 1.0024692)
+radius = 52.48
+gravity = 4000.0
+orbital_multiplier = 2.005
+sprite_texture = ExtResource("6_a17eo")
+
+[node name="BlockerPlanet6" parent="GameContainer/PlanetsContainer" instance=ExtResource("5_b6nm5")]
+position = Vector2(351, 617)
 scale = Vector2(1, 1.0024692)
 radius = 66.365
-gravity = 4000.0
+gravity = 4500.0
 orbital_multiplier = 2.525
-sprite_texture = ExtResource("6_vwl7l")
+sprite_texture = ExtResource("6_a17eo")
 
-[node name="GoalPlanet" parent="GameContainer/PlanetsContainer" instance=ExtResource("7_q5h8d")]
-position = Vector2(274, 151)
+[node name="GoalPlanet" parent="GameContainer/PlanetsContainer" instance=ExtResource("7_1ih1j")]
+position = Vector2(1010, 111)
 radius = 45.23
-sprite_texture = ExtResource("8_jvp2m")
+sprite_texture = ExtResource("8_atmrr")
 
 [node name="Flag01" type="Sprite2D" parent="GameContainer/PlanetsContainer/GoalPlanet"]
 position = Vector2(46.00006, -32.999985)
 scale = Vector2(0.64470863, 0.64470863)
-texture = ExtResource("9_hv4on")
+texture = ExtResource("9_2pe7x")
 
-[node name="StartPlanet" parent="GameContainer/PlanetsContainer" instance=ExtResource("10_78j02")]
+[node name="StartPlanet" parent="GameContainer/PlanetsContainer" instance=ExtResource("10_lsejj")]
 position = Vector2(766, 900)
-sprite_texture = ExtResource("11_u74vy")
+sprite_texture = ExtResource("11_cctoy")
 
 [node name="ShipVisuals" type="Node2D" parent="GameContainer"]
 
 [node name="TrailRenderer" type="Node2D" parent="GameContainer/ShipVisuals"]
-script = ExtResource("12_sii70")
+script = ExtResource("12_vxfym")
 
 [node name="ShipRenderer" type="Node2D" parent="GameContainer/ShipVisuals"]
 position = Vector2(-117, 0)
-script = ExtResource("13_pyg73")
+script = ExtResource("13_t1ol1")
 
 [node name="Sprite2D" type="Sprite2D" parent="GameContainer/ShipVisuals/ShipRenderer"]
 position = Vector2(883.00006, 862)
 scale = Vector2(0.5672705, 0.5672705)
-texture = ExtResource("14_t60s8")
+texture = ExtResource("14_qbskh")
 
 [node name="LaunchPreview" type="Node2D" parent="GameContainer/ShipVisuals"]
-script = ExtResource("15_hfhtm")
+script = ExtResource("15_nwnwb")
 
 [node name="LevelTool" type="Node2D" parent="GameContainer/ShipVisuals"]
-script = ExtResource("16_8vthk")
-launch_power = 52.21
-launch_angle_degrees = 62.07
+script = ExtResource("16_e1ek0")
+launch_power = 66.46
+launch_angle_degrees = -14.95
 
 [node name="Asteroids" type="Node2D" parent="GameContainer"]
 
-[node name="AsteroidBlock" parent="GameContainer/Asteroids" instance=ExtResource("5_bwgm8")]
+[node name="AsteroidBlock" parent="GameContainer/Asteroids" instance=ExtResource("5_b6nm5")]
 position = Vector2(137, 979)
 scale = Vector2(1, 1.0024692)
-script = ExtResource("17_bcgkv")
+script = ExtResource("17_b1es4")
 radius = 31.49
 orbital_multiplier = 0.0
-sprite_texture = ExtResource("18_rim6l")
+sprite_texture = ExtResource("18_cnom4")
 
-[node name="AsteroidBlock2" parent="GameContainer/Asteroids" instance=ExtResource("5_bwgm8")]
-position = Vector2(280, 711)
+[node name="AsteroidBlock2" parent="GameContainer/Asteroids" instance=ExtResource("5_b6nm5")]
+position = Vector2(173, 158)
 scale = Vector2(1, 1.0024692)
-script = ExtResource("17_bcgkv")
+script = ExtResource("17_b1es4")
 radius = 41.18
 orbital_multiplier = 0.0
-sprite_texture = ExtResource("19_ontqx")
+sprite_texture = ExtResource("19_sc1tb")
 
-[node name="AsteroidBlock3" parent="GameContainer/Asteroids" instance=ExtResource("5_bwgm8")]
-position = Vector2(1180, 421.99997)
+[node name="AsteroidBlock3" parent="GameContainer/Asteroids" instance=ExtResource("5_b6nm5")]
+position = Vector2(812, 753)
 scale = Vector2(1, 1.0024692)
-script = ExtResource("17_bcgkv")
+script = ExtResource("17_b1es4")
 radius = 36.705
 orbital_multiplier = 0.0
-sprite_texture = ExtResource("19_ontqx")
+sprite_texture = ExtResource("19_sc1tb")
 
-[node name="AsteroidBlock23" parent="GameContainer/Asteroids" instance=ExtResource("5_bwgm8")]
+[node name="AsteroidBlock23" parent="GameContainer/Asteroids" instance=ExtResource("5_b6nm5")]
 position = Vector2(168, 506)
 scale = Vector2(1, 1.0024692)
-script = ExtResource("17_bcgkv")
+script = ExtResource("17_b1es4")
 radius = 36.705
 orbital_multiplier = 0.0
-sprite_texture = ExtResource("19_ontqx")
+sprite_texture = ExtResource("19_sc1tb")
 
-[node name="AsteroidBlock4" parent="GameContainer/Asteroids" instance=ExtResource("5_bwgm8")]
-position = Vector2(673, 571)
+[node name="AsteroidBlock4" parent="GameContainer/Asteroids" instance=ExtResource("5_b6nm5")]
+position = Vector2(1003, 631)
 scale = Vector2(1, 1.0024692)
-script = ExtResource("17_bcgkv")
+script = ExtResource("17_b1es4")
 radius = 30.095
 orbital_multiplier = 0.0
-sprite_texture = ExtResource("20_tb1rx")
+sprite_texture = ExtResource("20_dn4yx")
 
-[node name="AsteroidBlock6" parent="GameContainer/Asteroids" instance=ExtResource("5_bwgm8")]
-position = Vector2(1111, 953)
+[node name="AsteroidBlock6" parent="GameContainer/Asteroids" instance=ExtResource("5_b6nm5")]
+position = Vector2(912.00006, 936)
 rotation = 0.56629
 scale = Vector2(1, 1.0024692)
-script = ExtResource("17_bcgkv")
+script = ExtResource("17_b1es4")
 radius = 36.19
 orbital_multiplier = 0.0
-sprite_texture = ExtResource("20_tb1rx")
+sprite_texture = ExtResource("20_dn4yx")
 
-[node name="AsteroidBlock5" parent="GameContainer/Asteroids" instance=ExtResource("5_bwgm8")]
-position = Vector2(548, 598)
+[node name="AsteroidBlock5" parent="GameContainer/Asteroids" instance=ExtResource("5_b6nm5")]
+position = Vector2(817, 370)
 scale = Vector2(1, 1.0024692)
-script = ExtResource("17_bcgkv")
+script = ExtResource("17_b1es4")
 radius = 41.455
 orbital_multiplier = 0.0
-sprite_texture = ExtResource("21_0l7i7")
+sprite_texture = ExtResource("21_nu4ls")
 
-[node name="AsteroidBlock18" parent="GameContainer/Asteroids" instance=ExtResource("5_bwgm8")]
-position = Vector2(576.99994, 378)
+[node name="AsteroidBlock18" parent="GameContainer/Asteroids" instance=ExtResource("5_b6nm5")]
+position = Vector2(504, 351)
 rotation = 1.378348
 scale = Vector2(1, 1.0024692)
-script = ExtResource("17_bcgkv")
+script = ExtResource("17_b1es4")
 radius = 36.495
 orbital_multiplier = 0.0
-sprite_texture = ExtResource("21_0l7i7")
+sprite_texture = ExtResource("21_nu4ls")
 
-[node name="AsteroidBlock19" parent="GameContainer/Asteroids" instance=ExtResource("5_bwgm8")]
-position = Vector2(580, 121)
+[node name="AsteroidBlock19" parent="GameContainer/Asteroids" instance=ExtResource("5_b6nm5")]
+position = Vector2(476.99994, 95)
 rotation = 0.9813126
 scale = Vector2(1, 1.0024692)
-script = ExtResource("17_bcgkv")
+script = ExtResource("17_b1es4")
 radius = 36.495
 orbital_multiplier = 0.0
-sprite_texture = ExtResource("21_0l7i7")
+sprite_texture = ExtResource("21_nu4ls")
 
-[node name="AsteroidBlock20" parent="GameContainer/Asteroids" instance=ExtResource("5_bwgm8")]
+[node name="AsteroidBlock20" parent="GameContainer/Asteroids" instance=ExtResource("5_b6nm5")]
 position = Vector2(116, 743.00006)
 rotation = 0.9813126
 scale = Vector2(1, 1.0024692)
-script = ExtResource("17_bcgkv")
+script = ExtResource("17_b1es4")
 radius = 36.495
 orbital_multiplier = 0.0
-sprite_texture = ExtResource("21_0l7i7")
+sprite_texture = ExtResource("21_nu4ls")
 
-[node name="AsteroidBlock7" parent="GameContainer/Asteroids" instance=ExtResource("5_bwgm8")]
+[node name="AsteroidBlock7" parent="GameContainer/Asteroids" instance=ExtResource("5_b6nm5")]
 position = Vector2(257.00003, 855.00006)
 rotation = 0.84854764
 scale = Vector2(1, 1.0024692)
-script = ExtResource("17_bcgkv")
+script = ExtResource("17_b1es4")
 radius = 45.09
 orbital_multiplier = 0.0
-sprite_texture = ExtResource("18_rim6l")
+sprite_texture = ExtResource("18_cnom4")
 
-[node name="AsteroidBlock13" parent="GameContainer/Asteroids" instance=ExtResource("5_bwgm8")]
-position = Vector2(684, 712)
+[node name="AsteroidBlock13" parent="GameContainer/Asteroids" instance=ExtResource("5_b6nm5")]
+position = Vector2(968, 758)
 rotation = 2.6342757
 scale = Vector2(1, 1.0024692)
-script = ExtResource("17_bcgkv")
+script = ExtResource("17_b1es4")
 radius = 32.575
 orbital_multiplier = 0.0
-sprite_texture = ExtResource("18_rim6l")
+sprite_texture = ExtResource("18_cnom4")
 
-[node name="AsteroidBlock14" parent="GameContainer/Asteroids" instance=ExtResource("5_bwgm8")]
-position = Vector2(1290, 894)
+[node name="AsteroidBlock14" parent="GameContainer/Asteroids" instance=ExtResource("5_b6nm5")]
+position = Vector2(1251, 908.00006)
 rotation = 2.6342757
 scale = Vector2(1, 1.0024692)
-script = ExtResource("17_bcgkv")
+script = ExtResource("17_b1es4")
 radius = 34.615
 orbital_multiplier = 0.0
-sprite_texture = ExtResource("18_rim6l")
+sprite_texture = ExtResource("18_cnom4")
 
-[node name="AsteroidBlock15" parent="GameContainer/Asteroids" instance=ExtResource("5_bwgm8")]
-position = Vector2(1207, 156)
+[node name="AsteroidBlock15" parent="GameContainer/Asteroids" instance=ExtResource("5_b6nm5")]
+position = Vector2(1193, 132.99997)
 rotation = -0.08155322
 scale = Vector2(1, 1.0024692)
-script = ExtResource("17_bcgkv")
+script = ExtResource("17_b1es4")
 radius = 38.56
 orbital_multiplier = 0.0
-sprite_texture = ExtResource("18_rim6l")
+sprite_texture = ExtResource("18_cnom4")
 
-[node name="AsteroidBlock17" parent="GameContainer/Asteroids" instance=ExtResource("5_bwgm8")]
-position = Vector2(1316.0001, 573)
+[node name="AsteroidBlock17" parent="GameContainer/Asteroids" instance=ExtResource("5_b6nm5")]
+position = Vector2(1211.0001, 646)
 rotation = 1.4240978
 scale = Vector2(1, 1.0024692)
-script = ExtResource("17_bcgkv")
+script = ExtResource("17_b1es4")
 radius = 34.18
 orbital_multiplier = 0.0
-sprite_texture = ExtResource("18_rim6l")
+sprite_texture = ExtResource("18_cnom4")
 
-[node name="AsteroidBlock8" parent="GameContainer/Asteroids" instance=ExtResource("5_bwgm8")]
+[node name="AsteroidBlock8" parent="GameContainer/Asteroids" instance=ExtResource("5_b6nm5")]
 position = Vector2(540, 984)
 rotation = 0.84854764
 scale = Vector2(1, 1.0024692)
-script = ExtResource("17_bcgkv")
+script = ExtResource("17_b1es4")
 radius = 41.18
 orbital_multiplier = 0.0
-sprite_texture = ExtResource("19_ontqx")
+sprite_texture = ExtResource("19_sc1tb")
 
-[node name="AsteroidBlock9" parent="GameContainer/Asteroids" instance=ExtResource("5_bwgm8")]
-position = Vector2(808, 154.99997)
+[node name="AsteroidBlock9" parent="GameContainer/Asteroids" instance=ExtResource("5_b6nm5")]
+position = Vector2(329, 169.00002)
 rotation = 0.84854764
 scale = Vector2(1, 1.0024692)
-script = ExtResource("17_bcgkv")
+script = ExtResource("17_b1es4")
 radius = 41.18
 orbital_multiplier = 0.0
-sprite_texture = ExtResource("19_ontqx")
+sprite_texture = ExtResource("19_sc1tb")
 
-[node name="AsteroidBlock21" parent="GameContainer/Asteroids" instance=ExtResource("5_bwgm8")]
-position = Vector2(874, 294.99994)
+[node name="AsteroidBlock21" parent="GameContainer/Asteroids" instance=ExtResource("5_b6nm5")]
+position = Vector2(325, 378)
 rotation = 0.84854764
 scale = Vector2(1, 1.0024692)
-script = ExtResource("17_bcgkv")
+script = ExtResource("17_b1es4")
 radius = 41.18
 orbital_multiplier = 0.0
-sprite_texture = ExtResource("19_ontqx")
+sprite_texture = ExtResource("19_sc1tb")
 
-[node name="AsteroidBlock22" parent="GameContainer/Asteroids" instance=ExtResource("5_bwgm8")]
+[node name="AsteroidBlock22" parent="GameContainer/Asteroids" instance=ExtResource("5_b6nm5")]
 position = Vector2(389, 966.9999)
 rotation = 0.84854764
 scale = Vector2(1, 1.0024692)
-script = ExtResource("17_bcgkv")
+script = ExtResource("17_b1es4")
 radius = 37.925
 orbital_multiplier = 0.0
-sprite_texture = ExtResource("19_ontqx")
+sprite_texture = ExtResource("19_sc1tb")
 
-[node name="AsteroidBlock16" parent="GameContainer/Asteroids" instance=ExtResource("5_bwgm8")]
-position = Vector2(1234, 714)
+[node name="AsteroidBlock16" parent="GameContainer/Asteroids" instance=ExtResource("5_b6nm5")]
+position = Vector2(1106, 847)
 rotation = 0.84854764
 scale = Vector2(1, 1.0024692)
-script = ExtResource("17_bcgkv")
+script = ExtResource("17_b1es4")
 radius = 47.58
 orbital_multiplier = 0.0
-sprite_texture = ExtResource("19_ontqx")
+sprite_texture = ExtResource("19_sc1tb")
 
-[node name="AsteroidBlock10" parent="GameContainer/Asteroids" instance=ExtResource("5_bwgm8")]
-position = Vector2(1063, 257.00003)
+[node name="AsteroidBlock10" parent="GameContainer/Asteroids" instance=ExtResource("5_b6nm5")]
+position = Vector2(958, 280.99997)
 rotation = 0.84854764
 scale = Vector2(1, 1.0024692)
-script = ExtResource("17_bcgkv")
+script = ExtResource("17_b1es4")
 radius = 36.19
 orbital_multiplier = 0.0
-sprite_texture = ExtResource("20_tb1rx")
+sprite_texture = ExtResource("20_dn4yx")
 
-[node name="AsteroidBlock11" parent="GameContainer/Asteroids" instance=ExtResource("5_bwgm8")]
-position = Vector2(1342.0001, 400)
+[node name="AsteroidBlock11" parent="GameContainer/Asteroids" instance=ExtResource("5_b6nm5")]
+position = Vector2(804.9999, 603)
 rotation = 1.4148376
 scale = Vector2(0.99999994, 1.0024692)
-script = ExtResource("17_bcgkv")
+script = ExtResource("17_b1es4")
 radius = 36.19
 orbital_multiplier = 0.0
-sprite_texture = ExtResource("20_tb1rx")
+sprite_texture = ExtResource("20_dn4yx")
 
-[node name="AsteroidBlock12" parent="GameContainer/Asteroids" instance=ExtResource("5_bwgm8")]
+[node name="AsteroidBlock12" parent="GameContainer/Asteroids" instance=ExtResource("5_b6nm5")]
 position = Vector2(161, 289)
 rotation = 0.84854764
 scale = Vector2(1, 1.0024692)
-script = ExtResource("17_bcgkv")
+script = ExtResource("17_b1es4")
 radius = 36.565
 orbital_multiplier = 0.0
-sprite_texture = ExtResource("21_0l7i7")
+sprite_texture = ExtResource("21_nu4ls")
 
-[node name="StarWin" parent="GameContainer" instance=ExtResource("22_4ea8n")]
-position = Vector2(521, 257)
+[node name="StarWin" parent="GameContainer" instance=ExtResource("22_m8hom")]
+position = Vector2(1148, 245)
 
 [node name="CRTEffect" type="Node2D" parent="."]
 z_index = 1
-script = ExtResource("23_mw225")
+script = ExtResource("23_qt87p")
 
 [node name="UIMain" type="Control" parent="."]
 layout_mode = 3
@@ -2518,82 +2526,82 @@ anchors_preset = 0
 
 [node name="Frame02" type="Sprite2D" parent="UIMain"]
 position = Vector2(1468, 0)
-texture = ExtResource("23_iwj1k")
+texture = ExtResource("24_h6gxb")
 centered = false
 
 [node name="Frame01" type="Sprite2D" parent="UIMain"]
-texture = ExtResource("24_3u52w")
+texture = ExtResource("25_v56sg")
 centered = false
 
 [node name="Logo" type="Sprite2D" parent="UIMain"]
 position = Vector2(1557, 47)
-texture = ExtResource("25_tcw1k")
+texture = ExtResource("26_6gd6e")
 centered = false
 
 [node name="LogoBack" type="Sprite2D" parent="UIMain"]
 position = Vector2(1548, 16)
-texture = ExtResource("26_xmvvx")
+texture = ExtResource("27_htbe7")
 centered = false
 
 [node name="Settings" type="Sprite2D" parent="UIMain"]
 position = Vector2(1777, 19)
-texture = ExtResource("27_godjs")
+texture = ExtResource("28_jnxmy")
 centered = false
 
 [node name="Filler" type="Sprite2D" parent="UIMain"]
 position = Vector2(1777, 154)
-texture = ExtResource("28_qigvo")
+texture = ExtResource("29_a8et8")
 centered = false
 
 [node name="Attemptback" type="Sprite2D" parent="UIMain"]
 position = Vector2(1552, 270)
-texture = ExtResource("29_kfqic")
+texture = ExtResource("30_vqola")
 centered = false
 
 [node name="AttemptScreen" type="Sprite2D" parent="UIMain"]
 position = Vector2(1571, 288)
-texture = ExtResource("30_u8qw3")
+texture = ExtResource("31_4w3bm")
 centered = false
 
 [node name="AttemptLives" type="Sprite2D" parent="UIMain"]
 position = Vector2(1600, 334)
-texture = ExtResource("31_f2ttu")
+texture = ExtResource("32_0qqio")
 centered = false
 
 [node name="AttemptLives2" type="Sprite2D" parent="UIMain"]
 position = Vector2(1669, 334)
-texture = ExtResource("31_f2ttu")
+texture = ExtResource("32_0qqio")
 centered = false
 
 [node name="PowerBack" type="Sprite2D" parent="UIMain"]
 position = Vector2(1552, 440)
-texture = ExtResource("32_j8g73")
+texture = ExtResource("33_skbwt")
 centered = false
 
 [node name="TriangleBase" type="Sprite2D" parent="UIMain"]
 visible = false
 position = Vector2(1586, 469)
-texture = ExtResource("33_vvdrh")
+texture = ExtResource("34_nshyk")
 centered = false
 
 [node name="PowerBarTriangleFill" type="Node2D" parent="UIMain"]
 position = Vector2(1584, 473.935)
 scale = Vector2(0.986, 0.941)
-script = ExtResource("34_sxy7q")
+script = ExtResource("35_n0n23")
 
 [node name="PowerBackBars" type="Sprite2D" parent="UIMain"]
 position = Vector2(1573, 457)
-texture = ExtResource("35_kgxb1")
+texture = ExtResource("36_3qx31")
 centered = false
 
 [node name="LaunchBack" type="Sprite2D" parent="UIMain"]
 position = Vector2(1552, 677)
-texture = ExtResource("36_kkuri")
+texture = ExtResource("37_5ehpq")
 centered = false
 
 [node name="ArrowsBack" type="Sprite2D" parent="UIMain"]
 position = Vector2(1552, 911)
-texture = ExtResource("37_luywl")
+texture = ExtResource("38_wsyd1")
 centered = false
 
 [node name="UIPanel" type="Control" parent="."]
@@ -2622,7 +2630,7 @@ offset_top = 929.0
 offset_right = 1915.0
 offset_bottom = 1050.0
 focus_mode = 0
-theme = ExtResource("39_rk8yb")
+theme = ExtResource("40_ltuvt")
 
 [node name="LaunchButton" type="Button" parent="UIPanel"]
 custom_minimum_size = Vector2(130, 54)
@@ -2649,7 +2657,7 @@ offset_top = 353.0
 offset_right = 1701.0
 offset_bottom = 401.0
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_fonts/font = ExtResource("40_2in1w")
+theme_override_fonts/font = ExtResource("41_05ni1")
 theme_override_font_sizes/font_size = 47
 text = "0"
 
@@ -2660,7 +2668,7 @@ offset_top = 353.0
 offset_right = 1770.0
 offset_bottom = 401.0
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_fonts/font = ExtResource("40_2in1w")
+theme_override_fonts/font = ExtResource("41_05ni1")
 theme_override_font_sizes/font_size = 47
 text = "0"
 
@@ -2672,7 +2680,7 @@ offset_right = 1712.0001
 offset_bottom = 491.0
 scale = Vector2(1.5021799, 1.5129611)
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_fonts/font = ExtResource("40_2in1w")
+theme_override_fonts/font = ExtResource("41_05ni1")
 text = "POWER"
 
 [node name="PowerMeter" type="Label" parent="UIPanel"]
@@ -2683,7 +2691,7 @@ offset_right = 1731.0
 offset_bottom = 524.0
 scale = Vector2(0.8364207, 1.2709585)
 theme_override_colors/font_color = Color(0.9515795, 0.95157963, 0.9515795, 1)
-theme_override_fonts/font = ExtResource("40_2in1w")
+theme_override_fonts/font = ExtResource("41_05ni1")
 theme_override_font_sizes/font_size = 45
 text = "100%"
 horizontal_alignment = 2
@@ -2695,14 +2703,14 @@ offset_top = 297.0
 offset_right = 1765.0
 offset_bottom = 320.0
 scale = Vector2(1.202726, 1.2113581)
-theme_override_fonts/font = ExtResource("40_2in1w")
+theme_override_fonts/font = ExtResource("41_05ni1")
 text = "ATTEMPTS"
 
 [node name="GameManager" type="Node2D" parent="."]
-script = ExtResource("41_qdvvn")
+script = ExtResource("42_l32ve")
 
 [node name="InputManager" type="Node" parent="."]
-script = ExtResource("42_tc80m")
+script = ExtResource("43_0adg4")
 
 [node name="OverlayScreens" type="CanvasLayer" parent="."]
 visible = false
@@ -2726,4 +2734,4 @@ offset_right = 810.0
 offset_bottom = 651.0
 
 [node name="LevelEntrySequence" type="CanvasLayer" parent="."]
-script = ExtResource("43_5ak30")
+script = ExtResource("44_5tcwx")

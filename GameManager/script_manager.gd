@@ -3,6 +3,7 @@ extends Node2D
 
 # Game phases
 enum Phase { SURFACE, CHARGING, FLYING, WIN, PAUSED }
+# Keyboard fix for one-click rotation
 
 # Singleton-like level tracking
 var _level_manager: Node = null
@@ -36,9 +37,9 @@ var num_launches: int = 0  # Track number of launches for one-shot detection
 var has_star: bool = false  # Track if star was collected in this attempt
 var shake_tween: Tween = null  # Control screen shake animation
 
-# Keyboard input tracking for continuous rotation
-var key_left_held: bool = false  # Track A key
-var key_right_held: bool = false  # Track D key
+# Keyboard input tracking - one rotation per key press
+var left_key_clicked: bool = false  # A key pressed once (one rotation)
+var right_key_clicked: bool = false  # D key pressed once (one rotation)
 
 
 func _ready() -> void:
@@ -220,8 +221,8 @@ func _reset_level_internal(is_complete_retry: bool) -> void:
 	if power_bar_triangle and power_bar_triangle.has_method("reset"):
 		power_bar_triangle.reset()
 	
-	key_left_held = false
-	key_right_held = false
+	left_key_clicked = false
+	right_key_clicked = false
 	current_planet = start_planet
 	
 	# Hide win screen if it's showing
@@ -243,25 +244,27 @@ func _reset_level_internal(is_complete_retry: bool) -> void:
 
 func _update_surface_phase() -> void:
 	"""Handle surface phase - waiting for launch."""
-	# Apply continuous rotation while held down (slower: 1 degree per frame)
-	if input_manager.left_held or key_left_held:
+	# Process keyboard clicks - one rotation per key press
+	if left_key_clicked:
+		ship_rotation -= PI / 180.0  # 1 degree per click
+		left_key_clicked = false
+	elif right_key_clicked:
+		ship_rotation += PI / 180.0  # 1 degree per click
+		right_key_clicked = false
+	
+	# Apply continuous rotation from buttons while held down (slower: 1 degree per frame)
+	elif input_manager.left_held:
 		ship_rotation -= PI / 180.0  # 1 degree per frame for smooth hold
-		if current_planet and ship and current_phase == Phase.SURFACE:
-			var surface_pos: Vector2 = current_planet.get_surface_position(ship_rotation)
-			ship.position_ = surface_pos
-			ship.global_position = surface_pos
-			ship.angle = ship_rotation
-			ship.queue_redraw()
-		_update_trajectory_preview_static()
-	elif input_manager.right_held or key_right_held:
+	elif input_manager.right_held:
 		ship_rotation += PI / 180.0  # 1 degree per frame for smooth hold
-		if current_planet and ship and current_phase == Phase.SURFACE:
-			var surface_pos: Vector2 = current_planet.get_surface_position(ship_rotation)
-			ship.position_ = surface_pos
-			ship.global_position = surface_pos
-			ship.angle = ship_rotation
-			ship.queue_redraw()
-		_update_trajectory_preview_static()
+	
+	# Update ship position on surface
+	if current_planet and ship and current_phase == Phase.SURFACE:
+		var surface_pos: Vector2 = current_planet.get_surface_position(ship_rotation)
+		ship.position_ = surface_pos
+		ship.global_position = surface_pos
+		ship.angle = ship_rotation
+		ship.queue_redraw()
 	
 	# Show preview with current direction at minimum power
 	launch_preview.show_preview()
@@ -278,6 +281,11 @@ func _update_charging_phase() -> void:
 	if abs(input_manager.power - last_preview_power) >= 5.0:
 		last_preview_power = input_manager.power
 		_update_trajectory_preview_static()
+		
+		# Update power bar pitch dynamically
+		var audio_manager = get_tree().root.get_node_or_null("AudioManager")
+		if audio_manager:
+			audio_manager.update_power_pitch(input_manager.power)
 
 
 func _update_flying_phase(delta: float) -> void:
@@ -394,6 +402,12 @@ func _on_left_button_pressed() -> void:
 	"""Handle left button down - start tracking time."""
 	if input_manager.inputs_blocked:
 		return
+	
+	# Play button click sound
+	var audio_manager = get_tree().root.get_node_or_null("AudioManager")
+	if audio_manager:
+		audio_manager.play_button_click()
+	
 	input_manager.record_left_press()
 
 
@@ -423,6 +437,12 @@ func _on_right_button_pressed() -> void:
 	"""Handle right button down - start tracking time."""
 	if input_manager.inputs_blocked:
 		return
+	
+	# Play button click sound
+	var audio_manager = get_tree().root.get_node_or_null("AudioManager")
+	if audio_manager:
+		audio_manager.play_button_click()
+	
 	input_manager.record_right_press()
 
 
@@ -452,11 +472,20 @@ func _on_launch_button_pressed() -> void:
 	"""Handle launch button press."""
 	if input_manager.inputs_blocked:
 		return
+	
+	# Play button click sound
+	var audio_manager = get_tree().root.get_node_or_null("AudioManager")
+	if audio_manager:
+		audio_manager.play_button_click()
+	
 	if current_phase == Phase.SURFACE:
 		# Start charging
 		current_phase = Phase.CHARGING
 		last_preview_power = -1.0  # Reset preview tracker
 		input_manager.start_charging()
+		# Start power bar sound
+		if audio_manager:
+			audio_manager.update_power_pitch(0.0)
 	elif current_phase == Phase.CHARGING:
 		# Stop charging and launch
 		var power: float = input_manager.stop_charging()
@@ -465,6 +494,11 @@ func _on_launch_button_pressed() -> void:
 		last_launch_rotation = ship_rotation  # Save rotation for respawn
 		ship.set_launch_velocity(power, ship_rotation)
 		launch_preview.hide_preview()
+		
+		# Stop power bar and start ship travel
+		if audio_manager:
+			audio_manager.stop_power_bar()
+			audio_manager.start_ship_travel()
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -474,17 +508,15 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	
 	if event is InputEventKey:
-		if event.keycode == KEY_A:
-			# Left rotation (A key)
-			key_left_held = event.pressed
-			if event.pressed:
-				get_tree().root.set_input_as_handled()
+		if event.keycode == KEY_A and event.pressed:
+			# Left rotation (A key pressed)
+			left_key_clicked = true
+			get_tree().root.set_input_as_handled()
 		
-		elif event.keycode == KEY_D:
-			# Right rotation (D key)
-			key_right_held = event.pressed
-			if event.pressed:
-				get_tree().root.set_input_as_handled()
+		elif event.keycode == KEY_D and event.pressed:
+			# Right rotation (D key pressed)
+			right_key_clicked = true
+			get_tree().root.set_input_as_handled()
 		
 		elif event.keycode == KEY_SPACE and event.pressed:
 			# Launch (Space key)
@@ -504,6 +536,13 @@ func _on_goal_reached() -> void:
 	"""Handle reaching the goal planet."""
 	current_phase = Phase.WIN
 	ship.is_flying = false
+	
+	# Stop ship travel sound
+	var audio_manager = get_tree().root.get_node_or_null("AudioManager")
+	if audio_manager:
+		audio_manager.stop_ship_travel()
+		audio_manager.play_victory()
+	
 	# Show victory screen
 	_show_win_screen()
 
@@ -513,6 +552,12 @@ func _on_crash() -> void:
 	# No limpiar explosiones anteriores - dejar que se animen completamente
 	current_phase = Phase.SURFACE
 	ship.is_flying = false
+	
+	# Stop ship travel sound
+	var audio_manager = get_tree().root.get_node_or_null("AudioManager")
+	if audio_manager:
+		audio_manager.stop_ship_travel()
+		audio_manager.play_explosion()
 	
 	# Create explosion effect at crash location
 	if ship:
@@ -526,8 +571,8 @@ func _on_crash() -> void:
 	if power_bar_triangle and power_bar_triangle.has_method("reset"):
 		power_bar_triangle.reset()
 	
-	key_left_held = false
-	key_right_held = false
+	left_key_clicked = false
+	right_key_clicked = false
 	
 	# Handle attempts
 	_level_manager.increment_attempts()
@@ -543,6 +588,12 @@ func _on_star_collected() -> void:
 	
 	has_star = true
 	star_win.collect_star()
+	
+	# Play star collect sound
+	var audio_manager = get_tree().root.get_node_or_null("AudioManager")
+	if audio_manager:
+		audio_manager.play_star_collect()
+	
 	print("Star collected!")
 
 
@@ -557,12 +608,12 @@ func _show_win_screen() -> void:
 
 
 func _on_next_level_pressed() -> void:
-	"""Load next level."""
+	"""Load next level or return to WorldLevel if at end of world (level x-8)."""
 	var current_scene = get_tree().current_scene.get_scene_file_path()
 	print("Current scene: %s" % current_scene)
 	
 	# Extract current level name for saving
-	var current_level_name = _extract_current_level_name(current_scene)
+	var current_level_name = _extract_level_from_path(current_scene)
 	var current_attempts = _level_manager.attempts if _level_manager else 0
 	
 	# Auto-save progress for CURRENT level before moving to next
@@ -571,8 +622,22 @@ func _on_next_level_pressed() -> void:
 		save_manager.auto_save(current_level_name, current_attempts)
 		print("Saved current level: %s with %d attempts" % [current_level_name, current_attempts])
 	
+	# Check if current level is the last level of a world (x-8)
+	var level_parts = current_level_name.split("-")
+	if level_parts.size() == 2:
+		var level_num = int(level_parts[1])
+		# If level is the last one of the world (level 8), return to WorldLevel
+		if level_num == 8:  # LEVELS_PER_WORLD = 8
+			print("Completed world! Returning to WorldLevel.tscn")
+			# Reset attempts for next level(s)
+			if _level_manager:
+				_level_manager.attempts = 0
+				_level_manager.reset_first_entry()
+			get_tree().change_scene_to_file("res://WorldLevel/WorldLevel.tscn")
+			return
+	
 	# Get next level intelligently by parsing current level
-	var next_level_name = _get_next_level_name(current_scene)
+	var next_level_name = _get_next_level_name(current_level_name)
 	var next_scene = "res://MainScenes/Level " + next_level_name + ".tscn"
 	
 	# Reset attempts for new level
@@ -584,64 +649,45 @@ func _on_next_level_pressed() -> void:
 	get_tree().change_scene_to_file(next_scene)
 
 
-func _extract_current_level_name(scene_path: String) -> String:
-	"""Extract current level name from scene path."""
-	if "Level 1-1" in scene_path:
-		return "1-1"
-	elif "Level 1-2" in scene_path:
-		return "1-2"
-	elif "Level 1-3" in scene_path:
-		return "1-3"
-	elif "Level 1-4" in scene_path:
-		return "1-4"
-	elif "Level 2-1" in scene_path:
-		return "2-1"
-	elif "Level 2-2" in scene_path:
-		return "2-2"
-	else:
-		return "1-1"  # Default
+func _extract_level_from_path(scene_path: String) -> String:
+	"""Extract level name from scene path (e.g., '1-5' from 'res://MainScenes/Level 1-5.tscn').
+	Generic and scalable for any world-level format.
+	"""
+	if "Level " in scene_path:
+		var parts = scene_path.split("Level ")
+		if parts.size() > 1:
+			var level_str = parts[1].split(".")[0]  # Get everything until .tscn
+			return level_str
+	return "1-1"  # Default fallback
 
 
-func _get_next_level_name(current_scene: String) -> String:
-	"""Parse current scene and return next level name (e.g. '1-2', '2-1')."""
-	# Extract current level from scene path (e.g., 'Level 1-3' -> '1-3')
-	var current_level = ""
-	if "Level 1-1" in current_scene:
-		current_level = "1-1"
-	elif "Level 1-2" in current_scene:
-		current_level = "1-2"
-	elif "Level 1-3" in current_scene:
-		current_level = "1-3"
-	elif "Level 1-4" in current_scene:
-		current_level = "1-4"
-	elif "Level 2-1" in current_scene:
-		current_level = "2-1"
-	elif "Level 2-2" in current_scene:
-		current_level = "2-2"
-	else:
-		# Default to 1-1 if can't parse
-		return "1-1"
+func _get_next_level_name(current_level: String) -> String:
+	"""Parse level name and return next level name (e.g. '1-2', '2-1').
+	Scalable for any number of worlds and levels per world.
 	
-	# Parse zone and number
+	Note: This function assumes level x-8 calls should NOT reach here (_on_next_level_pressed redirects to WorldLevel).
+	"""
+	# Parse zone and number (format: "1-3")
 	var parts = current_level.split("-")
 	if parts.size() != 2:
 		return "1-1"
 	
-	var zone = int(parts[0])
-	var num = int(parts[1])
+	var world = int(parts[0])
+	var level_num = int(parts[1])
 	
-	# Try incrementing within the zone first
-	var next_level = str(zone) + "-" + str(num + 1)
+	# Increment level within the world
+	var next_level = str(world) + "-" + str(level_num + 1)
 	if _level_exists(next_level):
 		return next_level
 	
-	# Try next zone, level 1
-	var next_zone = zone + 1
-	next_level = str(next_zone) + "-1"
+	# If we've passed level 8 (shouldn't happen due to _on_next_level_pressed check),
+	# try next world, level 1
+	var next_world = world + 1
+	next_level = str(next_world) + "-1"
 	if _level_exists(next_level):
 		return next_level
 	
-	# If no more levels, cycle back to 1-1
+	# If no more levels, fallback to 1-1
 	return "1-1"
 
 
