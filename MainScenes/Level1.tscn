@@ -2484,8 +2484,6 @@ radius = 36.565
 orbital_multiplier = 0.0
 sprite_texture = ExtResource("11_l4gva")
 
-[node name="UIMain" type="Control" parent="."]
-
 [node name="CRTEffect" type="Node2D" parent="."]
 z_index = 1
 script = ExtResource("crt_script")
