@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=4 uid="uid://cctirlbsq47p7"]
+[gd_scene load_steps=30 format=4 uid="uid://cctirlbsq47p7"]
 
 [ext_resource type="Script" uid="uid://cob5i5ddpju0d" path="res://MainScenes/main_menu.gd" id="1_fd5jv"]
 [ext_resource type="Texture2D" uid="uid://bf6oqb0wb274f" path="res://MainMenuArt/Main_Menu_Back_01.png" id="2_pq6p2"]
@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://e4jvbgp6e83i" path="res://MainMenuArt/Main_Menu_Back_Stars_03.png" id="5_h7vvw"]
 [ext_resource type="Texture2D" uid="uid://btfmj6j3n7ynb" path="res://Ship/Orbitalyte_Ship_01.png" id="6_fghas"]
 [ext_resource type="Texture2D" uid="uid://dgk3egr3vhy1g" path="res://MainMenuArt/Main_Menu_Back_02.png" id="6_kj2pr"]
+[ext_resource type="Texture2D" uid="uid://df44b3ut804c0" path="res://MainMenuArt/Demo.png" id="7_fghas"]
 [ext_resource type="Texture2D" uid="uid://bw4su14lvhe0l" path="res://MainMenuArt/Main_Menu_Logo_01.png" id="7_lu3xc"]
 
 [sub_resource type="Image" id="Image_fur8i"]
@@ -2404,6 +2405,11 @@ centered = false
 [node name="Sprite2D" type="Sprite2D" parent="CanvasLayer/StarsBack"]
 position = Vector2(960, 846)
 texture = ExtResource("6_fghas")
+
+[node name="Demo" type="Sprite2D" parent="CanvasLayer/StarsBack"]
+position = Vector2(259.00012, 210.00005)
+scale = Vector2(0.6005917, 0.6005917)
+texture = ExtResource("7_fghas")
 
 [node name="Planet" type="Sprite2D" parent="CanvasLayer/StarsBack"]
 position = Vector2(960, 979)
